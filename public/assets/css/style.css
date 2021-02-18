@@ -1,0 +1,25 @@
+.xm-letterify {
+	border: 1px solid #5b5b5a;
+	border-radius: .25rem;
+}
+
+.xm-letterify .xm-input-wrap {
+	margin-bottom: 10px;
+}
+
+.xm-letterify .xm-input-wrap input,
+.xm-letterify .xm-input-wrap select,
+.xm-letterify .xm-input-wrap textarea {
+	display: block;
+	width: 100%;
+	padding: .375rem .75rem;
+	font-size: 1rem;
+	line-height: 1.5;
+	color: #5b5b5a;
+	background-color: #fff;
+	background-clip: padding-box;
+	border: 1px solid #b4b4b3;
+	border-radius: .25rem;
+	-webkit-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+	        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}

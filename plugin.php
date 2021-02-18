@@ -11,7 +11,7 @@ defined('ABSPATH') || exit;
  * @since 1.0.0
  */
 final class Plugin {
-	const TEXT_DOMAIN       = 'shopengine';
+	const TEXT_DOMAIN       = 'letterify';
 	// const CPT_WOO_BUILDER   = 'wooengine-template';
 	// const CSS_CLASS_PREFIX  = 'wooengine_';
 	// const GENERAL_PREFIX    = 'web__';
@@ -28,10 +28,14 @@ final class Plugin {
 	 */
 	public function __construct() {
 		// load autoload method 
-		// Autoloader::run();
-		$this->init();
+		Autoloader::run();
 	}
 
+	function letterify_form_function() {
+		$tpl = trailingslashit(plugin_dir_path(__FILE__)) . 'templates/default.php';
+
+		include $tpl;
+	}
 
 	/**
 	 * Public function init.
@@ -41,14 +45,11 @@ final class Plugin {
 	 */
 	public function init() {
 		#Loading the scripts and styles
+		add_action('wp_enqueue_scripts', [$this, 'js_css_public']);
 		// add_action('admin_enqueue_scripts', [$this, 'js_css_admin']);
-		// add_action('wp_enqueue_scripts', [$this, 'js_css_public']);
-		add_shortcode('letterify', 'letterify_form_function');
+		add_shortcode('letterify', [$this, 'letterify_form_function']);
 	}
 
-	function letterify_form_function() {
-		echo "hello!";
-	}
 
 	/**
 	 * Public function version.
@@ -194,8 +195,11 @@ final class Plugin {
 	 * @since 1.0.0
 	 */
 	public function js_css_public() {
-		wp_enqueue_style('wp-woo-public-css', plugin_dir_url(__FILE__) . 'assets/css/public-style.css', false, $this->version());
-		wp_enqueue_script('wp-woo-js', plugin_dir_url(__FILE__) . 'assets/js/public.js', array(), $this->version(), true);
+        wp_enqueue_style('letterify-css', plugin_dir_url(__FILE__) . 'public/assets/css/style.css', null, '1.0.0', true);
+
+        wp_enqueue_script('htm', plugin_dir_url(__FILE__) . 'public/assets/js/htm.js', null, '1.0.0', true);
+
+        wp_enqueue_script('letterify-js', plugin_dir_url(__FILE__) . 'public/assets/js/app.js', array('htm', 'jquery', 'wp-element'), '1.0.0', true);
 	}
 
 
