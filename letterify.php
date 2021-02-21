@@ -31,12 +31,12 @@ final class Letterify
 	}
 
 	public function __construct() {
-		do_action('letterify/before_loaded');
+		// do_action('letterify/before_loaded');
 
 		add_action('plugins_loaded', [$this, 'init'], 100);
 
 		do_action('plugins_loaded');
-		do_action('letterify/after_loaded');
+		// do_action('letterify/after_loaded');
 	}
 
 	public function init() {

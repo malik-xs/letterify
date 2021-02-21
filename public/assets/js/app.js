@@ -38,7 +38,11 @@ var TextToImage = /*#__PURE__*/function (_React$Component) {
     _this = _super.call(this, props);
     _this.state = {
       img: '',
-      err: ''
+      err: '',
+      color: _this.props.value || '#343234',
+      value: _this.props.value !== '' ? _this.props.value : 'Enter Your Text',
+      fontFamily: _this.props.font,
+      fontSize: 48
     };
     return _this;
   }
@@ -46,19 +50,23 @@ var TextToImage = /*#__PURE__*/function (_React$Component) {
   _createClass(TextToImage, [{
     key: "componentDidMount",
     value: function componentDidMount() {
-      var font = this.props.font;
+      var _this$state = this.state,
+          value = _this$state.value,
+          color = _this$state.color,
+          fontFamily = _this$state.fontFamily,
+          fontSize = _this$state.fontSize;
+      var font = 'bold ' + fontSize + 'px "' + fontFamily + '"';
       var canvasTxt = document.getElementById('canvasComponent').getContext('2d');
       canvasTxt.canvas.width = 500;
       canvasTxt.canvas.height = 100;
+      canvasTxt.clearRect(0, 0, 500, 100);
+      canvasTxt.font = font;
+      canvasTxt.fillStyle = color;
       canvasTxt.textAlign = 'center';
-      canvasTxt.textBaseline = 'middle';
-      canvasTxt.font = '24px Arial';
-      canvasTxt.fillText(this.props.name, canvasTxt.canvas.width / 2, canvasTxt.canvas.height / 2); // var junction_font = new FontFace( font, 'url("https://fonts.googleapis.com/css2?family=' + font + '&display=swap")' );
-      // junction_font.load().then( function( loaded_face ) {
-      // 	document.fonts.add( loaded_face );
-      // 	canvasTxt.font = '24px ' + loaded_face;
-      // } );
+      canvasTxt.textBaseline = 'middle'; // Canvas can tell us the width
 
+      this.props.callbackWidth(canvasTxt.measureText(value).width / fontSize);
+      canvasTxt.fillText(value, canvasTxt.canvas.width / 2, canvasTxt.canvas.height / 2);
       this.setState({
         img: canvasTxt.canvas.toDataURL()
       });
@@ -71,7 +79,7 @@ var TextToImage = /*#__PURE__*/function (_React$Component) {
         style: {
           display: 'none'
         }
-      }), this.state.img.length > 0 ? /*#__PURE__*/React.createElement("img", {
+      }), this.state.img ? /*#__PURE__*/React.createElement("img", {
         id: "imageComponent",
         src: this.state.img
       }) : null);
@@ -121,6 +129,8 @@ function _defineProperty(obj, key, value) { if (key in obj) { Object.definePrope
 
 // import GoogleFontLoader from 'react-google-font-loader';
 
+var fonts = ['Almibar', 'PermanentMarker', 'SourceCodePro'];
+var colors = ['#fff', '#000', '#971a1e', '#D40000', '#DAB0AA', '#fcf1f7', '#f199bf', '#e3568a', '#FC9E8B', '#f16728', '#E87400', '#faed12', '#faf8ae', '#e4ecb0', '#abcf37', '#97b94b', '#119f49', '#0f643d', '#1e214a', '#0d5488', '#083B9C', '#70c1ec', '#63888E', '#88cfbd', '#A2E8D9', '#dee8e7', '#8882b2', '#7d52a1', '#3D266E', '#b783a7', '#E5DDD0', '#fef7dd', '#D3AD12', '#c0ac94', '#6d4835', '#291A00', '#B5B0AC', '#808281', '#494B4E'];
 
 var LetterifyEl = /*#__PURE__*/function (_React$Component) {
   app_inherits(LetterifyEl, _React$Component);
@@ -134,18 +144,77 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this, props);
 
+    _defineProperty(app_assertThisInitialized(_this), "callbackWidth", function (v) {
+      var height = _this.state.height;
+      var width = Number(v) * Number(height);
+      console.log(width); // this.handleChange( { target: { name: 'width', value: width } } );
+    });
+
     _defineProperty(app_assertThisInitialized(_this), "handleChange", function (e) {
       var _e$target = e.target,
           name = _e$target.name,
           value = _e$target.value;
 
-      _this.setState(_defineProperty({}, name, value));
+      if (_this.state[name] !== value) {
+        _this.setState(_defineProperty({}, name, value));
+      }
+    });
+
+    _defineProperty(app_assertThisInitialized(_this), "handleSubmit", function (e) {
+      e.preventDefault();
+      var image = document.getElementById('canvasComponent');
+      var imageURL = image.toDataURL();
+      jQuery.ajax({
+        type: 'POST',
+        url: _this.props.ajaxurl,
+        action: 'ajaxHandler',
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;',
+          'X-WP-Nonce': _this.props.wpNonce
+        },
+        data: {
+          imgBase64: imageURL
+        }
+      }).done(function () {
+        console.log('saved');
+      });
+      return;
+      var data = {
+        action: 'woocommerce_ajax_add_to_cart',
+        product_id: 18,
+        product_sku: '',
+        quantity: _this.state.quantity
+      };
+      jQuery(document.body).trigger('adding_to_cart', [e.target, data]);
+      jQuery.ajax({
+        type: 'post',
+        url: wc_add_to_cart_params.ajax_url,
+        data: data,
+        headers: {
+          'Content-Type': 'application/x-www-form-urlencoded;'
+        },
+        method: 'POST',
+        beforeSend: function beforeSend(response) {// $thisbutton.removeClass('added').addClass('loading');
+        },
+        complete: function complete(response) {// $thisbutton.addClass('added').removeClass('loading');
+        },
+        success: function success(response) {
+          if (!response.error) {
+            jQuery(document.body).trigger('added_to_cart', [response.fragments, response.cart_hash, e.target]);
+          }
+        }
+      });
     });
 
     _this.state = {
       value: '',
-      size: 24,
-      font: 'Roboto'
+      height: '',
+      width: 0,
+      finish: '',
+      color: '',
+      font: 'Almibar',
+      quantity: 1,
+      price: 0.59
     };
     return _this;
   }
@@ -159,48 +228,228 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
+      var _this2 = this;
+
       var parent = this;
       var state = parent.state;
       return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("form", null, /*#__PURE__*/React.createElement("div", {
-        className: "xm-input-wrap"
+        className: "xm-input-wrap text-center"
       }, React.createElement(function () {
         return /*#__PURE__*/React.createElement(TextToImage, {
-          name: state.value || '',
+          font: state.font,
+          color: state.color,
+          callbackWidth: _this2.callbackWidth,
+          value: state.value || '',
           x: "0",
-          y: "10",
-          font: state.font
+          y: "10"
         });
       })), /*#__PURE__*/React.createElement("div", {
         className: "xm-input-wrap"
       }, /*#__PURE__*/React.createElement("input", {
         name: "value",
+        className: "xm-entry-text",
         value: state.value,
         onChange: this.handleChange,
         placeholder: 'Enter your text'
       })), /*#__PURE__*/React.createElement("div", {
         className: "xm-input-wrap"
       }, /*#__PURE__*/React.createElement("label", {
-        htmlFor: "font"
-      }), /*#__PURE__*/React.createElement("select", {
+        htmlFor: "font",
+        className: "text-right"
+      }, /*#__PURE__*/React.createElement("strong", null, "Choose Font")), /*#__PURE__*/React.createElement("select", {
         name: "font",
-        id: "font"
-      }, /*#__PURE__*/React.createElement("option", {
-        value: "volvo"
-      }, "Volvo"), /*#__PURE__*/React.createElement("option", {
-        value: "saab"
-      }, "Saab"), /*#__PURE__*/React.createElement("option", {
-        value: "mercedes"
-      }, "Mercedes"), /*#__PURE__*/React.createElement("option", {
-        value: "audi"
-      }, "Audi"))), /*#__PURE__*/React.createElement("div", {
-        className: "xm-input-wrap"
-      }, /*#__PURE__*/React.createElement("input", {
-        type: "number",
-        name: "size",
-        value: state.size,
+        id: "font",
         onChange: this.handleChange,
-        placeholder: 'Enter your size`'
-      }))));
+        value: state.font
+      }, fonts.map(function (f, i) {
+        return /*#__PURE__*/React.createElement("option", {
+          key: i,
+          value: f
+        }, f);
+      }))), /*#__PURE__*/React.createElement("div", {
+        className: "xm-input-wrap"
+      }, /*#__PURE__*/React.createElement("label", {
+        htmlFor: "finish",
+        className: "text-right"
+      }, /*#__PURE__*/React.createElement("strong", null, "Finish")), /*#__PURE__*/React.createElement("select", {
+        name: "finish",
+        id: "finish",
+        onChange: this.handleChange,
+        value: state.finish
+      }, /*#__PURE__*/React.createElement("option", {
+        value: ""
+      }, "Choose Finish..."), /*#__PURE__*/React.createElement("option", {
+        value: "painted"
+      }, "Painted"), /*#__PURE__*/React.createElement("option", {
+        value: "unpainted"
+      }, "Unpainted"))), /*#__PURE__*/React.createElement("div", {
+        className: "xm-input-wrap",
+        style: {
+          display: state.finish === '' ? 'none' : 'flex'
+        }
+      }, /*#__PURE__*/React.createElement("label", {
+        htmlFor: "height",
+        className: "text-right"
+      }, /*#__PURE__*/React.createElement("strong", null, "Height")), /*#__PURE__*/React.createElement("select", {
+        name: "height",
+        id: "height",
+        onChange: this.handleChange,
+        value: state.height
+      }, /*#__PURE__*/React.createElement("option", {
+        value: ""
+      }, "Choose Height..."), /*#__PURE__*/React.createElement("option", {
+        value: "1",
+        style: {
+          display: state.finish === 'painted' ? 'none' : 'block'
+        }
+      }, "1 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "2",
+        style: {
+          display: state.finish === 'painted' ? 'none' : 'block'
+        }
+      }, "2 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "3",
+        style: {
+          display: state.finish === 'painted' ? 'none' : 'block'
+        }
+      }, "3 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "4"
+      }, "4 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "5"
+      }, "5 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "6"
+      }, "6 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "7"
+      }, "7 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "8"
+      }, "8 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "9"
+      }, "9 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "10"
+      }, "10 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "11"
+      }, "11 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "12"
+      }, "12 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "13"
+      }, "13 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "14"
+      }, "14 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "15"
+      }, "15 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "16"
+      }, "16 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "17"
+      }, "17 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "18"
+      }, "18 inch"))), /*#__PURE__*/React.createElement("div", {
+        className: "xm-input-wrap",
+        style: {
+          display: state.height === '' ? 'none' : 'flex'
+        }
+      }, /*#__PURE__*/React.createElement("label", {
+        htmlFor: "thickness",
+        className: "text-right"
+      }, /*#__PURE__*/React.createElement("strong", null, "Thickness")), /*#__PURE__*/React.createElement("select", {
+        name: "thickness",
+        id: "thickness",
+        onChange: this.handleChange
+      }, /*#__PURE__*/React.createElement("option", {
+        value: ""
+      }, "Choose Thickness..."), /*#__PURE__*/React.createElement("option", {
+        value: "1/8 inch"
+      }, "1/8 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "1/4 inch"
+      }, "1/4 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "3/8 inch"
+      }, "3/8 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "1/2 inch"
+      }, "1/2 inch"), /*#__PURE__*/React.createElement("option", {
+        value: "3/4 inch"
+      }, "3/4 inch"))), /*#__PURE__*/React.createElement("div", {
+        className: "xm-input-wrap",
+        style: {
+          display: this.state.height > 4 ? 'flex' : 'none'
+        }
+      }, /*#__PURE__*/React.createElement("label", {
+        htmlFor: "mounting",
+        className: "text-right"
+      }, /*#__PURE__*/React.createElement("strong", null, "Mounting")), /*#__PURE__*/React.createElement("select", {
+        name: "mounting",
+        id: "mounting",
+        onChange: this.handleChange
+      }, /*#__PURE__*/React.createElement("option", {
+        value: ""
+      }, "- Select an Option -"), /*#__PURE__*/React.createElement("option", {
+        value: ""
+      }, "Hanging Strips & Paper Template (+10%)"), /*#__PURE__*/React.createElement("option", {
+        value: ""
+      }, "None"))), /*#__PURE__*/React.createElement("div", {
+        className: "xm-input-wrap",
+        style: {
+          display: this.state.finish === 'painted' ? 'flex' : 'none'
+        }
+      }, /*#__PURE__*/React.createElement("label", {
+        htmlFor: "color",
+        className: "text-right"
+      }, /*#__PURE__*/React.createElement("strong", null, "Color")), /*#__PURE__*/React.createElement("select", {
+        name: "color",
+        id: "color",
+        onChange: this.handleChange
+      }, colors.map(function (c, i) {
+        return /*#__PURE__*/React.createElement("option", {
+          key: i,
+          value: c
+        }, c);
+      }))), /*#__PURE__*/React.createElement("div", {
+        className: "xm-input-wrap text-center xm-input-sm"
+      }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Approx. Width: "), state.value !== '' && state.height !== '' ? state.width + '"' : 'Enter text and select a Height to see Approx. Width.')), /*#__PURE__*/React.createElement("div", {
+        className: "xm-input-wrap xm-input-sm"
+      }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Total Letter Count: "), state.value.replace(/\s/g, '').length)), /*#__PURE__*/React.createElement("div", {
+        className: "xm-input-wrap xm-input-full"
+      }, /*#__PURE__*/React.createElement("label", {
+        htmlFor: "thickness",
+        className: "text-right"
+      }, /*#__PURE__*/React.createElement("strong", null, "Letter Connect")), /*#__PURE__*/React.createElement("select", {
+        name: "letterConnect",
+        id: "letterConnect",
+        onChange: this.handleChange,
+        value: state.letterConnect
+      }, /*#__PURE__*/React.createElement("option", {
+        value: ""
+      }, "-- Please Select --"), /*#__PURE__*/React.createElement("option", {
+        value: "502",
+        price: "0"
+      }, "As Shown "), /*#__PURE__*/React.createElement("option", {
+        value: "503",
+        price: "0"
+      }, "Each Word Connected "), /*#__PURE__*/React.createElement("option", {
+        value: "504",
+        price: "0"
+      }, "Individual Letters "))), /*#__PURE__*/React.createElement("div", {
+        className: "xm-input-wrap"
+      }, /*#__PURE__*/React.createElement("div", {
+        className: "xm-input-frag"
+      }, "Starting At: $", state.price), /*#__PURE__*/React.createElement("div", {
+        className: "xm-input-frag"
+      }, /*#__PURE__*/React.createElement("label", {
+        htmlFor: "quantity",
+        className: "text-right"
+      }, /*#__PURE__*/React.createElement("strong", null, "Qty")), /*#__PURE__*/React.createElement("input", {
+        type: "number",
+        name: "quantity",
+        value: state.quantity,
+        onChange: this.handleChange,
+        placeholder: 'Enter your size'
+      })), /*#__PURE__*/React.createElement("div", {
+        className: "xm-input-frag"
+      }, /*#__PURE__*/React.createElement("input", {
+        type: "submit",
+        name: "submit",
+        className: "xm-input-submit",
+        value: "Add to cart",
+        onClick: this.handleSubmit
+      })))));
     }
   }]);
 
@@ -222,6 +471,10 @@ var init = function init($scope) {
     return;
   }
 
+  var _el$dataset = el.dataset,
+      ajaxurl = _el$dataset.ajaxurl,
+      wpNonce = _el$dataset.wpNonce;
+
   var _$scope$find3 = $scope.find('.xm-letterify-template'),
       _$scope$find4 = _slicedToArray(_$scope$find3, 1),
       templateEl = _$scope$find4[0];
@@ -235,7 +488,9 @@ var init = function init($scope) {
 
 
   ReactDOM.render(React.createElement(LetterifyEl, {
-    templateEl: templateEl
+    templateEl: templateEl,
+    ajaxurl: ajaxurl,
+    wpNonce: wpNonce
   }), el);
 };
 

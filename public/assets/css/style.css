@@ -1,10 +1,68 @@
+.xm-letterify p:last-child {
+	margin-bottom: 0;
+}
+
+.xm-letterify .text-center {
+	text-align: center;
+	-webkit-box-pack: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+}
+
+.xm-letterify .text-right {
+	text-align: right;
+}
+
+@font-face {
+	font-family: "Almibar";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../fonts/Almibar.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "PermanentMarker";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../fonts/PermanentMarker.ttf") format("truetype");
+}
+
 .xm-letterify {
-	border: 1px solid #5b5b5a;
+	border: 1px solid rgba(0, 0, 0, 0.125);
 	border-radius: .25rem;
 }
 
 .xm-letterify .xm-input-wrap {
-	margin-bottom: 10px;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	padding: .75rem 1.25rem;
+}
+
+.xm-letterify .xm-input-wrap .xm-input-frag {
+	-webkit-box-flex: 1;
+	    -ms-flex: 1;
+	        flex: 1;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+}
+
+.xm-letterify .xm-input-wrap .xm-input-frag:not(:first-child):not(:last-child) {
+	padding: 0 10px;
+}
+
+.xm-letterify .xm-input-wrap:not(:last-child) {
+	border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 }
 
 .xm-letterify .xm-input-wrap input,
@@ -22,4 +80,73 @@
 	border-radius: .25rem;
 	-webkit-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
 	        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+}
+
+.xm-letterify .xm-input-wrap input.xm-entry-text,
+.xm-letterify .xm-input-wrap select.xm-entry-text,
+.xm-letterify .xm-input-wrap textarea.xm-entry-text {
+	font-size: 1.5rem;
+}
+
+.xm-letterify .xm-input-wrap.xm-input-sm {
+	font-size: 0.9rem;
+}
+
+.xm-letterify .xm-input-wrap label {
+	display: block;
+	margin-right: 10px;
+	width: calc(30% - 10px);
+}
+
+.xm-letterify .xm-input-wrap label strong {
+	font-weight: 600;
+}
+
+.xm-letterify .xm-input-wrap label + input,
+.xm-letterify .xm-input-wrap label + select,
+.xm-letterify .xm-input-wrap label + textarea {
+	display: block;
+}
+
+:not(.xm-input-full) .xm-letterify .xm-input-wrap label + input, :not(.xm-input-full)
+.xm-letterify .xm-input-wrap label + select, :not(.xm-input-full)
+.xm-letterify .xm-input-wrap label + textarea {
+	width: 70%;
+}
+
+.xm-letterify .xm-input-wrap.xm-input-full {
+	display: block;
+}
+
+.xm-letterify .xm-input-wrap.xm-input-full > * {
+	text-align: left;
+	min-width: 100%;
+}
+
+.xm-letterify .xm-input-wrap input[type=submit] {
+	color: #fff;
+	background-color: #ff5a46;
+	border: 1px solid #ff5a46;
+	display: inline-block;
+	font-weight: 600;
+	letter-spacing: .1em;
+	text-transform: uppercase;
+	text-align: center;
+	white-space: nowrap;
+	vertical-align: middle;
+	-webkit-user-select: none;
+	    -ms-user-select: none;
+	        user-select: none;
+	padding: .375rem .75rem;
+	font-size: 1rem;
+	line-height: 1.5;
+	border-radius: .25rem;
+	-webkit-transition: all .15s ease-in-out;
+	        transition: all .15s ease-in-out;
+}
+
+.xm-letterify .xm-input-wrap input[type=submit]:hover {
+	color: #fff;
+	background-color: #ff3820;
+	border-color: #ff2d13;
 }
