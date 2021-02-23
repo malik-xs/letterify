@@ -46,11 +46,88 @@ final class Plugin {
 	public function init() {
 		#Loading the scripts and styles
 		add_action('wp_enqueue_scripts', [$this, 'js_css_public']);
+
+		add_action('wp_ajax_woocommerce_ajax_add_to_cart', [$this, 'woocommerce_ajax_add_to_cart']);
+		add_action('wp_ajax_nopriv_woocommerce_ajax_add_to_cart', [$this, 'woocommerce_ajax_add_to_cart']);
+
+		add_action( 'wp_ajax_ajax_save_photo',  [$this, 'ajax_save_photo'] );
+		add_action( 'wp_ajax_nopriv_ajax_save_photo',  [$this, 'ajax_save_photo'] );
+
 		// add_action('admin_enqueue_scripts', [$this, 'js_css_admin']);
 		add_shortcode('letterify', [$this, 'letterify_form_function']);
 	}
 
 
+	function ajax_save_photo() {
+		$upload_dir  = wp_upload_dir();
+		$upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
+
+		$img             = str_replace( 'data:image/png;base64,', '', $_POST['imgBase64'] );
+		$img             = str_replace( ' ', '+', $img );
+		$decoded         = base64_decode( $img );
+		$filename        = $_POST['title'] . '.png';
+		$file_type       = 'image/png';
+		$hashed_filename = md5( $filename . microtime() ) . '_' . $filename;
+
+		// Save the image in the uploads directory.
+		$upload_file = file_put_contents( $upload_path . $hashed_filename, $decoded );
+
+		$attachment = array(
+			'post_mime_type' => $file_type,
+			'post_title'     => preg_replace( '/\.[^.]+$/', '', basename( $hashed_filename ) ),
+			'post_content'   => '',
+			'post_status'    => 'inherit',
+			'guid'           => $upload_dir['url'] . '/' . basename( $hashed_filename )
+		);
+
+		$attach_id = wp_insert_attachment( $attachment, $upload_dir['path'] . '/' . $hashed_filename );
+		
+		wp_die();
+	}
+
+	function woocommerce_ajax_add_to_cart() {
+		$product_id = apply_filters('woocommerce_add_to_cart_product_id', absint($_POST['product_id']));
+		$quantity = empty($_POST['quantity']) ? 1 : wc_stock_amount($_POST['quantity']);
+		$variation_id = absint($_POST['variation_id']);
+		$passed_validation = apply_filters('woocommerce_add_to_cart_validation', true, $product_id, $quantity);
+		$product_status = get_post_status($product_id);
+
+		if ($passed_validation && WC()->cart->add_to_cart($product_id, $quantity, $variation_id) && 'publish' === $product_status) {
+
+			do_action('woocommerce_ajax_added_to_cart', $product_id);
+
+			if ('yes' === get_option('woocommerce_cart_redirect_after_add')) {
+				wc_add_to_cart_message(array($product_id => $quantity), true);
+			}
+			
+			add_action( 'woocommerce_before_calculate_totals', [$this, 'woocommerce_custom_price_to_cart_item'], 99, WC()->cart->get_cart() );
+
+			// WC_AJAX :: get_refreshed_fragments();
+
+		} else {
+
+			$data = array(
+				'error' => true,
+				'product_url' => apply_filters('woocommerce_cart_redirect_after_error', get_permalink($product_id), $product_id));
+
+			echo wp_send_json($data);
+		}
+
+		wp_die();
+	}
+
+	function woocommerce_custom_price_to_cart_item( $cart_object ) {  
+		if( !WC()->session->__isset( "reload_checkout" )) {
+			foreach ( $cart_object->cart_contents as $key => $value ) {
+				if( isset( $_POST['price'] ) ) {
+					//for woocommerce version lower than 3
+					//$value['data']->price = $_POST['price'];
+					//for woocommerce version +3
+					$value['data']->set_price($_POST['price']);
+				}
+			}  
+		}  
+	}
 	/**
 	 * Public function version.
 	 * set for plugin version

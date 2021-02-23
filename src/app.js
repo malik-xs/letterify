@@ -61,12 +61,12 @@ class LetterifyEl extends React.Component {
 			color: '',
 			font: 'Almibar',
 			quantity: 1,
+			loading: false,
 			price: 0.59,
 		};
 	}
 
 	componentDidUpdate( ) {
-
 	}
 
 	componentDidMount( ) {
@@ -82,6 +82,7 @@ class LetterifyEl extends React.Component {
 
 	handleChange = ( e ) => {
 		const { name, value } = e.target;
+
 		if ( this.state[name] !== value ) {
 			this.setState( {
 				[name]: value,
@@ -91,51 +92,47 @@ class LetterifyEl extends React.Component {
 
 	handleSubmit = ( e ) => {
 		e.preventDefault();
+		this.setState( { loading: true } );
 
 		var image = document.getElementById( 'canvasComponent' );
-		var imageURL = image.toDataURL();
+		var imageURL = image.toDataURL( 'image/png' );
 
 		jQuery.ajax( {
 			type: 'POST',
 			url: this.props.ajaxurl,
-			action: 'ajaxHandler',
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded;',
-				'X-WP-Nonce': this.props.wpNonce,
-			},
-			data: { imgBase64: imageURL },
+			data: { action: 'ajax_save_photo', title: this.state.value + Math.floor( ( Math.random() * 100 ) + 1 ), imgBase64: imageURL },
 		} ).done( function() {
 			console.log( 'saved' );
 		} );
 
-		return;
-
 		var data = {
 			action: 'woocommerce_ajax_add_to_cart',
-			product_id: 18,
+			product_id: 163,
 			product_sku: '',
+			price: 500,
 			quantity: this.state.quantity,
+			variation_id: null
 		};
 
-		jQuery( document.body ).trigger( 'adding_to_cart', [ e.target, data ] );
+		// jQuery( document.body ).trigger( 'adding_to_cart', [ e.target, data ] );
 
 		jQuery.ajax( {
 			type: 'post',
 			url: wc_add_to_cart_params.ajax_url,
 			data: data,
-			headers: {
-				'Content-Type': 'application/x-www-form-urlencoded;'
-			},
-			method: 'POST',
 			beforeSend: ( response ) => {
 				// $thisbutton.removeClass('added').addClass('loading');
 			},
 			complete: ( response ) => {
+				setTimeout( ( ) => {
+					this.setState( { loading: false } );
+				}, 1000 );
 				// $thisbutton.addClass('added').removeClass('loading');
 			},
 			success: ( response ) => {
+				console.log( response );
 				if ( ! response.error ) {
-					jQuery( document.body ).trigger('added_to_cart', [response.fragments, response.cart_hash, e.target]);
+					// jQuery( document.body ).trigger('added_to_cart', [ response.fragments, response.cart_hash, e.target ]);
 				}
 			},
 		} );
@@ -261,7 +258,9 @@ class LetterifyEl extends React.Component {
 					</div>
 					<div className="xm-input-wrap">
 						<div className="xm-input-frag">
-							Starting At: ${ state.price }
+							Starting At: ${
+								( 0.59 * ( this.state.value.replace( /\s/g, '' ).length > 0 ? this.state.value.replace( /\s/g, '' ).length : 1 ) * ( state.quantity > 0 ? state.quantity : 1 ) ).toFixed( 2 )
+							}
 						</div>
 						<div className="xm-input-frag">
 							<label htmlFor="quantity" className="text-right"><strong>Qty</strong></label>
@@ -270,7 +269,12 @@ class LetterifyEl extends React.Component {
 								onChange={ this.handleChange } placeholder={ 'Enter your size' } />
 						</div>
 						<div className="xm-input-frag">
-							<input type='submit' name='submit' className='xm-input-submit' value='Add to cart' onClick={ this.handleSubmit } />
+							<input
+								type='submit' name='submit'
+								className='xm-input-submit'
+								disabled={ state.loading }
+								value={ state.loading ? 'Loading...' : 'Add to cart' }
+								onClick={ this.handleSubmit } />
 						</div>
 					</div>
 				</form>

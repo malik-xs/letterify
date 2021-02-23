@@ -3,7 +3,7 @@
  * Grunt build script.
  * @description Automate several processes and compilations on `watch`. Export installable projects and zip on dist directory on `build`.
  * @version 1.0.0
- * @author emranio, malik-xs
+ * @author xianmalik
  * @organization Wpmet
 **************************************************/
 

@@ -162,45 +162,50 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
 
     _defineProperty(app_assertThisInitialized(_this), "handleSubmit", function (e) {
       e.preventDefault();
+
+      _this.setState({
+        loading: true
+      });
+
       var image = document.getElementById('canvasComponent');
-      var imageURL = image.toDataURL();
+      var imageURL = image.toDataURL('image/png');
       jQuery.ajax({
         type: 'POST',
         url: _this.props.ajaxurl,
-        action: 'ajaxHandler',
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;',
-          'X-WP-Nonce': _this.props.wpNonce
-        },
         data: {
+          action: 'ajax_save_photo',
+          title: _this.state.value + Math.floor(Math.random() * 100 + 1),
           imgBase64: imageURL
         }
       }).done(function () {
         console.log('saved');
       });
-      return;
       var data = {
         action: 'woocommerce_ajax_add_to_cart',
-        product_id: 18,
+        product_id: 163,
         product_sku: '',
-        quantity: _this.state.quantity
-      };
-      jQuery(document.body).trigger('adding_to_cart', [e.target, data]);
+        price: 500,
+        quantity: _this.state.quantity,
+        variation_id: null
+      }; // jQuery( document.body ).trigger( 'adding_to_cart', [ e.target, data ] );
+
       jQuery.ajax({
         type: 'post',
         url: wc_add_to_cart_params.ajax_url,
         data: data,
-        headers: {
-          'Content-Type': 'application/x-www-form-urlencoded;'
-        },
-        method: 'POST',
         beforeSend: function beforeSend(response) {// $thisbutton.removeClass('added').addClass('loading');
         },
-        complete: function complete(response) {// $thisbutton.addClass('added').removeClass('loading');
+        complete: function complete(response) {
+          setTimeout(function () {
+            _this.setState({
+              loading: false
+            });
+          }, 1000); // $thisbutton.addClass('added').removeClass('loading');
         },
         success: function success(response) {
-          if (!response.error) {
-            jQuery(document.body).trigger('added_to_cart', [response.fragments, response.cart_hash, e.target]);
+          console.log(response);
+
+          if (!response.error) {// jQuery( document.body ).trigger('added_to_cart', [ response.fragments, response.cart_hash, e.target ]);
           }
         }
       });
@@ -214,6 +219,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       color: '',
       font: 'Almibar',
       quantity: 1,
+      loading: false,
       price: 0.59
     };
     return _this;
@@ -430,7 +436,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         className: "xm-input-wrap"
       }, /*#__PURE__*/React.createElement("div", {
         className: "xm-input-frag"
-      }, "Starting At: $", state.price), /*#__PURE__*/React.createElement("div", {
+      }, "Starting At: $", (0.59 * (this.state.value.replace(/\s/g, '').length > 0 ? this.state.value.replace(/\s/g, '').length : 1) * (state.quantity > 0 ? state.quantity : 1)).toFixed(2)), /*#__PURE__*/React.createElement("div", {
         className: "xm-input-frag"
       }, /*#__PURE__*/React.createElement("label", {
         htmlFor: "quantity",
@@ -447,7 +453,8 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         type: "submit",
         name: "submit",
         className: "xm-input-submit",
-        value: "Add to cart",
+        disabled: state.loading,
+        value: state.loading ? 'Loading...' : 'Add to cart',
         onClick: this.handleSubmit
       })))));
     }
