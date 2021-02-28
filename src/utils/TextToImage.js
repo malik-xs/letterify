@@ -4,7 +4,7 @@ export default class TextToImage extends React.Component {
 		this.state = {
 			img: '',
 			err: '',
-			color: this.props.value || '#343234',
+			color: this.props.color,
 			value: this.props.value !== '' ? this.props.value : 'Enter Your Text',
 			fontFamily: this.props.font,
 			fontSize: 48,

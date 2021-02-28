@@ -51,7 +51,7 @@ new Letterify();
 
 function activate_letterify() {
 
-//   \Wooengine\Core\Wooengine_Template_Cpt::instance()->init();
+//   \Letterify\Core\Letterify_Template_Cpt::instance()->init();
 //   flush_rewrite_rules();
 }
 

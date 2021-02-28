@@ -12,8 +12,8 @@ defined('ABSPATH') || exit;
  */
 final class Plugin {
 	const TEXT_DOMAIN       = 'letterify';
-	// const CPT_WOO_BUILDER   = 'wooengine-template';
-	// const CSS_CLASS_PREFIX  = 'wooengine_';
+	// const CPT_WOO_BUILDER   = 'letterify-template';
+	// const CSS_CLASS_PREFIX  = 'letterify_';
 	// const GENERAL_PREFIX    = 'web__';
 
 
@@ -55,8 +55,22 @@ final class Plugin {
 
 		// add_action('admin_enqueue_scripts', [$this, 'js_css_admin']);
 		add_shortcode('letterify', [$this, 'letterify_form_function']);
+
+		add_action( 'woocommerce_before_calculate_totals', [$this, 'woocommerce_custom_price_to_cart_item'], 99 );
 	}
 
+	function woocommerce_custom_price_to_cart_item( $cart_object ) {  
+		if( !WC()->session->__isset( "reload_checkout" )) {
+			foreach ( $cart_object->cart_contents as $key => $value ) {
+				if( isset( $value["custom_price"] ) ) {
+					//for woocommerce version lower than 3
+					$value['data']->price = $value["custom_price"];
+					//for woocommerce version +3
+					$value['data']->set_price($value["custom_price"]);
+				}
+			}  
+		}  
+	}
 
 	function ajax_save_photo() {
 		$upload_dir  = wp_upload_dir();
@@ -92,7 +106,29 @@ final class Plugin {
 		$passed_validation = apply_filters('woocommerce_add_to_cart_validation', true, $product_id, $quantity);
 		$product_status = get_post_status($product_id);
 
-		if ($passed_validation && WC()->cart->add_to_cart($product_id, $quantity, $variation_id) && 'publish' === $product_status) {
+		// $user_custom_data_values = array(
+		// 	$product_id => $_POST['product_id'],
+		// 	$quantity => $_POST['quantity']
+		// );
+
+		$custom_price = 1000;
+		// Cart item data to send & save in order
+		$cart_item_data = array('custom_price' => $custom_price);
+
+		/**
+		 * Add to Session
+		 */
+		// session_start();
+		// $_SESSION['lettrify_cart_data'] = $user_custom_data_values;
+		// die();
+			
+		if ($passed_validation && WC()->cart->add_to_cart($product_id, $quantity, $variation_id, $cart_item_data) && 'publish' === $product_status) {
+			global $woocommerce;
+			$woocommerce->cart->calculate_totals();
+			// Save cart to session
+			$woocommerce->cart->set_session();
+			// Maybe set cart cookies
+			$woocommerce->cart->maybe_set_cart_cookies();
 
 			do_action('woocommerce_ajax_added_to_cart', $product_id);
 
@@ -100,7 +136,7 @@ final class Plugin {
 				wc_add_to_cart_message(array($product_id => $quantity), true);
 			}
 			
-			add_action( 'woocommerce_before_calculate_totals', [$this, 'woocommerce_custom_price_to_cart_item'], 99, WC()->cart->get_cart() );
+			// add_action( 'woocommerce_before_calculate_totals', [$this, 'woocommerce_custom_price_to_cart_item'], 99, WC()->cart->get_cart() );
 
 			// WC_AJAX :: get_refreshed_fragments();
 
@@ -116,18 +152,6 @@ final class Plugin {
 		wp_die();
 	}
 
-	function woocommerce_custom_price_to_cart_item( $cart_object ) {  
-		if( !WC()->session->__isset( "reload_checkout" )) {
-			foreach ( $cart_object->cart_contents as $key => $value ) {
-				if( isset( $_POST['price'] ) ) {
-					//for woocommerce version lower than 3
-					//$value['data']->price = $_POST['price'];
-					//for woocommerce version +3
-					$value['data']->set_price($_POST['price']);
-				}
-			}  
-		}  
-	}
 	/**
 	 * Public function version.
 	 * set for plugin version
@@ -281,41 +305,15 @@ final class Plugin {
 	}
 
 
-	public function js_css_admin() {
-
-		// get screen id
-		// $screen = get_current_screen();
-
-		// $cptName = Cpt::get_cpt_name();
-
-		// if(in_array($screen->id, ['edit-' . $cptName, 'wwb_page_mt-form-settings'])) {
-
-		// 	wp_enqueue_style('wooengine-ui', plugin_dir_url(__FILE__) . 'assets/css/design-ui.css', false, $this->version());
-		// 	wp_enqueue_style('wooengine-admin-style', plugin_dir_url(__FILE__) . 'assets/css/admin-style.css', false, $this->version());
-
-		// 	wp_enqueue_script('wooengine-ui', plugin_dir_url(__FILE__) . 'assets/js/ui.min.js', array(), $this->version(), true);
-		// 	wp_enqueue_script('wooengine-admin-script', plugin_dir_url(__FILE__) . 'assets/js/admin-script.js', array(), $this->version(), true);
-		// 	wp_localize_script('wooengine-admin-script', 'wwb_api', array(
-		// 		'resturl' => get_rest_url(),
-		// 		'siteurl' => get_option('siteurl'),
-		// 		'nonce'   => wp_create_nonce('wp_rest'),
-		// 	));
-		// }
-
-		// if($screen->id == 'edit-wooengine-entry' || $screen->id == 'wooengine-entry') {
-		// 	wp_enqueue_style('wooengine-ui', plugin_dir_url(__FILE__) . 'assets/css/design-ui.css', false, $this->version());
-		// 	wp_enqueue_script('wooengine-entry-script', plugin_dir_url(__FILE__) . 'assets/js/admin-entry-script.js', array(), $this->version(), true);
-		// }
-
-	}
+	public function js_css_admin() { }
 
 
 	function admin_menu() {
 		add_menu_page(
-			esc_html__('Letterify', 'shopengine'),
-			esc_html__('Letterify', 'shopengine'),
+			esc_html__('Letterify', 'letterify'),
+			esc_html__('Letterify', 'letterify'),
 			'read',
-			'wooengine-menu',
+			'letterify-menu',
 			'',
 			'dashicons-feedback',
 			5
