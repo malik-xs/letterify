@@ -46,6 +46,7 @@ final class Plugin {
 	public function init() {
 		#Loading the scripts and styles
 		add_action('wp_enqueue_scripts', [$this, 'js_css_public']);
+		add_action('admin_enqueue_scripts', [$this, 'js_css_admin']);
 
 		add_action('wp_ajax_woocommerce_ajax_add_to_cart', [$this, 'woocommerce_ajax_add_to_cart']);
 		add_action('wp_ajax_nopriv_woocommerce_ajax_add_to_cart', [$this, 'woocommerce_ajax_add_to_cart']);
@@ -53,10 +54,44 @@ final class Plugin {
 		add_action( 'wp_ajax_ajax_save_photo',  [$this, 'ajax_save_photo'] );
 		add_action( 'wp_ajax_nopriv_ajax_save_photo',  [$this, 'ajax_save_photo'] );
 
-		// add_action('admin_enqueue_scripts', [$this, 'js_css_admin']);
 		add_shortcode('letterify', [$this, 'letterify_form_function']);
 
 		add_action( 'woocommerce_before_calculate_totals', [$this, 'woocommerce_custom_price_to_cart_item'], 99 );
+
+		
+		// check permission for manage user
+		add_action('admin_menu', [$this, 'admin_menu']);
+	
+		add_action( 'wp_ajax_ajax_save_admin_options', [$this, 'ajax_save_admin_options'] );
+		add_action( 'wp_ajax_nopriv_ajax_save_admin_options', [$this, 'ajax_save_admin_options'] );
+	}
+
+	function ajax_save_admin_options() {
+		$colors = $_POST['colors'];
+
+		if ( ! get_option("__letterify_colors") ){
+			add_option("__letterify_colors", $colors);
+		} else {
+			update_option("__letterify_colors", json_encode($colors));
+		}
+		
+		wp_die();
+		// $wpdb->insert(
+		// 	$wpdb->options,
+		// 	array( 'meta_key' => '__letterify_colors', 'meta_value' => $colors ),
+		// 	array( '%s' ),
+		// );
+
+		// wp_redirect( site_url('/wp-admin/admin.php?page=letterify-menu') ); 
+		// die;
+	}
+
+	function my_admin_page_contents() {
+		?>
+			<h1>
+				<?php esc_html_e( 'Welcome to my custom admin page.', 'my-plugin-textdomain' ); ?>
+			</h1>
+		<?php
 	}
 
 	function woocommerce_custom_price_to_cart_item( $cart_object ) {  
@@ -305,7 +340,9 @@ final class Plugin {
 	}
 
 
-	public function js_css_admin() { }
+	public function js_css_admin() {
+        wp_enqueue_script('letterify-admin-js', plugin_dir_url(__FILE__) . 'core/assets/js/admin-scripts.js', array('jquery'), '1.0.0', true);
+	}
 
 
 	function admin_menu() {
@@ -314,10 +351,14 @@ final class Plugin {
 			esc_html__('Letterify', 'letterify'),
 			'read',
 			'letterify-menu',
-			'',
-			'dashicons-feedback',
+			[$this, 'letterify_menu'],
+			'dashicons-slides',
 			5
 		);
+	}
+
+	function letterify_menu() {
+		require_once 'core/views/admin-menu.php';
 	}
 
 	public static function instance() {

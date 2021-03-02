@@ -1,7 +1,6 @@
 // import GoogleFontLoader from 'react-google-font-loader';
-import Select from 'react-select-2';
 import TextToImage from './utils/TextToImage';
-import 'react-select-2/dist/css/react-select.css';
+import Select from 'react-select';
 
 const fonts = [
 	'Almibar',
@@ -9,58 +8,59 @@ const fonts = [
 	'SourceCodePro',
 ];
 
-const colors = [
-	{ value: '#ffffff', label: '#ffffff' },
-	{ value: '#000000', label: '#000000' },
-	{ value: '#971a1e', label: '#971a1e' },
-	{ value: '#D40000', label: '#D40000' },
-	{ value: '#DAB0AA', label: '#DAB0AA' },
-	{ value: '#fcf1f7', label: '#fcf1f7' },
-	{ value: '#f199bf', label: '#f199bf' },
-	{ value: '#e3568a', label: '#e3568a' },
-	{ value: '#FC9E8B', label: '#FC9E8B' },
-	{ value: '#f16728', label: '#f16728' },
-	{ value: '#E87400', label: '#E87400' },
-	{ value: '#faed12', label: '#faed12' },
-	{ value: '#faf8ae', label: '#faf8ae' },
-	{ value: '#e4ecb0', label: '#e4ecb0' },
-	{ value: '#abcf37', label: '#abcf37' },
-	{ value: '#97b94b', label: '#97b94b' },
-	{ value: '#119f49', label: '#119f49' },
-	{ value: '#0f643d', label: '#0f643d' },
-	{ value: '#1e214a', label: '#1e214a' },
-	{ value: '#0d5488', label: '#0d5488' },
-	{ value: '#083B9C', label: '#083B9C' },
-	{ value: '#70c1ec', label: '#70c1ec' },
-	{ value: '#63888E', label: '#63888E' },
-	{ value: '#88cfbd', label: '#88cfbd' },
-	{ value: '#A2E8D9', label: '#A2E8D9' },
-	{ value: '#dee8e7', label: '#dee8e7' },
-	{ value: '#8882b2', label: '#8882b2' },
-	{ value: '#7d52a1', label: '#7d52a1' },
-	{ value: '#3D266E', label: '#3D266E' },
-	{ value: '#b783a7', label: '#b783a7' },
-	{ value: '#E5DDD0', label: '#E5DDD0' },
-	{ value: '#fef7dd', label: '#fef7dd' },
-	{ value: '#D3AD12', label: '#D3AD12' },
-	{ value: '#c0ac94', label: '#c0ac94' },
-	{ value: '#6d4835', label: '#6d4835' },
-	{ value: '#291A00', label: '#291A00' },
-	{ value: '#B5B0AC', label: '#B5B0AC' },
-	{ value: '#808281', label: '#808281' },
-	{ value: '#494B4E', label: '#494B4E' },
+const colors_fallback = [
+	{ "value": '#ffffff', "label": 'White' },
+	{ "value": '#000000', "label": 'Black' },
+	{ "value": '#971a1e', "label": 'Barn Red' },
+	{ "value": '#D40000', "label": 'RedMetallic Rose' },
+	{ "value": '#DAB0AA', "label": 'Princess Pink' },
+	{ "value": '#fcf1f7', "label": 'Lisa Pink' },
+	{ "value": '#f199bf', "label": '#f199bf' },
+	{ "value": '#e3568a', "label": '#e3568a' },
+	{ "value": '#FC9E8B', "label": '#FC9E8B' },
+	{ "value": '#f16728', "label": '#f16728' },
+	{ "value": '#E87400', "label": '#E87400' },
+	{ "value": '#faed12', "label": '#faed12' },
+	{ "value": '#faf8ae', "label": '#faf8ae' },
+	{ "value": '#e4ecb0', "label": '#e4ecb0' },
+	{ "value": '#abcf37', "label": '#abcf37' },
+	{ "value": '#97b94b', "label": '#97b94b' },
+	{ "value": '#119f49', "label": '#119f49' },
+	{ "value": '#0f643d', "label": '#0f643d' },
+	{ "value": '#1e214a', "label": '#1e214a' },
+	{ "value": '#0d5488', "label": '#0d5488' },
+	{ "value": '#083B9C', "label": '#083B9C' },
+	{ "value": '#70c1ec', "label": '#70c1ec' },
+	{ "value": '#63888E', "label": '#63888E' },
+	{ "value": '#88cfbd', "label": '#88cfbd' },
+	{ "value": '#A2E8D9', "label": '#A2E8D9' },
+	{ "value": '#dee8e7', "label": '#dee8e7' },
+	{ "value": '#8882b2', "label": '#8882b2' },
+	{ "value": '#7d52a1', "label": '#7d52a1' },
+	{ "value": '#3D266E', "label": '#3D266E' },
+	{ "value": '#b783a7', "label": '#b783a7' },
+	{ "value": '#E5DDD0', "label": '#E5DDD0' },
+	{ "value": '#fef7dd', "label": '#fef7dd' },
+	{ "value": '#D3AD12', "label": '#D3AD12' },
+	{ "value": '#c0ac94', "label": '#c0ac94' },
+	{ "value": '#6d4835', "label": '#6d4835' },
+	{ "value": '#291A00', "label": '#291A00' },
+	{ "value": '#B5B0AC', "label": '#B5B0AC' },
+	{ "value": '#808281', "label": '#808281' },
+	{ "value": '#494B4E', "label": '#494B4E' },
 ];
 
 class LetterifyEl extends React.Component {
 	constructor( props ) {
 		super( props );
-
+		console.log( props );
 		this.state = {
 			value: '',
 			height: '',
 			width: 0,
 			finish: '',
 			color: '#343234',
+			colors: props.colors !== '' ? JSON.parse( props.colors ) : colors_fallback,
 			font: 'Almibar',
 			quantity: 1,
 			loading: false,
@@ -78,8 +78,7 @@ class LetterifyEl extends React.Component {
 	callbackWidth = ( v ) => {
 		const { height } = this.state;
 		const width = Number( v ) * Number( height );
-		console.log( width );
-		// this.handleChange( { target: { name: 'width', value: width } } );
+		this.handleChange( { target: { name: 'width', value: width } } );
 	}
 
 	handleChange = ( e ) => {
@@ -228,11 +227,12 @@ class LetterifyEl extends React.Component {
 
 					<div className="xm-input-wrap" style={ { display: ( this.state.finish === 'painted' ? 'flex' : 'none' ) } }>
 						<label htmlFor="color" className="text-right"><strong>Color</strong></label>
+						{ state.colors.map( ( f, i ) => <option key={ i } value={ f.value }>{ f.label }</option> ) }
 						<Select
 							name="color"
 							id="color"
 							onChange={ this.handleChange }
-							options={ colors } />
+							options={ state.colors } />
 					</div>
 
 					<div className="xm-input-wrap text-center xm-input-sm">
@@ -297,7 +297,7 @@ let init = function( $scope ) {
 	if ( ! el ) {
 		return;
 	}
-	const { ajaxurl, wpNonce } = el.dataset;
+	const { ajaxurl, wpNonce, colors } = el.dataset;
 
 	const [ templateEl ] = $scope.find( '.xm-letterify-template' );
 	if ( ! templateEl ) {
@@ -312,6 +312,7 @@ let init = function( $scope ) {
 			templateEl: templateEl,
 			ajaxurl: ajaxurl,
 			wpNonce: wpNonce,
+			colors: colors,
 		} ),
 		el,
 	);
