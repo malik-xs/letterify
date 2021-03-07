@@ -7,7 +7,7 @@ export default class TextToImage extends React.Component {
 			color: this.props.color,
 			value: this.props.value !== '' ? this.props.value : 'Enter Your Text',
 			fontFamily: this.props.font,
-			fontSize: 48,
+			fontSize: 42,
 		};
 	}
 
@@ -26,10 +26,12 @@ export default class TextToImage extends React.Component {
 		canvasTxt.textAlign = 'center';
 		canvasTxt.textBaseline = 'middle';
 
+		let text = this.props.connect === 'individual' ? value.split( '' ).join( ' ' ) : value;
+
 		// Canvas can tell us the width
 		this.props.callbackWidth( canvasTxt.measureText( value ).width / fontSize );
 
-		canvasTxt.fillText( value, canvasTxt.canvas.width / 2, canvasTxt.canvas.height / 2 );
+		canvasTxt.fillText( text, canvasTxt.canvas.width / 2, canvasTxt.canvas.height / 2 );
 
 		this.setState( {
 			img: canvasTxt.canvas.toDataURL(),

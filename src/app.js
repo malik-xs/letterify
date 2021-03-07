@@ -1,6 +1,8 @@
 // import GoogleFontLoader from 'react-google-font-loader';
-import TextToImage from './utils/TextToImage';
+import React from 'react';
+
 import Select from 'react-select';
+import TextToImage from './utils/TextToImage';
 
 const fonts = [
 	'Almibar',
@@ -8,62 +10,22 @@ const fonts = [
 	'SourceCodePro',
 ];
 
-const colors_fallback = [
-	{ "value": '#ffffff', "label": 'White' },
-	{ "value": '#000000', "label": 'Black' },
-	{ "value": '#971a1e', "label": 'Barn Red' },
-	{ "value": '#D40000', "label": 'RedMetallic Rose' },
-	{ "value": '#DAB0AA', "label": 'Princess Pink' },
-	{ "value": '#fcf1f7', "label": 'Lisa Pink' },
-	{ "value": '#f199bf', "label": '#f199bf' },
-	{ "value": '#e3568a', "label": '#e3568a' },
-	{ "value": '#FC9E8B', "label": '#FC9E8B' },
-	{ "value": '#f16728', "label": '#f16728' },
-	{ "value": '#E87400', "label": '#E87400' },
-	{ "value": '#faed12', "label": '#faed12' },
-	{ "value": '#faf8ae', "label": '#faf8ae' },
-	{ "value": '#e4ecb0', "label": '#e4ecb0' },
-	{ "value": '#abcf37', "label": '#abcf37' },
-	{ "value": '#97b94b', "label": '#97b94b' },
-	{ "value": '#119f49', "label": '#119f49' },
-	{ "value": '#0f643d', "label": '#0f643d' },
-	{ "value": '#1e214a', "label": '#1e214a' },
-	{ "value": '#0d5488', "label": '#0d5488' },
-	{ "value": '#083B9C', "label": '#083B9C' },
-	{ "value": '#70c1ec', "label": '#70c1ec' },
-	{ "value": '#63888E', "label": '#63888E' },
-	{ "value": '#88cfbd', "label": '#88cfbd' },
-	{ "value": '#A2E8D9', "label": '#A2E8D9' },
-	{ "value": '#dee8e7', "label": '#dee8e7' },
-	{ "value": '#8882b2', "label": '#8882b2' },
-	{ "value": '#7d52a1', "label": '#7d52a1' },
-	{ "value": '#3D266E', "label": '#3D266E' },
-	{ "value": '#b783a7', "label": '#b783a7' },
-	{ "value": '#E5DDD0', "label": '#E5DDD0' },
-	{ "value": '#fef7dd', "label": '#fef7dd' },
-	{ "value": '#D3AD12', "label": '#D3AD12' },
-	{ "value": '#c0ac94', "label": '#c0ac94' },
-	{ "value": '#6d4835', "label": '#6d4835' },
-	{ "value": '#291A00', "label": '#291A00' },
-	{ "value": '#B5B0AC', "label": '#B5B0AC' },
-	{ "value": '#808281', "label": '#808281' },
-	{ "value": '#494B4E', "label": '#494B4E' },
-];
+const colors_fallback = require( '../configs/colors.json' );
 
 class LetterifyEl extends React.Component {
 	constructor( props ) {
 		super( props );
-		console.log( props );
 		this.state = {
 			value: '',
 			height: '',
 			width: 0,
 			finish: '',
 			color: '#343234',
-			colors: props.colors !== '' ? JSON.parse( props.colors ) : colors_fallback,
+			colors: ( props.colors !== '' && Array.isArray( JSON.parse( props.colors ) ) ) ? JSON.parse( props.colors ).data : colors_fallback,
 			font: 'Almibar',
+			connect: '',
 			quantity: 1,
-			loading: false,
+			loaded: false,
 			price: 0.59,
 		};
 	}
@@ -72,7 +34,7 @@ class LetterifyEl extends React.Component {
 	}
 
 	componentDidMount( ) {
-
+		this.setState( { loaded: true } );
 	}
 
 	callbackWidth = ( v ) => {
@@ -98,21 +60,21 @@ class LetterifyEl extends React.Component {
 		var image = document.getElementById( 'canvasComponent' );
 		var imageURL = image.toDataURL( 'image/png' );
 
-		jQuery.ajax( {
-			type: 'POST',
-			url: this.props.ajaxurl,
-			data: { action: 'ajax_save_photo', title: this.state.value + Math.floor( ( Math.random() * 100 ) + 1 ), imgBase64: imageURL },
-		} ).done( function() {
-			console.log( 'saved' );
-		} );
+		// jQuery.ajax( {
+		// 	type: 'POST',
+		// 	url: this.props.ajaxurl,
+		// 	data: { action: 'ajax_save_photo', title: this.state.value + Math.floor( ( Math.random() * 100 ) + 1 ), imgBase64: imageURL },
+		// } ).done( function() {
+		// 	console.log( 'saved' );
+		// } );
 
 		var data = {
 			action: 'woocommerce_ajax_add_to_cart',
-			product_id: 163,
-			product_sku: '',
-			price: 500,
+			value: this.state.value,
+			price: ( 0.59 * ( this.state.value.replace( /\s/g, '' ).length > 0 ? this.state.value.replace( /\s/g, '' ).length : 1 ) ).toFixed( 2 ),
 			quantity: this.state.quantity,
 			variation_id: null,
+			imgBase64: imageURL,
 		};
 
 		// jQuery( document.body ).trigger( 'adding_to_cart', [ e.target, data ] );
@@ -143,6 +105,10 @@ class LetterifyEl extends React.Component {
 		const parent = this;
 		const { state } = parent;
 
+		if ( ! state.loaded ) {
+			return <><h4>Loading</h4></>;
+		}
+
 		return (
 			<>
 				<form>
@@ -152,6 +118,7 @@ class LetterifyEl extends React.Component {
 								<TextToImage
 									font={ state.font }
 									color={ state.color }
+									connect={ state.connect }
 									callbackWidth={ this.callbackWidth }
 									value={ state.value || '' }
 									x="0" y="10" />
@@ -216,7 +183,7 @@ class LetterifyEl extends React.Component {
 						</select>
 					</div>
 
-					<div className="xm-input-wrap" style={ { display: ( this.state.height > 4 ? 'flex' : 'none' ) } }>
+					<div className="xm-input-wrap">
 						<label htmlFor="mounting" className="text-right"><strong>Mounting</strong></label>
 						<select name="mounting" id="mounting" onChange={ this.handleChange }>
 							<option value="">- Select an Option -</option>
@@ -227,20 +194,22 @@ class LetterifyEl extends React.Component {
 
 					<div className="xm-input-wrap" style={ { display: ( this.state.finish === 'painted' ? 'flex' : 'none' ) } }>
 						<label htmlFor="color" className="text-right"><strong>Color</strong></label>
-						{ state.colors.map( ( f, i ) => <option key={ i } value={ f.value }>{ f.label }</option> ) }
-						<Select
-							name="color"
-							id="color"
-							onChange={ this.handleChange }
-							options={ state.colors } />
+						<select className="" name="color" id="color" onChange={ this.handleChange } data-dot-style={ state.color }>
+							{ state.colors.map(
+								( f, i ) =>
+									<option
+										style={ { background: 'linear-gradient(to right , ' + f.value + ' 20%, #ffffff 20%)' } }
+										className={ 'xm-input-color-' + f.value }
+										key={ i } value={ f.value }>{ f.label }</option> )
+							}
+						</select>
 					</div>
-
 					<div className="xm-input-wrap text-center xm-input-sm">
 						<p>
 							<strong>Approx. Width: </strong>
 							{
 								state.value !== '' && state.height !== ''
-									? state.width + '"'
+									? state.width.toFixed( 2 ) + '"'
 									: 'Enter text and select a Height to see Approx. Width.'
 							}
 						</p>
@@ -252,12 +221,12 @@ class LetterifyEl extends React.Component {
 						</p>
 					</div>
 					<div className="xm-input-wrap xm-input-full">
-						<label htmlFor="thickness" className="text-right"><strong>Letter Connect</strong></label>
-						<select name="letterConnect" id="letterConnect" onChange={ this.handleChange } value={ state.letterConnect }>
+						<label htmlFor="connect" className="text-right"><strong>Letter Connect</strong></label>
+						<select name="connect" id="connect" onChange={ this.handleChange } value={ state.connect }>
 							<option value="">-- Please Select --</option>
-							<option value="502" price="0">As Shown </option>
-							<option value="503" price="0">Each Word Connected </option>
-							<option value="504" price="0">Individual Letters </option>
+							<option value="shown" price="0">As Shown </option>
+							<option value="connect" price="0">Each Word Connected </option>
+							<option value="individual" price="0">Individual Letters </option>
 						</select>
 					</div>
 					<div className="xm-input-wrap">

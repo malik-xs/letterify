@@ -252,9 +252,8 @@ module.exports = function (grunt) {
 		},
 
 		// Minify all .js files.
-		uglify: {
+		terser: {
 			options: {
-				force: true,
 				ie8: true,
 				parse: {
 					strict: false
@@ -266,9 +265,6 @@ module.exports = function (grunt) {
 					src: [projectConfig.distDir + '**/*.js'],
 					dest: '',
 				}],
-				options: {
-					preserveComments: false
-				}
 			}
 		},
 
@@ -352,7 +348,6 @@ module.exports = function (grunt) {
 	grunt.loadNpmTasks('grunt-wp-i18n');          // Load wp-i18n lib
 	grunt.loadNpmTasks('grunt-checktextdomain');
 	grunt.loadNpmTasks('grunt-stylelint');          // Loading Stylelint manually
-	grunt.loadNpmTasks('grunt-contrib-uglify-es');  // Loading Uglify ES6 manually
 
 	/* ---------------------------------------- * 
 	 *  Registering TASKS
@@ -377,7 +372,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask('minify', [
 		'log:minifying',
-		'uglify:js',
+		'terser:js',
 		'cssmin'
 	]);
 

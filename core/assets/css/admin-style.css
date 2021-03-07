@@ -1,0 +1,57 @@
+@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400&display=swap');
+
+.letterify-admin-wrap {
+	font-family: 'Lato', sans-serif !important;
+}
+.letterify-admin-wrap label {
+    font-size: 22px;
+    font-weight: 600;
+    margin: 0 0 16px;
+}
+.letterify-admin-wrap textarea {
+	min-width: 450px;
+	min-height: 400px;
+	font-size: 14px;
+	letter-spacing: .05em;
+	line-height: 1.6;
+	display: block;
+	border: 2px solid #4D61FC;
+    box-shadow: 0 2px 4px 0 rgb(136 144 195 / 20%), 0 5px 15px 0 rgb(37 44 97 / 15%);
+	background: #ffffff;
+	border-radius: 5px;
+	margin: 0 0 20px;
+}
+
+.letterify-admin-wrap .letterify-btn {
+	overflow: hidden;
+    display: inline-block;
+    position: relative;
+    padding: 12px 20px 12px;
+    background-color: #4D61FC;
+    color: white;
+    min-width: 120px;
+    border: 2px solid transparent;
+    min-height: 44px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px 0 rgb(136 144 195 / 20%), 0 5px 15px 0 rgb(37 44 97 / 15%);
+    font-size: 0;
+    line-height: 1.2;
+    font-weight: 400;
+	letter-spacing: 0.06em;
+	text-transform: uppercase;
+    -webkit-user-select: none;
+    -ms-user-select: none;
+    user-select: none;
+    text-align: center;
+    text-decoration: none;
+    cursor: pointer;
+    transition: color .2s ease,background-color .2s ease,border-color .2s ease,box-shadow .2s ease,transform .2s ease;
+	vertical-align: middle;
+	font-size: 14px;
+}
+
+.letterify-admin-wrap .letterify-btn {
+    background-color: #344bfc;
+    transform: translateY(-2px);
+    box-shadow: 0 2px 8px 0 rgb(136 144 195 / 22%), 0 8px 15px 0 rgb(37 44 97 / 17%);
+}
