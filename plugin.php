@@ -69,6 +69,19 @@ final class Plugin {
 
 
 		add_filter( 'woocommerce_process_product_meta', [$this, 'pharmacy_meta_boxes'] );
+
+		
+		remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
+
+		add_action( 'woocommerce_single_product_summary', [$this, 'replace_default_button'], 30 );
+	}
+
+	function replace_default_button(){
+		echo '<div class="xm-letterify">
+		<div class="xm-letterify-form-wrapper" data-ajaxurl="' . admin_url('admin-ajax.php') . '"
+			data-wpNonce="' . wp_create_nonce("xm_letterify") . '"
+			data-colors=' . stripslashes( preg_replace( '/\s*/m', '', json_decode( get_option('__letterify_colors') ) )) . '
+		><div class="xm-letterify-template"></div></div></div>';
 	}
 
 	function pharmacy_meta_boxes( $meta_boxes ) {
@@ -414,7 +427,7 @@ final class Plugin {
         wp_enqueue_script('htm', plugin_dir_url(__FILE__) . 'public/assets/js/htm.js', null, '1.0.0', true);
 
         wp_enqueue_script('letterify-js', plugin_dir_url(__FILE__) . 'public/assets/js/app.js', array('htm', 'jquery', 'wp-element'), '1.0.0', true);
-		wp_localize_script('letterify-js', 'ajaxurl', admin_url('admin-ajax.php'));
+		wp_localize_script('letterify-js', 'ajaxurl', array(admin_url('admin-ajax.php')));
 	}
 
 

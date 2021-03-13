@@ -1,6 +1,3 @@
-// import GoogleFontLoader from 'react-google-font-loader';
-import React from 'react';
-
 import Select from 'react-select';
 import TextToImage from './utils/TextToImage';
 
@@ -15,13 +12,15 @@ const colors_fallback = require( '../configs/colors.json' );
 class LetterifyEl extends React.Component {
 	constructor( props ) {
 		super( props );
+		const colors_data = JSON.parse( props.colors );
+
 		this.state = {
 			value: '',
 			height: '',
 			width: 0,
 			finish: '',
 			color: '#343234',
-			colors: ( props.colors !== '' && Array.isArray( JSON.parse( props.colors ) ) ) ? JSON.parse( props.colors ).data : colors_fallback,
+			colors: ( props.colors !== '' && Array.isArray( colors_data.data ) ) ? colors_data.data : colors_fallback.data,
 			font: 'Almibar',
 			connect: '',
 			quantity: 1,
@@ -183,7 +182,7 @@ class LetterifyEl extends React.Component {
 						</select>
 					</div>
 
-					<div className="xm-input-wrap">
+					<div className="xm-input-wrap" style={ { display: ( state.height === '' ? 'none' : 'flex' ) } }>
 						<label htmlFor="mounting" className="text-right"><strong>Mounting</strong></label>
 						<select name="mounting" id="mounting" onChange={ this.handleChange }>
 							<option value="">- Select an Option -</option>
@@ -191,6 +190,12 @@ class LetterifyEl extends React.Component {
 							<option value="">None</option>
 						</select>
 					</div>
+
+					<Select
+						name="let-color"
+						isSearchable={ false }
+						options={ [ { value: 'one', label: 'One' }, { value: 'two', label: 'Two' } ] }
+					/>
 
 					<div className="xm-input-wrap" style={ { display: ( this.state.finish === 'painted' ? 'flex' : 'none' ) } }>
 						<label htmlFor="color" className="text-right"><strong>Color</strong></label>
