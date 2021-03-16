@@ -3,8 +3,20 @@ import TextToImage from './utils/TextToImage';
 
 const fonts = [
 	'Almibar',
+	'AlwaysAGoodTime',
+	'Betterfly',
+	'BreakingBread',
+	'Brusher',
+	'BukhariScript',
+	'GrandHotel',
+	'HickoryJack',
+	'Kaleidos',
+	'Lavanderia',
+	'Norican',
 	'PermanentMarker',
-	'SourceCodePro',
+	'Sanelma',
+	'Sophia',
+	'StorytellerScript',
 ];
 
 const colors_fallback = require( '../configs/colors.json' );
@@ -92,7 +104,6 @@ class LetterifyEl extends React.Component {
 				// $thisbutton.addClass('added').removeClass('loading');
 			},
 			success: ( response ) => {
-				console.log( response );
 				if ( ! response.error ) {
 					// jQuery( document.body ).trigger('added_to_cart', [ response.fragments, response.cart_hash, e.target ]);
 				}
@@ -191,11 +202,11 @@ class LetterifyEl extends React.Component {
 						</select>
 					</div>
 
-					<Select
+					{ /* <Select
 						name="let-color"
 						isSearchable={ false }
 						options={ [ { value: 'one', label: 'One' }, { value: 'two', label: 'Two' } ] }
-					/>
+					/> */ }
 
 					<div className="xm-input-wrap" style={ { display: ( this.state.finish === 'painted' ? 'flex' : 'none' ) } }>
 						<label htmlFor="color" className="text-right"><strong>Color</strong></label>

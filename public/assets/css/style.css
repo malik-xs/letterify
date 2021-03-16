@@ -24,10 +24,101 @@
 }
 
 @font-face {
+	font-family: "AlwaysAGoodTime";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../fonts/AlwaysAGoodTime.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Betterfly";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../fonts/Betterfly.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "BreakingBread";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../fonts/BreakingBread.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Brusher";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../fonts/Brusher.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "BukhariScript";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../fonts/BukhariScript.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "GrandHotel";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../fonts/GrandHotel.otf") format("opentype");
+}
+
+@font-face {
+	font-family: "HickoryJack";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../fonts/HickoryJack.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Kaleidos";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../fonts/Kaleidos.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Lavanderia";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../fonts/Lavanderia.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Norican";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../fonts/Norican.ttf") format("truetype");
+}
+
+@font-face {
 	font-family: "PermanentMarker";
 	font-style: normal;
 	font-weight: 400;
 	src: url("../fonts/PermanentMarker.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Sanelma";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../fonts/Sanelma.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "Sophia";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../fonts/Sophia.ttf") format("truetype");
+}
+
+@font-face {
+	font-family: "StorytellerScript";
+	font-style: normal;
+	font-weight: 400;
+	src: url("../fonts/StorytellerScript.ttf") format("truetype");
 }
 
 .xm-letterify {
