@@ -1,4 +1,6 @@
-<?php if ( is_plugin_active( 'elementor/elementor.php' ) && \Elementor\Plugin::$instance->editor->is_edit_mode() ) : ?>
+<?php
+include_once(ABSPATH.'wp-admin/includes/plugin.php');
+if ( is_plugin_active( 'elementor/elementor.php' ) && \Elementor\Plugin::$instance->editor->is_edit_mode() ) : ?>
 	<div class="elementor-editor-panel elementor-editor-alert">Cannot preview in Elementor Editor Mode</div>
 <?php else : ?>
 	<div class="xm-letterify">

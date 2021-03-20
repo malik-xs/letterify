@@ -11,10 +11,9 @@
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
   
-  
 defined('ABSPATH') || exit;
-require 'plugin.php';
-require_once 'autoloader.php';
+
+require_once 'plugin.php';  
 
 final class Letterify
 {
@@ -32,15 +31,13 @@ final class Letterify
 
 	public function __construct() {
 		do_action('letterify/before_loaded');
-		add_action('plugins_loaded', [$this, 'init'], 100);
-		do_action('plugins_loaded');
+		add_action('letterify/plugins_loaded', [$this, 'init'], 100);
+		do_action('letterify/plugins_loaded');
 		do_action('letterify/after_loaded');
 	}
 
 	public function init() {
 		Letterify\Plugin::instance()->init();
-
-		// require_once plugin_dir_path( __FILE__ ) .  '/core/integrations/woocommerce.php';
 	}
 }
 
@@ -51,7 +48,7 @@ new Letterify();
 function activate_letterify() {
 
 //   \Letterify\Core\Letterify_Template_Cpt::instance()->init();
-//   flush_rewrite_rules();
+   flush_rewrite_rules();
 }
 
 

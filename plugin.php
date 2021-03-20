@@ -27,8 +27,6 @@ final class Plugin {
 	 * @since 1.0.0
 	 */
 	public function __construct() {
-		// load autoload method 
-		Autoloader::run();
 	}
 
 	function letterify_form_function() {
