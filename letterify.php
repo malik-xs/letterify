@@ -6,7 +6,7 @@
  * Version: 1.0.0
  * Author: Xian Malik
  * Author URI:  https://wpmet.com
- * Text Domain: xm-letterify
+ * Text Domain: letterify
  * License:  GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
@@ -18,7 +18,7 @@ require_once 'plugin.php';
 final class Letterify
 {
 	public static function version() {
-		return '1.0.0';
+		return '1.0.1';
 	}
 
 	static function author_name() {
