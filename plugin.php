@@ -437,7 +437,10 @@ final class Plugin {
         wp_enqueue_script('htm', plugin_dir_url(__FILE__) . 'public/assets/js/htm.js', null, '1.0.0', true);
 
         wp_enqueue_script('letterify-js', plugin_dir_url(__FILE__) . 'public/assets/js/app.js', array('htm', 'jquery', 'wp-element'), '1.0.0', true);
-		wp_localize_script('letterify-js', 'ajaxurl', array(admin_url('admin-ajax.php')));
+		wp_localize_script('letterify-js', 'letterify_admin_var', array(
+			'ajax_url' => admin_url('admin-ajax.php'),
+			'cart_url' => wc_get_cart_url(),
+		) );
 	}
 
 

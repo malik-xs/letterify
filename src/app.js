@@ -1,4 +1,3 @@
-import Select from 'react-select';
 import TextToImage from './utils/TextToImage';
 
 const fonts = [
@@ -39,6 +38,8 @@ class LetterifyEl extends React.Component {
 			loaded: false,
 			price: 0.59,
 			mounting: '',
+			add_to_cart_text: 'Add to cart',
+			added_to_cart: false,
 		};
 	}
 
@@ -67,18 +68,15 @@ class LetterifyEl extends React.Component {
 
 	handleSubmit = ( e ) => {
 		e.preventDefault();
+		if ( this.state.added_to_cart ) {
+			window.location = letterify_admin_var.cart_url;
+			return;
+		}
+
 		this.setState( { loading: true } );
 
 		var image = document.getElementById( 'canvasComponent' );
 		var imageURL = image.toDataURL( 'image/png' );
-
-		// jQuery.ajax( {
-		// 	type: 'POST',
-		// 	url: this.props.ajaxurl,
-		// 	data: { action: 'ajax_save_photo', title: this.state.value + Math.floor( ( Math.random() * 100 ) + 1 ), imgBase64: imageURL },
-		// } ).done( function() {
-		// 	console.log( 'saved' );
-		// } );
 
 		var data = {
 			action: 'woocommerce_ajax_add_to_cart',
@@ -97,26 +95,29 @@ class LetterifyEl extends React.Component {
 			font: this.state.font,
 		};
 
-		// jQuery( document.body ).trigger( 'adding_to_cart', [ e.target, data ] );
-
 		jQuery.ajax( {
 			type: 'post',
 			url: wc_add_to_cart_params.ajax_url,
 			data: data,
 			beforeSend: ( response ) => {
-				// $thisbutton.removeClass('added').addClass('loading');
+				this.setState( { add_to_cart_text: 'Adding to cart' } );
 			},
 			complete: ( response ) => {
 				setTimeout( ( ) => {
 					this.setState( { loading: false } );
 				}, 1000 );
-				// $thisbutton.addClass('added').removeClass('loading');
 			},
 			success: ( response ) => {
 				if ( ! response.error ) {
-					// jQuery( document.body ).trigger('added_to_cart', [ response.fragments, response.cart_hash, e.target ]);
+					this.setState( { add_to_cart_text: 'View Cart', added_to_cart: true } );
 				}
 			},
+			error: ( error ) => {
+				this.setState( { add_to_cart_text: 'Unsuccessful' } );
+				setTimeout( () => {
+					this.setState( { add_to_cart_text: 'Add to cart' } );
+				}, 1000 );
+			}
 		} );
 	}
 
@@ -271,7 +272,7 @@ class LetterifyEl extends React.Component {
 								type='submit' name='submit'
 								className='xm-input-submit'
 								disabled={ state.loading }
-								value={ state.loading ? 'Loading...' : 'Add to cart' }
+								value={ this.state.add_to_cart_text }
 								onClick={ this.handleSubmit } />
 						</div>
 					</div>
@@ -291,7 +292,7 @@ let init = function( $scope ) {
 	if ( ! el ) {
 		return;
 	}
-	const { ajaxurl, wpNonce, colors } = el.dataset;
+	const { letterify_admin_var, wpNonce, colors } = el.dataset;
 
 	const [ templateEl ] = $scope.find( '.xm-letterify-template' );
 	if ( ! templateEl ) {
@@ -304,7 +305,7 @@ let init = function( $scope ) {
 	ReactDOM.render(
 		React.createElement( LetterifyEl, {
 			templateEl: templateEl,
-			ajaxurl: ajaxurl,
+			letterify_admin_var: letterify_admin_var,
 			wpNonce: wpNonce,
 			colors: colors,
 		} ),
