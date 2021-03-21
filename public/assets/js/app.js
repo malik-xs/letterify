@@ -167,7 +167,6 @@ function app_getPrototypeOf(o) { app_getPrototypeOf = Object.setPrototypeOf ? Ob
 function _defineProperty(obj, key, value) { if (key in obj) { Object.defineProperty(obj, key, { value: value, enumerable: true, configurable: true, writable: true }); } else { obj[key] = value; } return obj; }
 
 
-
 var fonts = ['Almibar', 'AlwaysAGoodTime', 'Betterfly', 'BreakingBread', 'Brusher', 'BukhariScript', 'GrandHotel', 'HickoryJack', 'Kaleidos', 'Lavanderia', 'Norican', 'PermanentMarker', 'Sanelma', 'Sophia', 'StorytellerScript'];
 
 var colors_fallback = __webpack_require__(570);
@@ -209,19 +208,17 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
     _defineProperty(app_assertThisInitialized(_this), "handleSubmit", function (e) {
       e.preventDefault();
 
+      if (_this.state.added_to_cart) {
+        window.location = letterify_admin_var.cart_url;
+        return;
+      }
+
       _this.setState({
         loading: true
       });
 
       var image = document.getElementById('canvasComponent');
-      var imageURL = image.toDataURL('image/png'); // jQuery.ajax( {
-      // 	type: 'POST',
-      // 	url: this.props.ajaxurl,
-      // 	data: { action: 'ajax_save_photo', title: this.state.value + Math.floor( ( Math.random() * 100 ) + 1 ), imgBase64: imageURL },
-      // } ).done( function() {
-      // 	console.log( 'saved' );
-      // } );
-
+      var imageURL = image.toDataURL('image/png');
       var data = {
         action: 'woocommerce_ajax_add_to_cart',
         value: _this.state.value,
@@ -237,24 +234,41 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         width: _this.state.width,
         connect: _this.state.connect,
         font: _this.state.font
-      }; // jQuery( document.body ).trigger( 'adding_to_cart', [ e.target, data ] );
-
+      };
       jQuery.ajax({
         type: 'post',
         url: wc_add_to_cart_params.ajax_url,
         data: data,
-        beforeSend: function beforeSend(response) {// $thisbutton.removeClass('added').addClass('loading');
+        beforeSend: function beforeSend(response) {
+          _this.setState({
+            add_to_cart_text: 'Adding to cart'
+          });
         },
         complete: function complete(response) {
           setTimeout(function () {
             _this.setState({
               loading: false
             });
-          }, 1000); // $thisbutton.addClass('added').removeClass('loading');
+          }, 1000);
         },
         success: function success(response) {
-          if (!response.error) {// jQuery( document.body ).trigger('added_to_cart', [ response.fragments, response.cart_hash, e.target ]);
+          if (!response.error) {
+            _this.setState({
+              add_to_cart_text: 'View Cart',
+              added_to_cart: true
+            });
           }
+        },
+        error: function error(_error) {
+          _this.setState({
+            add_to_cart_text: 'Unsuccessful'
+          });
+
+          setTimeout(function () {
+            _this.setState({
+              add_to_cart_text: 'Add to cart'
+            });
+          }, 1000);
         }
       });
     });
@@ -272,7 +286,9 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       quantity: 1,
       loaded: false,
       price: 0.59,
-      mounting: ''
+      mounting: '',
+      add_to_cart_text: 'Add to cart',
+      added_to_cart: false
     };
     return _this;
   }
@@ -522,7 +538,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         name: "submit",
         className: "xm-input-submit",
         disabled: state.loading,
-        value: state.loading ? 'Loading...' : 'Add to cart',
+        value: this.state.add_to_cart_text,
         onClick: this.handleSubmit
       })))));
     }
@@ -547,7 +563,7 @@ var init = function init($scope) {
   }
 
   var _el$dataset = el.dataset,
-      ajaxurl = _el$dataset.ajaxurl,
+      letterify_admin_var = _el$dataset.letterify_admin_var,
       wpNonce = _el$dataset.wpNonce,
       colors = _el$dataset.colors;
 
@@ -565,7 +581,7 @@ var init = function init($scope) {
 
   ReactDOM.render(React.createElement(LetterifyEl, {
     templateEl: templateEl,
-    ajaxurl: ajaxurl,
+    letterify_admin_var: letterify_admin_var,
     wpNonce: wpNonce,
     colors: colors
   }), el);
