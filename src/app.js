@@ -1,3 +1,5 @@
+import Select from 'react-select';
+import chroma from 'chroma-js';
 import TextToImage from './utils/TextToImage';
 
 const fonts = [
@@ -20,6 +22,41 @@ const fonts = [
 
 const colors_fallback = require( '../configs/colors.json' );
 
+const dot = ( color = '#ccc' ) => ( {
+	alignItems: 'center',
+	display: 'flex',
+	':before': {
+		backgroundColor: color,
+		borderRadius: 3,
+		content: '" "',
+		display: 'block',
+		marginRight: 8,
+		height: 16,
+		width: 16,
+		border: '1px solid #f2f2f2',
+	},
+} );
+
+const colourStyles = {
+	control: styles => ( { ...styles, backgroundColor: 'white' } ),
+	option: ( styles, { data, isDisabled, isFocused, isSelected } ) => {
+		const color = chroma( data.color );
+		return {
+			...styles,
+			// backgroundColor: isDisabled ? null : isSelected ? data.color : isFocused ? color.alpha( 0.1 ).css() : null,
+			// color: isDisabled ? '#ccc' : isSelected ? chroma.contrast( color, 'white' ) > 2 ? 'white' : 'black' : data.color,
+			cursor: isDisabled ? 'not-allowed' : 'default',
+			':active': {
+				...styles[':active'],
+				backgroundColor: ! isDisabled && ( isSelected ? data.color : color.alpha( 0.3 ).css() ),
+			},
+			...dot( color.css() ),
+		};
+	},
+	input: styles => ( { ...styles, ...dot() } ),
+	placeholder: styles => ( { ...styles, ...dot() } ),
+	singleValue: ( styles, { data } ) => ( { ...styles, ...dot( data.color ) } ),
+};
 class LetterifyEl extends React.Component {
 	constructor( props ) {
 		super( props );
@@ -43,8 +80,7 @@ class LetterifyEl extends React.Component {
 		};
 	}
 
-	componentDidUpdate( ) {
-	}
+	componentDidUpdate( ) { }
 
 	componentDidMount( ) {
 		this.setState( { loaded: true } );
@@ -212,15 +248,17 @@ class LetterifyEl extends React.Component {
 						</select>
 					</div>
 
-					{ /* <Select
-						name="let-color"
-						isSearchable={ false }
-						options={ [ { value: 'one', label: 'One' }, { value: 'two', label: 'Two' } ] }
-					/> */ }
-
 					<div className="xm-input-wrap" style={ { display: ( this.state.finish === 'painted' ? 'flex' : 'none' ) } }>
 						<label htmlFor="color" className="text-right"><strong>Color</strong></label>
-						<select className="" name="color" id="color" onChange={ this.handleChange } data-dot-style={ state.color }>
+						<Select
+							className="" name="color"
+							id="color" onChange={ this.handleChange }
+							name="let-color"
+							isSearchable={ false }
+							styles={ colourStyles }
+							options={ this.state.colors }
+						/>
+						{/* <select data-dot-style={ state.color }>
 							{ state.colors.map(
 								( f, i ) =>
 									<option
@@ -228,7 +266,7 @@ class LetterifyEl extends React.Component {
 										className={ 'xm-input-color-' + f.value }
 										key={ i } value={ f.value }>{ f.label }</option> )
 							}
-						</select>
+						</select> */}
 					</div>
 					<div className="xm-input-wrap text-center xm-input-sm">
 						<p>

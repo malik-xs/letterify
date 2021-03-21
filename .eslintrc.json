@@ -28,6 +28,7 @@
 		"React": "readonly",
 		"ReactDOM": "readonly",
 		"grecaptcha": "readonly",
+		"letterify_admin_var": "readonly",
 		"htm": "readonly",
 		"StripeCheckout": "readonly",
 		"wp": true,
@@ -37,6 +38,7 @@
 	},
 	"rules": {
 		"camelcase": 0,
+        "no-nested-ternary": 0,
         "jsdoc/require-param-type": 0,
 		"no-alert": 0,
 		"vars-on-top": 0,

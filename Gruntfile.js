@@ -59,16 +59,37 @@ module.exports = function (grunt) {
 							'@babel/preset-env',
 							'@babel/preset-react',
 							{
-								plugins: ['@babel/plugin-proposal-class-properties']
+								plugins: [
+									'@babel/plugin-proposal-class-properties',
+									[ "import", {
+										"libraryName": "antd",
+										"style": "css",
+									} ]
+								]
 							}
 						],
 					}
 				}
+			},
+			{
+				test: /\.css$/i,
+				use: ['style-loader', 'css-loader'],
+			},
+			{
+				test: /\.(png|jpe?g|gif)$/i,
+				loader: 'file-loader',
+				options: {
+				  name: '[path][name].[ext]',
+				},
 			}]
 		},
 		performance: { hints: false },
 		resolve: {
 			fallback: { fs: false }
+		},
+		externals: {
+			"react": "React",
+			"react-dom": "ReactDOM"
 		},
 	}
 
