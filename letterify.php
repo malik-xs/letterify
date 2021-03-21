@@ -3,7 +3,7 @@
  * Plugin Name: Lettetify
  * Plugin URI:  https://github.com/malik-xs/letterify
  * Description: Letter printing plugin
- * Version: 1.0.0
+ * Version: 1.0.1
  * Author: Xian Malik
  * Author URI:  https://wpmet.com
  * Text Domain: letterify
