@@ -38,6 +38,7 @@ class LetterifyEl extends React.Component {
 			quantity: 1,
 			loaded: false,
 			price: 0.59,
+			mounting: '',
 		};
 	}
 
@@ -86,6 +87,14 @@ class LetterifyEl extends React.Component {
 			quantity: this.state.quantity,
 			variation_id: null,
 			imgBase64: imageURL,
+			finish: this.state.finish,
+			height: this.state.height,
+			thickness: this.state.thickness,
+			mounting: this.state.mounting,
+			color: this.state.color,
+			width: this.state.width,
+			connect: this.state.connect,
+			font: this.state.font,
 		};
 
 		// jQuery( document.body ).trigger( 'adding_to_cart', [ e.target, data ] );

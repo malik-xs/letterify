@@ -68,10 +68,25 @@ final class Plugin {
 
 		add_filter( 'woocommerce_process_product_meta', [$this, 'pharmacy_meta_boxes'] );
 
-		
 		remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
 
 		add_action( 'woocommerce_single_product_summary', [$this, 'replace_default_button'], 30 );
+
+		add_filter( 'woocommerce_cart_item_name', [$this, 'cart_description'], 20, 3);
+	}
+	
+	function cart_description( $name, $cart_item, $cart_item_key ) {
+		// Get the corresponding WC_Product
+		$product_item = $cart_item['data'];
+	
+		if(!empty($product_item)) {
+			// WC 3+ compatibility
+			$description = $product_item->get_description();
+			// $result = esc_html__( 'Description: ', 'letterify' ) . $description;
+			return $name . '<br>' . $description;
+		} else {
+			return $name;
+		}
 	}
 
 	function replace_default_button(){
@@ -164,34 +179,31 @@ final class Plugin {
 		return $attach_id;
 	}
 
-    protected function create_temp_product($price, $entry_id)
-    {
-    }
-
 	function woocommerce_ajax_add_to_cart() {
-		$content = '<table><tbody>';
-		if ( isset($_POST['font']) ) {
+		print_r($_POST);
+		$content = '<table class="letterify-cart-desc"><tbody>';
+		if ( isset($_POST['font']) && $_POST['font'] !== '' ) {
 			$content .= '<tr><td>Font: </td><td>' . esc_html($_POST['font']) . '</td></tr>';
 		}
-		if ( isset($_POST['finish']) ) {
+		if ( isset($_POST['finish']) && $_POST['finish'] !== '' ) {
 			$content .= '<tr><td>Finish: </td><td>' . esc_html($_POST['finish']) . '</td></tr>';
 		}
-		if ( isset($_POST['height']) ) {
+		if ( isset($_POST['height']) && $_POST['height'] !== '' ) {
 			$content .= '<tr><td>Height: </td><td>' . esc_html($_POST['height']) . '</td></tr>';
 		}
-		if ( isset($_POST['thickness']) ) {
+		if ( isset($_POST['thickness']) && $_POST['thickness'] !== '' ) {
 			$content .= '<tr><td>Thickness: </td><td>' . esc_html($_POST['thickness']) . '</td></tr>';
 		}
-		if ( isset($_POST['mounting']) ) {
+		if ( isset($_POST['mounting']) && $_POST['mounting'] !== '' ) {
 			$content .= '<tr><td>Mounting: </td><td>' . esc_html($_POST['mounting']) . '</td></tr>';
 		}
-		if ( isset($_POST['color']) ) {
+		if ( isset($_POST['color']) && $_POST['color'] !== '' ) {
 			$content .= '<tr><td>Color: </td><td>' . esc_html($_POST['color']) . '</td></tr>';
 		}
-		if ( isset($_POST['width']) ) {
+		if ( isset($_POST['width']) && $_POST['width'] !== '' ) {
 			$content .= '<tr><td>Width: </td><td>' . esc_html($_POST['width']) . '</td></tr>';
 		}
-		if ( isset($_POST['connect']) ) {
+		if ( isset($_POST['connect']) && $_POST['connect'] !== '' ) {
 			$content .= '<tr><td>Connect: </td><td>' . esc_html($_POST['connect']) . '</td></tr>';
 		}
 		$content .= '</tbody></table>';

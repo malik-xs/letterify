@@ -228,7 +228,15 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         price: (0.59 * (_this.state.value.replace(/\s/g, '').length > 0 ? _this.state.value.replace(/\s/g, '').length : 1)).toFixed(2),
         quantity: _this.state.quantity,
         variation_id: null,
-        imgBase64: imageURL
+        imgBase64: imageURL,
+        finish: _this.state.finish,
+        height: _this.state.height,
+        thickness: _this.state.thickness,
+        mounting: _this.state.mounting,
+        color: _this.state.color,
+        width: _this.state.width,
+        connect: _this.state.connect,
+        font: _this.state.font
       }; // jQuery( document.body ).trigger( 'adding_to_cart', [ e.target, data ] );
 
       jQuery.ajax({
@@ -263,7 +271,8 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       connect: '',
       quantity: 1,
       loaded: false,
-      price: 0.59
+      price: 0.59,
+      mounting: ''
     };
     return _this;
   }
