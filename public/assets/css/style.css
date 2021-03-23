@@ -83,7 +83,7 @@
 	font-family: "Lavanderia";
 	font-style: normal;
 	font-weight: 400;
-	src: url("../fonts/Lavanderia.ttf") format("truetype");
+	src: url("../fonts/Lavanderia.otf") format("opentype");
 }
 
 @font-face {
@@ -118,7 +118,7 @@
 	font-family: "StorytellerScript";
 	font-style: normal;
 	font-weight: 400;
-	src: url("../fonts/StorytellerScript.ttf") format("truetype");
+	src: url("../fonts/StorytellerScript.otf") format("opentype");
 }
 
 .xm-letterify {
@@ -186,7 +186,7 @@
 .xm-letterify .xm-input-wrap label {
 	display: block;
 	margin-right: 10px;
-	width: calc(30% - 10px);
+	width: calc(35% - 10px);
 }
 
 .xm-letterify .xm-input-wrap label strong {
@@ -202,7 +202,7 @@
 :not(.xm-input-full) .xm-letterify .xm-input-wrap label + input, :not(.xm-input-full)
 .xm-letterify .xm-input-wrap label + select, :not(.xm-input-full)
 .xm-letterify .xm-input-wrap label + textarea {
-	width: 70%;
+	width: 65%;
 }
 
 .xm-letterify .xm-input-wrap.xm-input-full {

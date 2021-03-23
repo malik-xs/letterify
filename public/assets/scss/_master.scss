@@ -48,7 +48,7 @@
 		label {
 			display: block;
 			margin-right: 10px;
-			width: calc(30% - 10px);
+			width: calc(35% - 10px);
 			
 
 			strong {
@@ -59,7 +59,7 @@
 			& + select,
 			& + textarea {
 				:not(.xm-input-full) & {
-					width: 70%;
+					width: 65%;
 				}
 				display: block;
 			}

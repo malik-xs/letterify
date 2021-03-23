@@ -2,24 +2,7 @@ import Select from 'react-select';
 import chroma from 'chroma-js';
 import TextToImage from './utils/TextToImage';
 
-const fonts = [
-	'Almibar',
-	'AlwaysAGoodTime',
-	'Betterfly',
-	'BreakingBread',
-	'Brusher',
-	'BukhariScript',
-	'GrandHotel',
-	'HickoryJack',
-	'Kaleidos',
-	'Lavanderia',
-	'Norican',
-	'PermanentMarker',
-	'Sanelma',
-	'Sophia',
-	'StorytellerScript',
-];
-
+const fonts_fallback = require( '../configs/fonts.json' );
 const colors_fallback = require( '../configs/colors.json' );
 
 const dot = ( color = '#ccc' ) => ( {
@@ -37,10 +20,22 @@ const dot = ( color = '#ccc' ) => ( {
 	},
 } );
 
+const fontsStyles = {
+	control: styles => ( { ...styles } ),
+	option: ( styles, { data } ) => {
+		return { ...styles, fontFamily: data.value };
+	},
+	input: ( styles, { data } ) => {
+		return { ...styles, fontFamily: data.value };
+	},
+	placeholder: styles => ( { ...styles } ),
+	singleValue: styles => ( { ...styles } ),
+};
+
 const colourStyles = {
 	control: styles => ( { ...styles, backgroundColor: 'white' } ),
-	option: ( styles, { data, isDisabled, isFocused, isSelected } ) => {
-		const color = chroma( data.color );
+	option: ( styles, { data, isDisabled, isSelected } ) => {
+		const color = chroma( data.value );
 		return {
 			...styles,
 			// backgroundColor: isDisabled ? null : isSelected ? data.color : isFocused ? color.alpha( 0.1 ).css() : null,
@@ -48,14 +43,14 @@ const colourStyles = {
 			cursor: isDisabled ? 'not-allowed' : 'default',
 			':active': {
 				...styles[':active'],
-				backgroundColor: ! isDisabled && ( isSelected ? data.color : color.alpha( 0.3 ).css() ),
+				backgroundColor: ! isDisabled && ( isSelected ? data.value : color.alpha( 0.3 ).css() ),
 			},
 			...dot( color.css() ),
 		};
 	},
 	input: styles => ( { ...styles, ...dot() } ),
 	placeholder: styles => ( { ...styles, ...dot() } ),
-	singleValue: ( styles, { data } ) => ( { ...styles, ...dot( data.color ) } ),
+	singleValue: ( styles, { data } ) => ( { ...styles, ...dot( data.value ) } ),
 };
 class LetterifyEl extends React.Component {
 	constructor( props ) {
@@ -93,12 +88,15 @@ class LetterifyEl extends React.Component {
 	}
 
 	handleChange = ( e ) => {
-		const { name, value } = e.target;
-
-		if ( this.state[name] !== value ) {
-			this.setState( {
-				[name]: value,
-			} );
+		if ( e.value ) {
+			this.setState( { color: e.value } );
+		} else {
+			const { name, value } = e.target;
+			if ( this.state[name] !== value ) {
+				this.setState( {
+					[name]: value,
+				} );
+			}
 		}
 	}
 
@@ -153,7 +151,7 @@ class LetterifyEl extends React.Component {
 				setTimeout( () => {
 					this.setState( { add_to_cart_text: 'Add to cart' } );
 				}, 1000 );
-			}
+			},
 		} );
 	}
 
@@ -191,9 +189,13 @@ class LetterifyEl extends React.Component {
 					</div>
 					<div className="xm-input-wrap">
 						<label htmlFor="font" className="text-right"><strong>Choose Font</strong></label>
-						<select name="font" id="font" onChange={ this.handleChange } value={ state.font }>
-							{ fonts.map( ( f, i ) => <option key={ i } value={ f }>{ f }</option> ) }
-						</select>
+						<Select
+							className="" name="font"
+							id="font" onChange={ e => this.handleChange( { target: { name: 'font', value: e.value } } ) }
+							isSearchable={ false }
+							styles={ fontsStyles }
+							options={ fonts_fallback.fonts }
+						/>
 					</div>
 					<div className="xm-input-wrap">
 						<label htmlFor="finish" className="text-right"><strong>Finish</strong></label>
@@ -253,20 +255,10 @@ class LetterifyEl extends React.Component {
 						<Select
 							className="" name="color"
 							id="color" onChange={ this.handleChange }
-							name="let-color"
 							isSearchable={ false }
 							styles={ colourStyles }
 							options={ this.state.colors }
 						/>
-						{/* <select data-dot-style={ state.color }>
-							{ state.colors.map(
-								( f, i ) =>
-									<option
-										style={ { background: 'linear-gradient(to right , ' + f.value + ' 20%, #ffffff 20%)' } }
-										className={ 'xm-input-color-' + f.value }
-										key={ i } value={ f.value }>{ f.label }</option> )
-							}
-						</select> */}
 					</div>
 					<div className="xm-input-wrap text-center xm-input-sm">
 						<p>

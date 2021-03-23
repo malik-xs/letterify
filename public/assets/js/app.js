@@ -5,7 +5,15 @@
 /***/ ((module) => {
 
 "use strict";
-module.exports = JSON.parse('{"data":[{"value":"#ffffff","label":"White","color":"#ffffff"},{"value":"#000000","label":"Black","color":"#000000"},{"value":"#971a1e","label":"Barn Red","color":"#971a1e"},{"value":"#D40000","label":"RedMetallic Rose","color":"#D40000"},{"value":"#DAB0AA","label":"Princess Pink","color":"#DAB0AA"},{"value":"#fcf1f7","label":"Lisa Pink","color":"#fcf1f7"},{"value":"#f199bf","label":"#f199bf","color":"#f199bf"},{"value":"#e3568a","label":"#e3568a","color":"#e3568a"},{"value":"#FC9E8B","label":"#FC9E8B","color":"#FC9E8B"},{"value":"#f16728","label":"#f16728","color":"#f16728"},{"value":"#E87400","label":"#E87400","color":"#E87400"},{"value":"#faed12","label":"#faed12","color":"#faed12"},{"value":"#faf8ae","label":"#faf8ae","color":"#faf8ae"},{"value":"#e4ecb0","label":"#e4ecb0","color":"#e4ecb0"},{"value":"#abcf37","label":"#abcf37","color":"#abcf37"},{"value":"#97b94b","label":"#97b94b","color":"#97b94b"},{"value":"#119f49","label":"#119f49","color":"#119f49"},{"value":"#0f643d","label":"#0f643d","color":"#0f643d"},{"value":"#1e214a","label":"#1e214a","color":"#1e214a"},{"value":"#0d5488","label":"#0d5488","color":"#0d5488"},{"value":"#083B9C","label":"#083B9C","color":"#083B9C"},{"value":"#70c1ec","label":"#70c1ec","color":"#70c1ec"},{"value":"#63888E","label":"#63888E","color":"#63888E"},{"value":"#88cfbd","label":"#88cfbd","color":"#88cfbd"},{"value":"#A2E8D9","label":"#A2E8D9","color":"#A2E8D9"},{"value":"#dee8e7","label":"#dee8e7","color":"#dee8e7"},{"value":"#8882b2","label":"#8882b2","color":"#8882b2"},{"value":"#7d52a1","label":"#7d52a1","color":"#7d52a1"},{"value":"#3D266E","label":"#3D266E","color":"#3D266E"},{"value":"#b783a7","label":"#b783a7","color":"#b783a7"},{"value":"#E5DDD0","label":"#E5DDD0","color":"#E5DDD0"},{"value":"#fef7dd","label":"#fef7dd","color":"#fef7dd"},{"value":"#D3AD12","label":"#D3AD12","color":"#D3AD12"},{"value":"#c0ac94","label":"#c0ac94","color":"#c0ac94"},{"value":"#6d4835","label":"#6d4835","color":"#6d4835"},{"value":"#291A00","label":"#291A00","color":"#291A00"},{"value":"#B5B0AC","label":"#B5B0AC","color":"#B5B0AC"},{"value":"#808281","label":"#808281","color":"#808281"},{"value":"#494B4E","label":"#494B4E","color":"#494B4E"}]}');
+module.exports = JSON.parse('{"data":[{"value":"#ffffff","label":"White"},{"value":"#000000","label":"Black"},{"value":"#971a1e","label":"Barn Red"},{"value":"#D40000","label":"RedMetallic Rose"},{"value":"#DAB0AA","label":"Princess Pink"},{"value":"#fcf1f7","label":"Lisa Pink"},{"value":"#f199bf","label":"#f199bf"},{"value":"#e3568a","label":"#e3568a"},{"value":"#FC9E8B","label":"#FC9E8B"},{"value":"#f16728","label":"#f16728"},{"value":"#E87400","label":"#E87400"},{"value":"#faed12","label":"#faed12"},{"value":"#faf8ae","label":"#faf8ae"},{"value":"#e4ecb0","label":"#e4ecb0"},{"value":"#abcf37","label":"#abcf37"},{"value":"#97b94b","label":"#97b94b"},{"value":"#119f49","label":"#119f49"},{"value":"#0f643d","label":"#0f643d"},{"value":"#1e214a","label":"#1e214a"},{"value":"#0d5488","label":"#0d5488"},{"value":"#083B9C","label":"#083B9C"},{"value":"#70c1ec","label":"#70c1ec"},{"value":"#63888E","label":"#63888E"},{"value":"#88cfbd","label":"#88cfbd"},{"value":"#A2E8D9","label":"#A2E8D9"},{"value":"#dee8e7","label":"#dee8e7"},{"value":"#8882b2","label":"#8882b2"},{"value":"#7d52a1","label":"#7d52a1"},{"value":"#3D266E","label":"#3D266E"},{"value":"#b783a7","label":"#b783a7"},{"value":"#E5DDD0","label":"#E5DDD0"},{"value":"#fef7dd","label":"#fef7dd"},{"value":"#D3AD12","label":"#D3AD12"},{"value":"#c0ac94","label":"#c0ac94"},{"value":"#6d4835","label":"#6d4835"},{"value":"#291A00","label":"#291A00"},{"value":"#B5B0AC","label":"#B5B0AC"},{"value":"#808281","label":"#808281"},{"value":"#494B4E","label":"#494B4E"}]}');
+
+/***/ }),
+
+/***/ 950:
+/***/ ((module) => {
+
+"use strict";
+module.exports = JSON.parse('{"fonts":[{"value":"Almibar","label":"Almibar"},{"value":"AlwaysAGoodTime","label":"AlwaysAGoodTime"},{"value":"Betterfly","label":"Betterfly"},{"value":"BreakingBread","label":"BreakingBread"},{"value":"Brusher","label":"Brusher"},{"value":"BukhariScript","label":"BukhariScript"},{"value":"GrandHotel","label":"GrandHotel"},{"value":"HickoryJack","label":"HickoryJack"},{"value":"Kaleidos","label":"Kaleidos"},{"value":"Lavanderia","label":"Lavanderia"},{"value":"Norican","label":"Norican"},{"value":"PermanentMarker","label":"PermanentMarker"},{"value":"Sanelma","label":"Sanelma"},{"value":"Sophia","label":"Sophia"},{"value":"StorytellerScript","label":"StorytellerScript"}]}');
 
 /***/ }),
 
@@ -10362,7 +10370,8 @@ function app_defineProperty(obj, key, value) { if (key in obj) { Object.definePr
 
 
 
-var fonts = ['Almibar', 'AlwaysAGoodTime', 'Betterfly', 'BreakingBread', 'Brusher', 'BukhariScript', 'GrandHotel', 'HickoryJack', 'Kaleidos', 'Lavanderia', 'Norican', 'PermanentMarker', 'Sanelma', 'Sophia', 'StorytellerScript'];
+
+var fonts_fallback = __webpack_require__(950);
 
 var colors_fallback = __webpack_require__(570);
 
@@ -10384,24 +10393,46 @@ var dot = function dot() {
   };
 };
 
+var fontsStyles = {
+  control: function control(styles) {
+    return app_objectSpread({}, styles);
+  },
+  option: function option(styles, _ref) {
+    var data = _ref.data;
+    return app_objectSpread(app_objectSpread({}, styles), {}, {
+      fontFamily: data.value
+    });
+  },
+  input: function input(styles, _ref2) {
+    var data = _ref2.data;
+    return app_objectSpread(app_objectSpread({}, styles), {}, {
+      fontFamily: data.value
+    });
+  },
+  placeholder: function placeholder(styles) {
+    return app_objectSpread({}, styles);
+  },
+  singleValue: function singleValue(styles) {
+    return app_objectSpread({}, styles);
+  }
+};
 var colourStyles = {
   control: function control(styles) {
     return app_objectSpread(app_objectSpread({}, styles), {}, {
       backgroundColor: 'white'
     });
   },
-  option: function option(styles, _ref) {
-    var data = _ref.data,
-        isDisabled = _ref.isDisabled,
-        isFocused = _ref.isFocused,
-        isSelected = _ref.isSelected;
-    var color = chroma_default()(data.color);
+  option: function option(styles, _ref3) {
+    var data = _ref3.data,
+        isDisabled = _ref3.isDisabled,
+        isSelected = _ref3.isSelected;
+    var color = chroma_default()(data.value);
     return app_objectSpread(app_objectSpread({}, styles), {}, {
       // backgroundColor: isDisabled ? null : isSelected ? data.color : isFocused ? color.alpha( 0.1 ).css() : null,
       // color: isDisabled ? '#ccc' : isSelected ? chroma.contrast( color, 'white' ) > 2 ? 'white' : 'black' : data.color,
       cursor: isDisabled ? 'not-allowed' : 'default',
       ':active': app_objectSpread(app_objectSpread({}, styles[':active']), {}, {
-        backgroundColor: !isDisabled && (isSelected ? data.color : color.alpha(0.3).css())
+        backgroundColor: !isDisabled && (isSelected ? data.value : color.alpha(0.3).css())
       })
     }, dot(color.css()));
   },
@@ -10411,9 +10442,9 @@ var colourStyles = {
   placeholder: function placeholder(styles) {
     return app_objectSpread(app_objectSpread({}, styles), dot());
   },
-  singleValue: function singleValue(styles, _ref2) {
-    var data = _ref2.data;
-    return app_objectSpread(app_objectSpread({}, styles), dot(data.color));
+  singleValue: function singleValue(styles, _ref4) {
+    var data = _ref4.data;
+    return app_objectSpread(app_objectSpread({}, styles), dot(data.value));
   }
 };
 
@@ -10442,12 +10473,18 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
     });
 
     app_defineProperty(app_assertThisInitialized(_this), "handleChange", function (e) {
-      var _e$target = e.target,
-          name = _e$target.name,
-          value = _e$target.value;
+      if (e.value) {
+        _this.setState({
+          color: e.value
+        });
+      } else {
+        var _e$target = e.target,
+            name = _e$target.name,
+            value = _e$target.value;
 
-      if (_this.state[name] !== value) {
-        _this.setState(app_defineProperty({}, name, value));
+        if (_this.state[name] !== value) {
+          _this.setState(app_defineProperty({}, name, value));
+        }
       }
     });
 
@@ -10552,8 +10589,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this,
-          _React$createElement;
+      var _this2 = this;
 
       var parent = this;
       var state = parent.state;
@@ -10587,17 +10623,22 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       }, /*#__PURE__*/React.createElement("label", {
         htmlFor: "font",
         className: "text-right"
-      }, /*#__PURE__*/React.createElement("strong", null, "Choose Font")), /*#__PURE__*/React.createElement("select", {
+      }, /*#__PURE__*/React.createElement("strong", null, "Choose Font")), /*#__PURE__*/React.createElement(react_select_browser_esm, {
+        className: "",
         name: "font",
         id: "font",
-        onChange: this.handleChange,
-        value: state.font
-      }, fonts.map(function (f, i) {
-        return /*#__PURE__*/React.createElement("option", {
-          key: i,
-          value: f
-        }, f);
-      }))), /*#__PURE__*/React.createElement("div", {
+        onChange: function onChange(e) {
+          return _this2.handleChange({
+            target: {
+              name: 'font',
+              value: e.value
+            }
+          });
+        },
+        isSearchable: false,
+        styles: fontsStyles,
+        options: fonts_fallback.fonts
+      })), /*#__PURE__*/React.createElement("div", {
         className: "xm-input-wrap"
       }, /*#__PURE__*/React.createElement("label", {
         htmlFor: "finish",
@@ -10723,12 +10764,15 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       }, /*#__PURE__*/React.createElement("label", {
         htmlFor: "color",
         className: "text-right"
-      }, /*#__PURE__*/React.createElement("strong", null, "Color")), /*#__PURE__*/React.createElement(react_select_browser_esm, (_React$createElement = {
+      }, /*#__PURE__*/React.createElement("strong", null, "Color")), /*#__PURE__*/React.createElement(react_select_browser_esm, {
         className: "",
         name: "color",
         id: "color",
-        onChange: this.handleChange
-      }, app_defineProperty(_React$createElement, "name", "let-color"), app_defineProperty(_React$createElement, "isSearchable", false), app_defineProperty(_React$createElement, "styles", colourStyles), app_defineProperty(_React$createElement, "options", this.state.colors), _React$createElement))), /*#__PURE__*/React.createElement("div", {
+        onChange: this.handleChange,
+        isSearchable: false,
+        styles: colourStyles,
+        options: this.state.colors
+      })), /*#__PURE__*/React.createElement("div", {
         className: "xm-input-wrap text-center xm-input-sm"
       }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Approx. Width: "), state.value !== '' && state.height !== '' ? state.width.toFixed(2) + '"' : 'Enter text and select a Height to see Approx. Width.')), /*#__PURE__*/React.createElement("div", {
         className: "xm-input-wrap xm-input-sm"

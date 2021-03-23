@@ -1,32 +1,40 @@
 <?php
-
 namespace Letterify;
-
 defined('ABSPATH') || exit;
 
-/**
- * Plugin final Class.
- * Handles dynamically loading classes only when needed. Check Elementor Plugin, Woocomerce Plugin Loaded or Install.
- *
- * @since 1.0.0
- */
 final class Plugin {
-	const TEXT_DOMAIN       = 'letterify';
-	// const CPT_WOO_BUILDER   = 'letterify-template';
-	// const CSS_CLASS_PREFIX  = 'letterify_';
-	// const GENERAL_PREFIX    = 'web__';
-
-
+	const TEXT_DOMAIN = 'letterify';
 	private static $instance;
-	private $entries;
-	private $forms;
 
-
-	/**
-	 * __construct function
-	 * @since 1.0.0
-	 */
 	public function __construct() {
+	}
+
+	public function version() {
+		return '1.0.10';
+	}
+
+	public function package_type() {
+		return 'free';
+	}
+
+	public function plugin_url() {
+		return trailingslashit(plugin_dir_url(__FILE__));
+	}
+
+	public function plugin_dir() {
+		return trailingslashit(plugin_dir_path(__FILE__));
+	}
+
+	public function core_url() {
+		return $this->plugin_url() . 'core/';
+	}
+
+	public function core_dir() {
+		return $this->plugin_dir() . 'core/';
+	}
+
+	public function text_domain() {
+		return self::TEXT_DOMAIN;
 	}
 
 	function letterify_form_function() {
@@ -35,12 +43,6 @@ final class Plugin {
 		include $tpl;
 	}
 
-	/**
-	 * Public function init.
-	 * call function for all
-	 *
-	 * @since 1.0.0
-	 */
 	public function init() {
 		add_action('init', [$this, 'letterify_cpt']);
 
@@ -50,9 +52,6 @@ final class Plugin {
 
 		add_action('wp_ajax_woocommerce_ajax_add_to_cart', [$this, 'woocommerce_ajax_add_to_cart']);
 		add_action('wp_ajax_nopriv_woocommerce_ajax_add_to_cart', [$this, 'woocommerce_ajax_add_to_cart']);
-
-		// add_action( 'wp_ajax_ajax_save_photo',  [$this, 'ajax_save_photo'] );
-		// add_action( 'wp_ajax_nopriv_ajax_save_photo',  [$this, 'ajax_save_photo'] );
 
 		add_shortcode('letterify', [$this, 'letterify_form_function']);
 
@@ -121,14 +120,6 @@ final class Plugin {
 		}
 		
 		wp_die();
-		// $wpdb->insert(
-		// 	$wpdb->options,
-		// 	array( 'meta_key' => '__letterify_colors', 'meta_value' => $colors ),
-		// 	array( '%s' ),
-		// );
-
-		// wp_redirect( site_url('/wp-admin/admin.php?page=letterify-menu') ); 
-		// die;
 	}
 
 	function my_admin_page_contents() {
@@ -144,7 +135,7 @@ final class Plugin {
 			foreach ( $cart_object->cart_contents as $key => $value ) {
 				if( isset( $value["custom_price"] ) ) {
 					//for woocommerce version lower than 3
-					$value['data']->price = $value["custom_price"];
+					// $value['data']->price = $value["custom_price"];
 					//for woocommerce version +3
 					$value['data']->set_price($value["custom_price"]);
 				}
@@ -241,11 +232,6 @@ final class Plugin {
         update_post_meta($entry_id, '_price', $price);
         update_post_meta($entry_id, 'price', $price);
 
-		// $product = wc_get_product( $entry_id );
-		// $product->set_sku( $sku );
-		// // etc...
-		// $product->save();
-
         /** Include required files */
         include_once WC_ABSPATH . 'includes/wc-cart-functions.php';
         include_once WC_ABSPATH . 'includes/class-wc-cart.php';
@@ -271,10 +257,6 @@ final class Plugin {
 			if ('yes' === get_option('woocommerce_cart_redirect_after_add')) {
 				wc_add_to_cart_message(array($product_id => $quantity), true);
 			}
-			
-			// add_action( 'woocommerce_before_calculate_totals', [$this, 'woocommerce_custom_price_to_cart_item'], 99, WC()->cart->get_cart() );
-
-			// WC_AJAX :: get_refreshed_fragments();
 
 		} else {
 
@@ -288,142 +270,6 @@ final class Plugin {
 		wp_die();
 	}
 
-	/**
-	 * Public function version.
-	 * set for plugin version
-	 *
-	 * @since 1.0.0
-	 */
-	public function version() {
-		return '1.0.0';
-	}
-
-
-	/**
-	 * Public function package_type.
-	 * set for plugin package type
-	 *
-	 * @since 1.0.0
-	 */
-	public function package_type() {
-		return 'free';
-	}
-
-
-	/**
-	 * Public function plugin_url.
-	 * set for plugin url
-	 *
-	 * @since 1.0.0
-	 */
-	public function plugin_url() {
-		return trailingslashit(plugin_dir_url(__FILE__));
-	}
-
-
-	/**
-	 * Public function plugin_dir.
-	 * set for plugin dir
-	 *
-	 * @since 1.0.0
-	 */
-	public function plugin_dir() {
-		return trailingslashit(plugin_dir_path(__FILE__));
-	}
-
-
-	/**
-	 * Public function core_url .
-	 * set for plugin  core folder url
-	 *
-	 * @since 1.0.0
-	 */
-	public function core_url() {
-		return $this->plugin_url() . 'core/';
-	}
-
-
-	/**
-	 * Public function core_dir .
-	 * set for plugin  core folder dir
-	 *
-	 * @since 1.0.0
-	 */
-	public function core_dir() {
-		return $this->plugin_dir() . 'core/';
-	}
-
-
-	/**
-	 * Public function base_url .
-	 * set for plugin  base folder url
-	 *
-	 * @since 1.0.0
-	 */
-	public function base_url() {
-		return $this->plugin_url() . 'base/';
-	}
-
-
-	/**
-	 * Public function base_dir .
-	 * set for plugin  base folder dir
-	 *
-	 * @since 1.0.0
-	 */
-	public function base_dir() {
-		return $this->plugin_dir() . 'base/';
-	}
-
-
-	/**
-	 * Public function utils_url .
-	 * set for plugin  utils folder url
-	 *
-	 * @since 1.0.0
-	 */
-	public function utils_url() {
-		return $this->plugin_url() . 'utils/';
-	}
-
-
-	/**
-	 * Public function utils_dir .
-	 * set for plugin  utils folder dir
-	 *
-	 * @since 1.0.0
-	 */
-	public function utils_dir() {
-		return $this->plugin_dir() . 'utils/';
-	}
-
-
-	/**
-	 * Public function widgets_url .
-	 * set for plugin  widget folder url
-	 *
-	 * @since 1.0.0
-	 */
-	public function widgets_url() {
-		return $this->plugin_url() . 'widgets/';
-	}
-
-
-	/**
-	 * Public function widgets_dir .
-	 * set for plugin  widget folder dir
-	 *
-	 * @since 1.0.0
-	 */
-	public function widgets_dir() {
-		return $this->plugin_dir() . 'widgets/';
-	}
-
-
-	public function text_domain() {
-		return self::TEXT_DOMAIN;
-	}
-
 
 	/**
 	 * Public function js_css_public .
@@ -432,11 +278,11 @@ final class Plugin {
 	 * @since 1.0.0
 	 */
 	public function js_css_public() {
-        wp_enqueue_style('letterify-css', plugin_dir_url(__FILE__) . 'public/assets/css/style.css', false, '1.0.0');
+        wp_enqueue_style('letterify-css', plugin_dir_url(__FILE__) . 'public/assets/css/style.css', false, $this->version());
 
-        wp_enqueue_script('htm', plugin_dir_url(__FILE__) . 'public/assets/js/htm.js', null, '1.0.0', true);
+        wp_enqueue_script('htm', plugin_dir_url(__FILE__) . 'public/assets/js/htm.js', null, $this->version(), true);
 
-        wp_enqueue_script('letterify-js', plugin_dir_url(__FILE__) . 'public/assets/js/app.js', array('htm', 'jquery', 'wp-element'), '1.0.0', true);
+        wp_enqueue_script('letterify-js', plugin_dir_url(__FILE__) . 'public/assets/js/app.js', array('htm', 'jquery', 'wp-element'), $this->version(), true);
 		wp_localize_script('letterify-js', 'letterify_admin_var', array(
 			'ajax_url' => admin_url('admin-ajax.php'),
 			'cart_url' => wc_get_cart_url(),
@@ -445,8 +291,8 @@ final class Plugin {
 
 
 	public function js_css_admin() {
-        wp_enqueue_style('letterify-admin-css', plugin_dir_url(__FILE__) . 'core/assets/css/admin-style.css', false, '1.0.0');
-        wp_enqueue_script('letterify-admin-js', plugin_dir_url(__FILE__) . 'core/assets/js/admin-scripts.js', array('jquery'), '1.0.0', true);
+        wp_enqueue_style('letterify-admin-css', plugin_dir_url(__FILE__) . 'core/assets/css/admin-style.css', false, $this->version());
+        wp_enqueue_script('letterify-admin-js', plugin_dir_url(__FILE__) . 'core/assets/js/admin-scripts.js', array('jquery'), $this->version(), true);
 	}
 
 

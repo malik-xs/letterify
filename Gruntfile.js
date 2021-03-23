@@ -406,7 +406,7 @@ module.exports = function (grunt) {
 		'log:begin',
 		( projectConfig.ignoreLint ? 'log:nolintwarning' : 'lint' ),
         'fixtextdomain',
-        'makepot',
+        // 'makepot',
         'boot',
 		'minify',
 		'compress',
