@@ -1,5 +1,7 @@
 <?php
 namespace Letterify;
+use Letterify;
+
 defined('ABSPATH') || exit;
 
 final class Plugin {
@@ -10,7 +12,7 @@ final class Plugin {
 	}
 
 	public function version() {
-		return '1.0.10';
+		return Letterify::version();
 	}
 
 	public function package_type() {
@@ -64,16 +66,56 @@ final class Plugin {
 		add_action( 'wp_ajax_ajax_save_admin_options', [$this, 'ajax_save_admin_options'] );
 		add_action( 'wp_ajax_nopriv_ajax_save_admin_options', [$this, 'ajax_save_admin_options'] );
 
-
-		add_filter( 'woocommerce_process_product_meta', [$this, 'pharmacy_meta_boxes'] );
-
 		remove_action( 'woocommerce_single_product_summary', 'woocommerce_template_single_add_to_cart', 30 );
 
 		add_action( 'woocommerce_single_product_summary', [$this, 'replace_default_button'], 30 );
 
 		add_filter( 'woocommerce_cart_item_name', [$this, 'cart_description'], 20, 3);
+
+		// add_action( 'add_meta_boxes', [$this, 'add_meta_box'] );
+
+		// add_action('save_post', [$this, 'letterify_save_meta']);
 	}
-	
+
+	function add_meta_box( $post_type ) {
+		require_once 'core/admin/meta/view.php';
+
+		$post_types = array('product');     //limit meta box to certain post types
+		global $post;
+		$product = wc_get_product( $post->ID );
+		if ( in_array( $post->post_type, $post_types ) ) {
+			add_meta_box(
+				'letterify_values',
+				esc_html__( 'Letterify Preview', 'letterify' ),
+				[$this, 'render_meta_box_content'],
+				$post_types,
+				'advanced',
+				'high'
+			);
+		}
+	}
+
+	function render_meta_box_content() {
+		\Letterify\MetaBox_View::render_meta_box_content();
+	}
+
+	function letterify_save_meta( $post_id ) {
+		if ( !current_user_can( 'edit_post', $post_id ) ) return;
+
+		$this->letterify_update_meta( $post_id, 'letterify-finish', sanitize_text_field($_POST['letterify-finish']));
+		$this->letterify_update_meta( $post_id, 'letterify-color', sanitize_text_field($_POST['letterify-color']));
+	}
+
+	function letterify_update_meta( $post_id, $term, $value ) {
+		if ( get_post_meta( $post_id, $term, true ) ) {
+			if ( isset( $value ) ) {        
+				update_post_meta($post_id, $term, $value);      
+			}
+		} else {
+			add_post_meta($post_id, $term, sanitize_text_field( $value ), true);
+		}
+	}
+
 	function cart_description( $name, $cart_item, $cart_item_key ) {
 		// Get the corresponding WC_Product
 		$product_item = $cart_item['data'];
@@ -89,26 +131,18 @@ final class Plugin {
 	}
 
 	function replace_default_button(){
+		global $post;
+		$settings = '';
+		$settings->finish = get_post_meta( $post->ID, 'letterify-finish', true );
+		$settings->color = get_post_meta( $post->ID, 'letterify-color', true );
+
 		echo '<div class="xm-letterify">
 		<div class="xm-letterify-form-wrapper" data-ajaxurl="' . admin_url('admin-ajax.php') . '"
 			data-wpNonce="' . wp_create_nonce("xm_letterify") . '"
 			data-colors=' . stripslashes( preg_replace( '/\s*/m', '', json_decode( get_option('__letterify_colors') ) )) . '
+			data-settings=' . json_encode( $settings ) . '
 		><div class="xm-letterify-template"></div></div></div>';
 	}
-
-	function pharmacy_meta_boxes( $meta_boxes ) {
-		$meta_boxes[] = array(
-			'title'  => __( 'Letterify Addons', 'letterify' ),
-			'fields' => array(
-				array(
-					'id'   => 'letterify_enable',
-					'name' => __( 'Letterify Enable', 'letterify' ),
-					'type' => 'text',
-				),
-			),
-		);
-		return $meta_boxes;
-	}	
 
 	function ajax_save_admin_options() {
 		$colors = $_POST['colors'];

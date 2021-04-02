@@ -10561,8 +10561,8 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       value: '',
       height: '',
       width: 0,
-      finish: '',
-      color: '#343234',
+      finish: JSON.parse(_this.props.settings).finish || '',
+      color: JSON.parse(_this.props.settings).color || '#343234',
       colors: props.colors !== '' && Array.isArray(colors_data.data) ? colors_data.data : colors_fallback.data,
       font: 'Almibar',
       connect: '',
@@ -10571,7 +10571,8 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       price: 0.59,
       mounting: '',
       add_to_cart_text: 'Add to cart',
-      added_to_cart: false
+      added_to_cart: false,
+      settings: JSON.parse(_this.props.settings) || {}
     };
     return _this;
   }
@@ -10639,7 +10640,10 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         styles: fontsStyles,
         options: fonts_fallback.fonts
       })), /*#__PURE__*/React.createElement("div", {
-        className: "xm-input-wrap"
+        className: "xm-input-wrap",
+        style: {
+          display: state.settings.finish ? 'none' : 'flex'
+        }
       }, /*#__PURE__*/React.createElement("label", {
         htmlFor: "finish",
         className: "text-right"
@@ -10846,7 +10850,8 @@ var init = function init($scope) {
   var _el$dataset = el.dataset,
       letterify_admin_var = _el$dataset.letterify_admin_var,
       wpNonce = _el$dataset.wpNonce,
-      colors = _el$dataset.colors;
+      colors = _el$dataset.colors,
+      settings = _el$dataset.settings;
 
   var _$scope$find3 = $scope.find('.xm-letterify-template'),
       _$scope$find4 = app_slicedToArray(_$scope$find3, 1),
@@ -10864,7 +10869,8 @@ var init = function init($scope) {
     templateEl: templateEl,
     letterify_admin_var: letterify_admin_var,
     wpNonce: wpNonce,
-    colors: colors
+    colors: colors,
+    settings: settings
   }), el);
 };
 

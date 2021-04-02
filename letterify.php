@@ -3,22 +3,21 @@
  * Plugin Name: Lettetify
  * Plugin URI:  https://github.com/malik-xs/letterify
  * Description: Letter printing plugin
- * Version: 1.0.10
+ * Version: 1.0.11
  * Author: Xian Malik
  * Author URI: 
  * Text Domain: letterify
  * License:  GPL-2.0+
  * License URI: http://www.gnu.org/licenses/gpl-2.0.txt
  */
-  
+
 defined('ABSPATH') || exit;
 
 require_once 'plugin.php';  
 
-final class Letterify
-{
+final class Letterify {
 	public static function version() {
-		return '1.0.10';
+		return '1.0.11';
 	}
 
 	static function author_name() {

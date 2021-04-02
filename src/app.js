@@ -61,8 +61,8 @@ class LetterifyEl extends React.Component {
 			value: '',
 			height: '',
 			width: 0,
-			finish: '',
-			color: '#343234',
+			finish: JSON.parse( this.props.settings ).finish || '',
+			color: JSON.parse( this.props.settings ).color || '#343234',
 			colors: ( props.colors !== '' && Array.isArray( colors_data.data ) ) ? colors_data.data : colors_fallback.data,
 			font: 'Almibar',
 			connect: '',
@@ -72,6 +72,7 @@ class LetterifyEl extends React.Component {
 			mounting: '',
 			add_to_cart_text: 'Add to cart',
 			added_to_cart: false,
+			settings: JSON.parse( this.props.settings ) || {},
 		};
 	}
 
@@ -197,7 +198,7 @@ class LetterifyEl extends React.Component {
 							options={ fonts_fallback.fonts }
 						/>
 					</div>
-					<div className="xm-input-wrap">
+					<div className="xm-input-wrap" style={ { display: ( state.settings.finish ? 'none' : 'flex' ) } }>
 						<label htmlFor="finish" className="text-right"><strong>Finish</strong></label>
 						<select name="finish" id="finish" onChange={ this.handleChange } value={ state.finish }>
 							<option value="">Choose Finish...</option>
@@ -229,6 +230,7 @@ class LetterifyEl extends React.Component {
 							<option value="18">18 inch</option>
 						</select>
 					</div>
+
 					<div className="xm-input-wrap" style={ { display: ( state.height === '' ? 'none' : 'flex' ) } }>
 						<label htmlFor="thickness" className="text-right"><strong>Thickness</strong></label>
 						<select name="thickness" id="thickness" onChange={ this.handleChange }>
@@ -322,7 +324,7 @@ let init = function( $scope ) {
 	if ( ! el ) {
 		return;
 	}
-	const { letterify_admin_var, wpNonce, colors } = el.dataset;
+	const { letterify_admin_var, wpNonce, colors, settings } = el.dataset;
 
 	const [ templateEl ] = $scope.find( '.xm-letterify-template' );
 	if ( ! templateEl ) {
@@ -338,6 +340,7 @@ let init = function( $scope ) {
 			letterify_admin_var: letterify_admin_var,
 			wpNonce: wpNonce,
 			colors: colors,
+			settings: settings,
 		} ),
 		el,
 	);
