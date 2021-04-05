@@ -72,9 +72,9 @@ final class Plugin {
 
 		add_filter( 'woocommerce_cart_item_name', [$this, 'cart_description'], 20, 3);
 
-		// add_action( 'add_meta_boxes', [$this, 'add_meta_box'] );
+		add_action( 'add_meta_boxes', [$this, 'add_meta_box'] );
 
-		// add_action('save_post', [$this, 'letterify_save_meta']);
+		add_action('save_post', [$this, 'letterify_save_meta']);
 	}
 
 	function add_meta_box( $post_type ) {
@@ -109,7 +109,7 @@ final class Plugin {
 	function letterify_update_meta( $post_id, $term, $value ) {
 		if ( get_post_meta( $post_id, $term, true ) ) {
 			if ( isset( $value ) ) {        
-				update_post_meta($post_id, $term, $value);      
+				update_post_meta($post_id, $term, $value);
 			}
 		} else {
 			add_post_meta($post_id, $term, sanitize_text_field( $value ), true);
@@ -132,9 +132,13 @@ final class Plugin {
 
 	function replace_default_button(){
 		global $post;
-		$settings = '';
-		$settings->finish = get_post_meta( $post->ID, 'letterify-finish', true );
-		$settings->color = get_post_meta( $post->ID, 'letterify-color', true );
+		$settings = (object) array();
+		if ( !empty( get_post_meta( $post->ID, 'letterify-finish', true ) ) ) {
+			$settings->finish = get_post_meta( $post->ID, 'letterify-finish', true );
+		}
+		if ( !empty( get_post_meta( $post->ID, 'letterify-color', true ) ) ) {
+			$settings->color = get_post_meta( $post->ID, 'letterify-color', true );
+		}
 
 		echo '<div class="xm-letterify">
 		<div class="xm-letterify-form-wrapper" data-ajaxurl="' . admin_url('admin-ajax.php') . '"
@@ -154,14 +158,6 @@ final class Plugin {
 		}
 		
 		wp_die();
-	}
-
-	function my_admin_page_contents() {
-		?>
-			<h1>
-				<?php esc_html_e( 'Welcome to my custom admin page.', 'letterify' ); ?>
-			</h1>
-		<?php
 	}
 
 	function woocommerce_custom_price_to_cart_item( $cart_object ) {  
