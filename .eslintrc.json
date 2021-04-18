@@ -24,6 +24,7 @@
 		"elementorFrontend": "readonly",
 		"bodymovin": "readonly",
 		"ElementsKit_Helper": "readonly",
+		"wc_add_to_cart_params": "readonly",
 		"mf": "readonly",
 		"React": "readonly",
 		"ReactDOM": "readonly",

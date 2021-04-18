@@ -10522,11 +10522,13 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         type: 'post',
         url: wc_add_to_cart_params.ajax_url,
         data: data,
+        // eslint-disable-next-line
         beforeSend: function beforeSend(response) {
           _this.setState({
             add_to_cart_text: 'Adding to cart'
           });
         },
+        // eslint-disable-next-line
         complete: function complete(response) {
           setTimeout(function () {
             _this.setState({
@@ -10534,6 +10536,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
             });
           }, 1000);
         },
+        // eslint-disable-next-line
         success: function success(response) {
           if (!response.error) {
             _this.setState({
@@ -10542,6 +10545,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
             });
           }
         },
+        // eslint-disable-next-line
         error: function error(_error) {
           _this.setState({
             add_to_cart_text: 'Unsuccessful'

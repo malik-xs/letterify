@@ -59,7 +59,9 @@ final class Plugin {
 
 		add_action( 'woocommerce_before_calculate_totals', [$this, 'woocommerce_custom_price_to_cart_item'], 99 );
 
-		
+
+		add_filter( 'woocommerce_data_stores', [$this, 'my_woocommerce_data_stores'] );
+
 		// check permission for manage user
 		add_action('admin_menu', [$this, 'admin_menu']);
 	
@@ -75,6 +77,13 @@ final class Plugin {
 		add_action( 'add_meta_boxes', [$this, 'add_meta_box'] );
 
 		add_action('save_post', [$this, 'letterify_save_meta']);
+	}
+
+	function my_woocommerce_data_stores( $stores ) {
+		require_once dirname( __FILE__ ) . '/core/cpt/cpt.php';
+		$stores['product'] = 'Letterify_CPT';
+	
+		return $stores;
 	}
 
 	function add_meta_box( $post_type ) {
@@ -102,8 +111,12 @@ final class Plugin {
 	function letterify_save_meta( $post_id ) {
 		if ( !current_user_can( 'edit_post', $post_id ) ) return;
 
-		$this->letterify_update_meta( $post_id, 'letterify-finish', sanitize_text_field($_POST['letterify-finish']));
-		$this->letterify_update_meta( $post_id, 'letterify-color', sanitize_text_field($_POST['letterify-color']));
+		if ( isset($_POST['letterify-finish']) ) {
+			$this->letterify_update_meta( $post_id, 'letterify-finish', sanitize_text_field($_POST['letterify-finish']));
+		}
+		if ( isset($_POST['letterify-color']) ) {
+			$this->letterify_update_meta( $post_id, 'letterify-color', sanitize_text_field($_POST['letterify-color']));
+		}
 	}
 
 	function letterify_update_meta( $post_id, $term, $value ) {
@@ -201,7 +214,6 @@ final class Plugin {
 	}
 
 	function woocommerce_ajax_add_to_cart() {
-		print_r($_POST);
 		$content = '<table class="letterify-cart-desc"><tbody>';
 		if ( isset($_POST['font']) && $_POST['font'] !== '' ) {
 			$content .= '<tr><td>Font: </td><td>' . esc_html($_POST['font']) . '</td></tr>';
@@ -229,22 +241,29 @@ final class Plugin {
 		}
 		$content .= '</tbody></table>';
 
-		$data = array(
-			'post_title' => $_POST['value'],
-			'post_status' => 'publish',
-			'post_content' => $content,
-			'post_type' => 'product',
-		);
+		// $data = [
+		// 	'post_title' => $_POST['value'],
+		// 	'post_status' => 'publish',
+		// 	'post_content' => $content,
+		// 	'post_type' => 'product',
+		// 	'meta_input'	=> [
+		// 		[
+		// 			'key'   => 'name',
+		// 			'value' => 'hidden'
+		// 		],
+		// 	]
+		// ];
 
 		// include_once 'core/entries/entry.php';
+		// $entry_id = wp_insert_post( $data );
+		// wp_set_object_terms( $entry_id, $location, 'location' );
 
-		$entry_id = wp_insert_post( $data );
 		$entry_id_letter = wp_insert_post( 
 			array(
-				'post_title' => $_POST['value'],
-				'post_status' => 'publish',
-				'post_content' => $content,
-				'post_type' => 'letterify-orders',
+				'post_title'	=> $_POST['value'],
+				'post_status'	=> 'publish',
+				'post_content'	=> $content,
+				'post_type'		=> 'letterify-orders',
 			)
 		);
 
@@ -253,23 +272,22 @@ final class Plugin {
 
 		$thumbnail_id = $this->save_photo($_POST['imgBase64']);
 
-		set_post_thumbnail( $entry_id, $thumbnail_id );
+		// set_post_thumbnail( $entry_id, $thumbnail_id );
 		set_post_thumbnail( $entry_id_letter, $thumbnail_id );
 
         //add price to the product,
-        update_post_meta($entry_id, '_regular_price', $price);
-        update_post_meta($entry_id, '_sale_price', $price);
-        update_post_meta($entry_id, '_price', $price);
-        update_post_meta($entry_id, 'price', $price);
+        add_post_meta($entry_id_letter, '_regular_price', $price);
+        add_post_meta($entry_id_letter, '_sale_price', $price);
+        add_post_meta($entry_id_letter, '_price', $price);
+        add_post_meta($entry_id_letter, 'price', $price);
 
         /** Include required files */
         include_once WC_ABSPATH . 'includes/wc-cart-functions.php';
         include_once WC_ABSPATH . 'includes/class-wc-cart.php';
         wc_load_cart();
 
-		$passed_validation = apply_filters('woocommerce_add_to_cart_validation', true, $entry_id, $quantity);
-		
-		$product_id = apply_filters('woocommerce_add_to_cart_product_id', absint($entry_id));
+		$passed_validation = apply_filters('woocommerce_add_to_cart_validation', true, $entry_id_letter, $quantity);
+		$product_id = apply_filters('woocommerce_add_to_cart_product_id', absint($entry_id_letter));
 		$quantity = empty($_POST['quantity']) ? 1 : wc_stock_amount($_POST['quantity']);
 		$passed_validation = apply_filters('woocommerce_add_to_cart_validation', true, $product_id, $quantity);
 		$product_status = get_post_status($product_id);

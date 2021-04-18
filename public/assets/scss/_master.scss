@@ -1,11 +1,11 @@
 .xm-letterify {
-	border: 1px solid rgba(0,0,0,.125);
-	border-radius: .25rem;
+	border: 1px solid rgba(0, 0, 0, 0.125);
+	border-radius: 0.25rem;
 
 	.xm-input-wrap {
 		display: flex;
 		align-items: center;
-		padding: .75rem 1.25rem;
+		padding: 0.75rem 1.25rem;
 
 		.xm-input-frag {
 			flex: 1;
@@ -18,26 +18,26 @@
 		}
 
 		&:not(:last-child) {
-			border-bottom: 1px solid rgba(0,0,0,.125);
+			border-bottom: 1px solid rgba(0, 0, 0, 0.125);
 		}
-	
+
 		input,
 		select,
 		textarea {
 			display: block;
 			width: 100%;
-			padding: .375rem .75rem;
+			padding: 0.375rem 0.75rem;
 			font-size: 1rem;
 			line-height: 1.5;
 			color: #5b5b5a;
 			background-color: #fff;
 			background-clip: padding-box;
 			border: 1px solid #b4b4b3;
-			border-radius: .25rem;
-			transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+			border-radius: 0.25rem;
+			transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 
 			&.xm-entry-text {
-				font-size: 1.5rem
+				font-size: 1.5rem;
 			}
 		}
 
@@ -49,22 +49,22 @@
 			display: block;
 			margin-right: 10px;
 			width: calc(35% - 10px);
-			
 
 			strong {
 				font-weight: 600;
 			}
-			
+
 			& + input,
 			& + select,
 			& + textarea {
+
 				:not(.xm-input-full) & {
 					width: 65%;
 				}
 				display: block;
 			}
 		}
-		
+
 		&.xm-input-full {
 			display: block;
 
@@ -74,23 +74,23 @@
 			}
 		}
 
-		input[type=submit] {
+		input[type="submit"] {
 			color: #fff;
 			background-color: #ff5a46;
 			border: 1px solid #ff5a46;
 			display: inline-block;
 			font-weight: 600;
-			letter-spacing: .1em;
+			letter-spacing: 0.1em;
 			text-transform: uppercase;
 			text-align: center;
 			white-space: nowrap;
 			vertical-align: middle;
 			user-select: none;
-			padding: .375rem .75rem;
+			padding: 0.375rem 0.75rem;
 			font-size: 1rem;
 			line-height: 1.5;
-			border-radius: .25rem;
-			transition: all .15s ease-in-out;
+			border-radius: 0.25rem;
+			transition: all 0.15s ease-in-out;
 
 			&:hover {
 				color: #fff;
@@ -99,11 +99,11 @@
 			}
 		}
 
-		input[name=color] {
+		input[name="color"] {
 			text-transform: uppercase;
 
 			&::before {
-				content: '';
+				content: "";
 				display: block;
 				height: 1rem;
 				width: 1rem;

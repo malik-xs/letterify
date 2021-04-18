@@ -8,8 +8,6 @@ class MetaBox_View {
 
 	public static function render_meta_box_content() {
 		global $post;
-		var_dump( get_post_meta( $post->ID, 'letterify-color', true ) );
-		var_dump( get_post_meta( $post->ID, 'letterify-finish', true ) );
 		?>
 			<div class="form-field term-meta-text-wrap">
 				<label for="letterify-finish"><?php esc_html_e( 'Finish', 'letterify' ); ?></label>

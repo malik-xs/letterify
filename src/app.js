@@ -134,19 +134,23 @@ class LetterifyEl extends React.Component {
 			type: 'post',
 			url: wc_add_to_cart_params.ajax_url,
 			data: data,
+			// eslint-disable-next-line
 			beforeSend: ( response ) => {
 				this.setState( { add_to_cart_text: 'Adding to cart' } );
 			},
+			// eslint-disable-next-line
 			complete: ( response ) => {
 				setTimeout( ( ) => {
 					this.setState( { loading: false } );
 				}, 1000 );
 			},
+			// eslint-disable-next-line
 			success: ( response ) => {
 				if ( ! response.error ) {
 					this.setState( { add_to_cart_text: 'View Cart', added_to_cart: true } );
 				}
 			},
+			// eslint-disable-next-line
 			error: ( error ) => {
 				this.setState( { add_to_cart_text: 'Unsuccessful' } );
 				setTimeout( () => {
@@ -290,7 +294,10 @@ class LetterifyEl extends React.Component {
 					<div className="xm-input-wrap">
 						<div className="xm-input-frag">
 							Starting At: ${
-								( 0.59 * ( this.state.value.replace( /\s/g, '' ).length > 0 ? this.state.value.replace( /\s/g, '' ).length : 1 ) * ( state.quantity > 0 ? state.quantity : 1 ) ).toFixed( 2 )
+								( 0.59 *
+									( this.state.value.replace( /\s/g, '' ).length > 0 ? this.state.value.replace( /\s/g, '' ).length : 1 ) *
+									( state.quantity > 0 ? state.quantity : 1 )
+								).toFixed( 2 )
 							}
 						</div>
 						<div className="xm-input-frag">
