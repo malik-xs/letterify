@@ -10502,10 +10502,12 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
 
       var image = document.getElementById('canvasComponent');
       var imageURL = image.toDataURL('image/png');
+      var value = _this.state.value;
+      var base_price = _this.props.base_price;
       var data = {
         action: 'woocommerce_ajax_add_to_cart',
         value: _this.state.value,
-        price: (0.59 * (_this.state.value.replace(/\s/g, '').length > 0 ? _this.state.value.replace(/\s/g, '').length : 1)).toFixed(2),
+        price: (base_price * (value.replace(/\s/g, '').length > 0 ? value.replace(/\s/g, '').length : 1)).toFixed(2),
         quantity: _this.state.quantity,
         variation_id: null,
         imgBase64: imageURL,
@@ -10572,7 +10574,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       connect: '',
       quantity: 1,
       loaded: false,
-      price: 0.59,
+      price: 0,
       mounting: '',
       add_to_cart_text: 'Add to cart',
       added_to_cart: false,
@@ -10598,6 +10600,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
 
       var parent = this;
       var state = parent.state;
+      var base_price = this.props.base_price;
 
       if (!state.loaded) {
         return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h4", null, "Loading"));
@@ -10809,7 +10812,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         className: "xm-input-wrap"
       }, /*#__PURE__*/React.createElement("div", {
         className: "xm-input-frag"
-      }, "Starting At: $", (0.59 * (this.state.value.replace(/\s/g, '').length > 0 ? this.state.value.replace(/\s/g, '').length : 1) * (state.quantity > 0 ? state.quantity : 1)).toFixed(2)), /*#__PURE__*/React.createElement("div", {
+      }, "Starting At: $", (base_price * this.state.value.replace(/\s/g, '').length * (state.quantity > 0 ? state.quantity : 1)).toFixed(2)), /*#__PURE__*/React.createElement("div", {
         className: "xm-input-frag"
       }, /*#__PURE__*/React.createElement("label", {
         htmlFor: "quantity",
@@ -10853,6 +10856,7 @@ var init = function init($scope) {
 
   var _el$dataset = el.dataset,
       letterify_admin_var = _el$dataset.letterify_admin_var,
+      price = _el$dataset.price,
       wpNonce = _el$dataset.wpNonce,
       colors = _el$dataset.colors,
       settings = _el$dataset.settings;
@@ -10871,6 +10875,7 @@ var init = function init($scope) {
 
   ReactDOM.render(React.createElement(LetterifyEl, {
     templateEl: templateEl,
+    base_price: price,
     letterify_admin_var: letterify_admin_var,
     wpNonce: wpNonce,
     colors: colors,

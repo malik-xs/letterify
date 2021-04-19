@@ -68,7 +68,7 @@ class LetterifyEl extends React.Component {
 			connect: '',
 			quantity: 1,
 			loaded: false,
-			price: 0.59,
+			price: 0,
 			mounting: '',
 			add_to_cart_text: 'Add to cart',
 			added_to_cart: false,
@@ -113,10 +113,13 @@ class LetterifyEl extends React.Component {
 		var image = document.getElementById( 'canvasComponent' );
 		var imageURL = image.toDataURL( 'image/png' );
 
+		const { value } = this.state;
+		const { base_price } = this.props;
+
 		var data = {
 			action: 'woocommerce_ajax_add_to_cart',
 			value: this.state.value,
-			price: ( 0.59 * ( this.state.value.replace( /\s/g, '' ).length > 0 ? this.state.value.replace( /\s/g, '' ).length : 1 ) ).toFixed( 2 ),
+			price: ( base_price * ( value.replace( /\s/g, '' ).length > 0 ? value.replace( /\s/g, '' ).length : 1 ) ).toFixed( 2 ),
 			quantity: this.state.quantity,
 			variation_id: null,
 			imgBase64: imageURL,
@@ -163,6 +166,7 @@ class LetterifyEl extends React.Component {
 	render() {
 		const parent = this;
 		const { state } = parent;
+		const { base_price } = this.props;
 
 		if ( ! state.loaded ) {
 			return <><h4>Loading</h4></>;
@@ -294,8 +298,8 @@ class LetterifyEl extends React.Component {
 					<div className="xm-input-wrap">
 						<div className="xm-input-frag">
 							Starting At: ${
-								( 0.59 *
-									( this.state.value.replace( /\s/g, '' ).length > 0 ? this.state.value.replace( /\s/g, '' ).length : 1 ) *
+								( base_price *
+									this.state.value.replace( /\s/g, '' ).length *
 									( state.quantity > 0 ? state.quantity : 1 )
 								).toFixed( 2 )
 							}
@@ -331,7 +335,7 @@ let init = function( $scope ) {
 	if ( ! el ) {
 		return;
 	}
-	const { letterify_admin_var, wpNonce, colors, settings } = el.dataset;
+	const { letterify_admin_var, price, wpNonce, colors, settings } = el.dataset;
 
 	const [ templateEl ] = $scope.find( '.xm-letterify-template' );
 	if ( ! templateEl ) {
@@ -344,6 +348,7 @@ let init = function( $scope ) {
 	ReactDOM.render(
 		React.createElement( LetterifyEl, {
 			templateEl: templateEl,
+			base_price: price,
 			letterify_admin_var: letterify_admin_var,
 			wpNonce: wpNonce,
 			colors: colors,

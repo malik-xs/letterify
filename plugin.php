@@ -143,22 +143,8 @@ final class Plugin {
 		}
 	}
 
-	function replace_default_button(){
-		global $post;
-		$settings = (object) array();
-		if ( !empty( get_post_meta( $post->ID, 'letterify-finish', true ) ) ) {
-			$settings->finish = get_post_meta( $post->ID, 'letterify-finish', true );
-		}
-		if ( !empty( get_post_meta( $post->ID, 'letterify-color', true ) ) ) {
-			$settings->color = get_post_meta( $post->ID, 'letterify-color', true );
-		}
-
-		echo '<div class="xm-letterify">
-		<div class="xm-letterify-form-wrapper" data-ajaxurl="' . admin_url('admin-ajax.php') . '"
-			data-wpNonce="' . wp_create_nonce("xm_letterify") . '"
-			data-colors=' . stripslashes( preg_replace( '/\s*/m', '', json_decode( get_option('__letterify_colors') ) )) . '
-			data-settings=' . json_encode( $settings ) . '
-		><div class="xm-letterify-template"></div></div></div>';
+	function replace_default_button() {
+		include_once plugin_dir_path(__FILE__) . 'templates/default.php';
 	}
 
 	function ajax_save_admin_options() {
@@ -431,5 +417,4 @@ final class Plugin {
 
 		return self::$instance;
 	}
-
 }
