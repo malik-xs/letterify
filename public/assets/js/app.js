@@ -1,22 +1,6 @@
 /******/ (() => { // webpackBootstrap
 /******/ 	var __webpack_modules__ = ({
 
-/***/ 570:
-/***/ ((module) => {
-
-"use strict";
-module.exports = JSON.parse('{"data":[{"value":"#ffffff","label":"White"},{"value":"#000000","label":"Black"},{"value":"#971a1e","label":"Barn Red"},{"value":"#D40000","label":"RedMetallic Rose"},{"value":"#DAB0AA","label":"Princess Pink"},{"value":"#fcf1f7","label":"Lisa Pink"},{"value":"#f199bf","label":"#f199bf"},{"value":"#e3568a","label":"#e3568a"},{"value":"#FC9E8B","label":"#FC9E8B"},{"value":"#f16728","label":"#f16728"},{"value":"#E87400","label":"#E87400"},{"value":"#faed12","label":"#faed12"},{"value":"#faf8ae","label":"#faf8ae"},{"value":"#e4ecb0","label":"#e4ecb0"},{"value":"#abcf37","label":"#abcf37"},{"value":"#97b94b","label":"#97b94b"},{"value":"#119f49","label":"#119f49"},{"value":"#0f643d","label":"#0f643d"},{"value":"#1e214a","label":"#1e214a"},{"value":"#0d5488","label":"#0d5488"},{"value":"#083B9C","label":"#083B9C"},{"value":"#70c1ec","label":"#70c1ec"},{"value":"#63888E","label":"#63888E"},{"value":"#88cfbd","label":"#88cfbd"},{"value":"#A2E8D9","label":"#A2E8D9"},{"value":"#dee8e7","label":"#dee8e7"},{"value":"#8882b2","label":"#8882b2"},{"value":"#7d52a1","label":"#7d52a1"},{"value":"#3D266E","label":"#3D266E"},{"value":"#b783a7","label":"#b783a7"},{"value":"#E5DDD0","label":"#E5DDD0"},{"value":"#fef7dd","label":"#fef7dd"},{"value":"#D3AD12","label":"#D3AD12"},{"value":"#c0ac94","label":"#c0ac94"},{"value":"#6d4835","label":"#6d4835"},{"value":"#291A00","label":"#291A00"},{"value":"#B5B0AC","label":"#B5B0AC"},{"value":"#808281","label":"#808281"},{"value":"#494B4E","label":"#494B4E"}]}');
-
-/***/ }),
-
-/***/ 950:
-/***/ ((module) => {
-
-"use strict";
-module.exports = JSON.parse('{"fonts":[{"value":"Almibar","label":"Almibar"},{"value":"AlwaysAGoodTime","label":"AlwaysAGoodTime"},{"value":"Betterfly","label":"Betterfly"},{"value":"BreakingBread","label":"BreakingBread"},{"value":"Brusher","label":"Brusher"},{"value":"BukhariScript","label":"BukhariScript"},{"value":"GrandHotel","label":"GrandHotel"},{"value":"HickoryJack","label":"HickoryJack"},{"value":"Kaleidos","label":"Kaleidos"},{"value":"Lavanderia","label":"Lavanderia"},{"value":"Norican","label":"Norican"},{"value":"PermanentMarker","label":"PermanentMarker"},{"value":"Sanelma","label":"Sanelma"},{"value":"Sophia","label":"Sophia"},{"value":"StorytellerScript","label":"StorytellerScript"}]}');
-
-/***/ }),
-
 /***/ 792:
 /***/ (function(module) {
 
@@ -3633,6 +3617,22 @@ AutosizeInput.defaultProps = {
 };
 
 exports.Z = AutosizeInput;
+
+/***/ }),
+
+/***/ 646:
+/***/ ((module) => {
+
+"use strict";
+module.exports = JSON.parse('[{"value":"#ffffff","label":"White"},{"value":"#000000","label":"Black"},{"value":"#971a1e","label":"Barn Red"},{"value":"#D40000","label":"RedMetallic Rose"},{"value":"#DAB0AA","label":"Princess Pink"},{"value":"#fcf1f7","label":"Lisa Pink"},{"value":"#f199bf","label":"#f199bf"},{"value":"#e3568a","label":"#e3568a"},{"value":"#FC9E8B","label":"#FC9E8B"},{"value":"#f16728","label":"#f16728"},{"value":"#E87400","label":"#E87400"},{"value":"#faed12","label":"#faed12"},{"value":"#faf8ae","label":"#faf8ae"},{"value":"#e4ecb0","label":"#e4ecb0"},{"value":"#abcf37","label":"#abcf37"},{"value":"#97b94b","label":"#97b94b"},{"value":"#119f49","label":"#119f49"},{"value":"#0f643d","label":"#0f643d"},{"value":"#1e214a","label":"#1e214a"},{"value":"#0d5488","label":"#0d5488"},{"value":"#083B9C","label":"#083B9C"},{"value":"#70c1ec","label":"#70c1ec"},{"value":"#63888E","label":"#63888E"},{"value":"#88cfbd","label":"#88cfbd"},{"value":"#A2E8D9","label":"#A2E8D9"},{"value":"#dee8e7","label":"#dee8e7"},{"value":"#8882b2","label":"#8882b2"},{"value":"#7d52a1","label":"#7d52a1"},{"value":"#3D266E","label":"#3D266E"},{"value":"#b783a7","label":"#b783a7"},{"value":"#E5DDD0","label":"#E5DDD0"},{"value":"#fef7dd","label":"#fef7dd"},{"value":"#D3AD12","label":"#D3AD12"},{"value":"#c0ac94","label":"#c0ac94"},{"value":"#6d4835","label":"#6d4835"},{"value":"#291A00","label":"#291A00"},{"value":"#B5B0AC","label":"#B5B0AC"},{"value":"#808281","label":"#808281"},{"value":"#494B4E","label":"#494B4E"}]');
+
+/***/ }),
+
+/***/ 333:
+/***/ ((module) => {
+
+"use strict";
+module.exports = JSON.parse('[{"value":"Almibar","label":"Almibar"},{"value":"AlwaysAGoodTime","label":"AlwaysAGoodTime"},{"value":"Betterfly","label":"Betterfly"},{"value":"BreakingBread","label":"BreakingBread"},{"value":"Brusher","label":"Brusher"},{"value":"BukhariScript","label":"BukhariScript"},{"value":"GrandHotel","label":"GrandHotel"},{"value":"HickoryJack","label":"HickoryJack"},{"value":"Kaleidos","label":"Kaleidos"},{"value":"Lavanderia","label":"Lavanderia"},{"value":"Norican","label":"Norican"},{"value":"PermanentMarker","label":"PermanentMarker"},{"value":"Sanelma","label":"Sanelma"},{"value":"Sophia","label":"Sophia"},{"value":"StorytellerScript","label":"StorytellerScript"}]');
 
 /***/ }),
 
@@ -10237,7 +10237,7 @@ var index = manageState(Select);
 // EXTERNAL MODULE: ./node_modules/chroma-js/chroma.js
 var chroma = __webpack_require__(792);
 var chroma_default = /*#__PURE__*/__webpack_require__.n(chroma);
-;// CONCATENATED MODULE: ./src/utils/TextToImage.js
+;// CONCATENATED MODULE: ./src/public/utils/TextToImage.js
 function TextToImage_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { TextToImage_typeof = function _typeof(obj) { return typeof obj; }; } else { TextToImage_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return TextToImage_typeof(obj); }
 
 function TextToImage_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
@@ -10326,7 +10326,7 @@ var TextToImage = /*#__PURE__*/function (_React$Component) {
 }(React.Component);
 
 
-;// CONCATENATED MODULE: ./src/app.js
+;// CONCATENATED MODULE: ./src/public/app.js
 function app_typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "function" && typeof Symbol.iterator === "symbol") { app_typeof = function _typeof(obj) { return typeof obj; }; } else { app_typeof = function _typeof(obj) { return obj && typeof Symbol === "function" && obj.constructor === Symbol && obj !== Symbol.prototype ? "symbol" : typeof obj; }; } return app_typeof(obj); }
 
 function app_slicedToArray(arr, i) { return app_arrayWithHoles(arr) || app_iterableToArrayLimit(arr, i) || app_unsupportedIterableToArray(arr, i) || app_nonIterableRest(); }
@@ -10371,9 +10371,9 @@ function app_defineProperty(obj, key, value) { if (key in obj) { Object.definePr
 
 
 
-var fonts_fallback = __webpack_require__(950);
+var fonts_fallback = __webpack_require__(333);
 
-var colors_fallback = __webpack_require__(570);
+var colors_fallback = __webpack_require__(646);
 
 var dot = function dot() {
   var color = arguments.length > 0 && arguments[0] !== undefined ? arguments[0] : '#ccc';
@@ -10563,13 +10563,22 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
     });
 
     var colors_data = JSON.parse(props.colors);
+    var font_parsed;
+
+    try {
+      font_parsed = JSON.parse(props.fonts);
+    } catch (_unused) {
+      font_parsed = fonts_fallback;
+    }
+
     _this.state = {
       value: '',
       height: '',
       width: 0,
       finish: JSON.parse(_this.props.settings).finish || '',
       color: JSON.parse(_this.props.settings).color || '#343234',
-      colors: props.colors !== '' && Array.isArray(colors_data.data) ? colors_data.data : colors_fallback.data,
+      colors: props.colors !== '' && Array.isArray(colors_data) ? colors_data : colors_fallback,
+      fonts: font_parsed,
       font: 'Almibar',
       connect: '',
       quantity: 1,
@@ -10645,7 +10654,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         },
         isSearchable: false,
         styles: fontsStyles,
-        options: fonts_fallback.fonts
+        options: this.state.fonts
       })), /*#__PURE__*/React.createElement("div", {
         className: "xm-input-wrap",
         style: {
@@ -10858,6 +10867,7 @@ var init = function init($scope) {
       letterify_admin_var = _el$dataset.letterify_admin_var,
       price = _el$dataset.price,
       wpNonce = _el$dataset.wpNonce,
+      fonts = _el$dataset.fonts,
       colors = _el$dataset.colors,
       settings = _el$dataset.settings;
 
@@ -10878,6 +10888,7 @@ var init = function init($scope) {
     base_price: price,
     letterify_admin_var: letterify_admin_var,
     wpNonce: wpNonce,
+    fonts: fonts,
     colors: colors,
     settings: settings
   }), el);

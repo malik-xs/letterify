@@ -35,13 +35,23 @@ module.exports = function (grunt) {
 				cwd: 'public/assets/scss/',
 				src: ['*.scss'],
 				dest: 'public/assets/css/'
+			},
+			{
+				cwd: 'core/assets/scss/',
+				src: ['*.scss'],
+				dest: 'core/assets/css/'
 			}
 		],
 		js: [
 			{
-				cwd: projectConfig.srcDir + 'src/',
+				cwd: projectConfig.srcDir + 'src/public',
 				src: ['app.js'],
 				dest: projectConfig.srcDir + 'public/assets/js/'
+			},
+			{
+				cwd: projectConfig.srcDir + 'src/admin',
+				src: ['app.js'],
+				dest: projectConfig.srcDir + 'core/assets/js/'
 			}
 		]
 	}

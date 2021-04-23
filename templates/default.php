@@ -18,7 +18,8 @@ $product = wc_get_product( $post->ID );
 		data-price="<?php echo $product->get_price() ?>"
 		data-ajaxurl="<?php echo admin_url('admin-ajax.php') ?>"
 		data-wpNonce="<?php echo wp_create_nonce("xm_letterify") ?>"
-		data-colors=<?php echo stripslashes( preg_replace( '/\s*/m', '', json_decode( get_option('__letterify_colors') ) )) ?>
+		data-fonts='<?php echo get_option('__letterify_fonts'); ?>'
+		data-colors='<?php echo get_option('__letterify_colors'); ?>'
 		data-settings=<?php echo json_encode( $settings ) ?> >
 		<div class="xm-letterify-template"></div>
 	</div>

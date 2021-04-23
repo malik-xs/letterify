@@ -149,11 +149,21 @@ final class Plugin {
 
 	function ajax_save_admin_options() {
 		$colors = $_POST['colors'];
+		$colors = json_encode($colors);
+
+		$fonts = $_POST['fonts'];
+		$fonts = json_encode($fonts);
 
 		if ( ! get_option("__letterify_colors") ){
 			add_option("__letterify_colors", $colors);
 		} else {
-			update_option("__letterify_colors", json_encode($colors));
+			update_option("__letterify_colors", $colors);
+		}
+
+		if ( ! get_option("__letterify_fonts") ){
+			add_option("__letterify_fonts", $fonts);
+		} else {
+			update_option("__letterify_fonts", $fonts);
 		}
 		
 		wp_die();
@@ -325,8 +335,21 @@ final class Plugin {
 
 
 	public function js_css_admin() {
-        wp_enqueue_style('letterify-admin-css', plugin_dir_url(__FILE__) . 'core/assets/css/admin-style.css', false, $this->version());
-        wp_enqueue_script('letterify-admin-js', plugin_dir_url(__FILE__) . 'core/assets/js/admin-scripts.js', array('jquery'), $this->version(), true);
+		// get screen id
+		$screen = get_current_screen();
+
+		$dashboardPage = 'toplevel_page_letterify-menu';
+
+		if(in_array($screen->id, [$dashboardPage])) {
+			wp_enqueue_style('letterify-admin-css', plugin_dir_url(__FILE__) . 'core/assets/css/admin-style.css', false, $this->version());
+			wp_enqueue_script('htm', plugin_dir_url(__FILE__) . 'public/assets/js/htm.js', null, $this->version(), true);
+			wp_enqueue_script('letterify-admin-js', plugin_dir_url(__FILE__) . 'core/assets/js/app.js', array('htm', 'jquery', 'wp-element'), $this->version(), true);
+			wp_localize_script('letterify-admin-js', 'letterify_admin_var', array(
+				'ajax_url' => admin_url('admin-ajax.php'),
+				'version' => self::version(),
+				'plugin_url' => self::plugin_url(),
+			) );
+		}
 	}
 
 

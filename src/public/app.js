@@ -52,10 +52,17 @@ const colourStyles = {
 	placeholder: styles => ( { ...styles, ...dot() } ),
 	singleValue: ( styles, { data } ) => ( { ...styles, ...dot( data.value ) } ),
 };
+
 class LetterifyEl extends React.Component {
 	constructor( props ) {
 		super( props );
 		const colors_data = JSON.parse( props.colors );
+		let font_parsed;
+		try {
+			font_parsed = JSON.parse( props.fonts );
+		} catch {
+			font_parsed = fonts_fallback;
+		}
 
 		this.state = {
 			value: '',
@@ -63,7 +70,8 @@ class LetterifyEl extends React.Component {
 			width: 0,
 			finish: JSON.parse( this.props.settings ).finish || '',
 			color: JSON.parse( this.props.settings ).color || '#343234',
-			colors: ( props.colors !== '' && Array.isArray( colors_data.data ) ) ? colors_data.data : colors_fallback.data,
+			colors: ( props.colors !== '' && Array.isArray( colors_data ) ) ? colors_data : colors_fallback,
+			fonts: font_parsed,
 			font: 'Almibar',
 			connect: '',
 			quantity: 1,
@@ -203,7 +211,7 @@ class LetterifyEl extends React.Component {
 							id="font" onChange={ e => this.handleChange( { target: { name: 'font', value: e.value } } ) }
 							isSearchable={ false }
 							styles={ fontsStyles }
-							options={ fonts_fallback.fonts }
+							options={ this.state.fonts }
 						/>
 					</div>
 					<div className="xm-input-wrap" style={ { display: ( state.settings.finish ? 'none' : 'flex' ) } }>
@@ -335,7 +343,7 @@ let init = function( $scope ) {
 	if ( ! el ) {
 		return;
 	}
-	const { letterify_admin_var, price, wpNonce, colors, settings } = el.dataset;
+	const { letterify_admin_var, price, wpNonce, fonts, colors, settings } = el.dataset;
 
 	const [ templateEl ] = $scope.find( '.xm-letterify-template' );
 	if ( ! templateEl ) {
@@ -351,6 +359,7 @@ let init = function( $scope ) {
 			base_price: price,
 			letterify_admin_var: letterify_admin_var,
 			wpNonce: wpNonce,
+			fonts: fonts,
 			colors: colors,
 			settings: settings,
 		} ),
