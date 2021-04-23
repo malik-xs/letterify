@@ -83,7 +83,7 @@
 	font-family: "Lavanderia";
 	font-style: normal;
 	font-weight: 400;
-	src: url("../fonts/Lavanderia.ttf") format("truetype");
+	src: url("../fonts/Lavanderia.otf") format("opentype");
 }
 
 @font-face {
@@ -118,12 +118,12 @@
 	font-family: "StorytellerScript";
 	font-style: normal;
 	font-weight: 400;
-	src: url("../fonts/StorytellerScript.ttf") format("truetype");
+	src: url("../fonts/StorytellerScript.otf") format("opentype");
 }
 
 .xm-letterify {
 	border: 1px solid rgba(0, 0, 0, 0.125);
-	border-radius: .25rem;
+	border-radius: 0.25rem;
 }
 
 .xm-letterify .xm-input-wrap {
@@ -133,7 +133,7 @@
 	-webkit-box-align: center;
 	    -ms-flex-align: center;
 	        align-items: center;
-	padding: .75rem 1.25rem;
+	padding: 0.75rem 1.25rem;
 }
 
 .xm-letterify .xm-input-wrap .xm-input-frag {
@@ -161,16 +161,16 @@
 .xm-letterify .xm-input-wrap textarea {
 	display: block;
 	width: 100%;
-	padding: .375rem .75rem;
+	padding: 0.375rem 0.75rem;
 	font-size: 1rem;
 	line-height: 1.5;
 	color: #5b5b5a;
 	background-color: #fff;
 	background-clip: padding-box;
 	border: 1px solid #b4b4b3;
-	border-radius: .25rem;
-	-webkit-transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
-	        transition: border-color .15s ease-in-out,box-shadow .15s ease-in-out;
+	border-radius: 0.25rem;
+	-webkit-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+	        transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
 .xm-letterify .xm-input-wrap input.xm-entry-text,
@@ -186,7 +186,7 @@
 .xm-letterify .xm-input-wrap label {
 	display: block;
 	margin-right: 10px;
-	width: calc(30% - 10px);
+	width: calc(35% - 10px);
 }
 
 .xm-letterify .xm-input-wrap label strong {
@@ -202,7 +202,7 @@
 :not(.xm-input-full) .xm-letterify .xm-input-wrap label + input, :not(.xm-input-full)
 .xm-letterify .xm-input-wrap label + select, :not(.xm-input-full)
 .xm-letterify .xm-input-wrap label + textarea {
-	width: 70%;
+	width: 65%;
 }
 
 .xm-letterify .xm-input-wrap.xm-input-full {
@@ -214,13 +214,13 @@
 	min-width: 100%;
 }
 
-.xm-letterify .xm-input-wrap input[type=submit] {
+.xm-letterify .xm-input-wrap input[type="submit"] {
 	color: #fff;
 	background-color: #ff5a46;
 	border: 1px solid #ff5a46;
 	display: inline-block;
 	font-weight: 600;
-	letter-spacing: .1em;
+	letter-spacing: 0.1em;
 	text-transform: uppercase;
 	text-align: center;
 	white-space: nowrap;
@@ -228,26 +228,26 @@
 	-webkit-user-select: none;
 	    -ms-user-select: none;
 	        user-select: none;
-	padding: .375rem .75rem;
+	padding: 0.375rem 0.75rem;
 	font-size: 1rem;
 	line-height: 1.5;
-	border-radius: .25rem;
-	-webkit-transition: all .15s ease-in-out;
-	        transition: all .15s ease-in-out;
+	border-radius: 0.25rem;
+	-webkit-transition: all 0.15s ease-in-out;
+	        transition: all 0.15s ease-in-out;
 }
 
-.xm-letterify .xm-input-wrap input[type=submit]:hover {
+.xm-letterify .xm-input-wrap input[type="submit"]:hover {
 	color: #fff;
 	background-color: #ff3820;
 	border-color: #ff2d13;
 }
 
-.xm-letterify .xm-input-wrap input[name=color] {
+.xm-letterify .xm-input-wrap input[name="color"] {
 	text-transform: uppercase;
 }
 
-.xm-letterify .xm-input-wrap input[name=color]::before {
-	content: '';
+.xm-letterify .xm-input-wrap input[name="color"]::before {
+	content: "";
 	display: block;
 	height: 1rem;
 	width: 1rem;

@@ -1,57 +1,158 @@
-@import url('https://fonts.googleapis.com/css2?family=Lato:wght@400&display=swap');
-
+@import url("https://fonts.googleapis.com/css2?family=Lato:wght@400&display=swap");
 .letterify-admin-wrap {
-	font-family: 'Lato', sans-serif !important;
+	font-family: Lato, sans-serif !important;
 }
+
 .letterify-admin-wrap label {
-    font-size: 22px;
-    font-weight: 600;
-    margin: 0 0 16px;
+	font-size: 22px;
+	font-weight: 600;
+	margin: 0 0 16px;
 }
+
 .letterify-admin-wrap textarea {
 	min-width: 450px;
 	min-height: 400px;
 	font-size: 14px;
-	letter-spacing: .05em;
+	letter-spacing: 0.05em;
 	line-height: 1.6;
 	display: block;
-	border: 2px solid #4D61FC;
-    box-shadow: 0 2px 4px 0 rgb(136 144 195 / 20%), 0 5px 15px 0 rgb(37 44 97 / 15%);
-	background: #ffffff;
+	border: 2px solid #4d61fc;
+	box-shadow: 0 2px 4px 0 rgba(136, 144, 195, 0.2), 0 5px 15px 0 rgba(37, 44, 97, 0.15);
+	background: #fff;
 	border-radius: 5px;
 	margin: 0 0 20px;
 }
 
 .letterify-admin-wrap .letterify-btn {
 	overflow: hidden;
-    display: inline-block;
-    position: relative;
-    padding: 12px 20px 12px;
-    background-color: #4D61FC;
-    color: white;
-    min-width: 120px;
-    border: 2px solid transparent;
-    min-height: 44px;
-    border-radius: 4px;
-    box-shadow: 0 2px 4px 0 rgb(136 144 195 / 20%), 0 5px 15px 0 rgb(37 44 97 / 15%);
-    font-size: 0;
-    line-height: 1.2;
-    font-weight: 400;
+	display: inline-block;
+	position: relative;
+	padding: 12px 20px 12px;
+	background-color: #344bfc;
+	color: #fff;
+	min-width: 120px;
+	border: 2px solid transparent;
+	min-height: 44px;
+	border-radius: 4px;
+	box-shadow: 0 2px 8px 0 rgba(136, 144, 195, 0.22), 0 8px 15px 0 rgba(37, 44, 97, 0.17);
+	font-size: 14px;
+	line-height: 1.2;
+	font-weight: 400;
 	letter-spacing: 0.06em;
 	text-transform: uppercase;
-    -webkit-user-select: none;
-    -ms-user-select: none;
-    user-select: none;
-    text-align: center;
-    text-decoration: none;
-    cursor: pointer;
-    transition: color .2s ease,background-color .2s ease,border-color .2s ease,box-shadow .2s ease,transform .2s ease;
+	-webkit-user-select: none;
+	-ms-user-select: none;
+	user-select: none;
+	text-align: center;
+	text-decoration: none;
+	cursor: pointer;
+	-webkit-transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, -webkit-transform 0.2s ease;
+	        transition: color 0.2s ease, background-color 0.2s ease, border-color 0.2s ease, box-shadow 0.2s ease, transform 0.2s ease;
 	vertical-align: middle;
-	font-size: 14px;
+	-webkit-transform: translateY(-2px);
+	        transform: translateY(-2px);
 }
 
-.letterify-admin-wrap .letterify-btn {
-    background-color: #344bfc;
-    transform: translateY(-2px);
-    box-shadow: 0 2px 8px 0 rgb(136 144 195 / 22%), 0 8px 15px 0 rgb(37 44 97 / 17%);
+.ant-message {
+	top: 50px;
+}
+
+.letterify-admin-wrapper {
+	padding-right: 20px;
+}
+
+.letterify-admin-wrapper .letterfiy-admin-header {
+	display: block;
+	background-color: #fff;
+	padding: 30px;
+	box-shadow: 0 5px 15px rgba(0, 0, 0, 0.1);
+	-webkit-transition: all 0.4s;
+	        transition: all 0.4s;
+}
+
+.letterify-admin-wrapper .letterfiy-admin-header .ant-badge {
+	font-size: 24px;
+	font-weight: 700;
+	color: #1e214a;
+	letter-spacing: 0.01em;
+	text-transform: uppercase;
+}
+
+.letterify-admin-wrapper .letterfiy-admin-header .ant-badge img {
+	height: 36px;
+	width: auto;
+}
+
+.letterify-admin-wrapper .letterfiy-admin-header .ant-badge .ant-badge-count {
+	text-transform: lowercase;
+	font-size: 11px;
+	border-radius: 4px;
+	background-color: #52c41a;
+	margin-right: -30px;
+	margin-top: 2px;
+}
+
+.letterify-admin-wrapper main {
+	padding: 0 30px;
+	display: -webkit-box;
+	display: -ms-flexbox;
+	display: flex;
+}
+
+.letterify-admin-wrapper main > div {
+	-webkit-box-flex: 1;
+	    -ms-flex: 1;
+	        flex: 1;
+}
+
+.letterify-admin-wrapper main > div .letterify-admin-input-title {
+	display: block;
+	margin-bottom: 16px;
+	padding: 30px 0 16px;
+	border-bottom: 1px solid #1890ff;
+}
+
+.letterify-admin-wrapper main > div .letterify-admin-input-title .anticon {
+	width: 42px;
+	height: 42px;
+	margin-right: 12px;
+	color: #fff;
+	background: #1890ff;
+	display: -webkit-inline-box;
+	display: -ms-inline-flexbox;
+	display: inline-flex;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
+	-webkit-box-pack: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
+	border-radius: 6px;
+}
+
+.letterify-admin-wrapper main > div .letterify-admin-input-group {
+	margin: 0 0 20px;
+}
+
+.letterify-admin-wrapper .letterify-admin-tag {
+	font-weight: 500;
+	line-height: 24px;
+	padding: 0 6px 0 6px;
+	margin: 0 6px 6px 0;
+}
+
+.letterify-admin-wrapper .letterify-admin-tag .letterify-admin-tag-preview {
+	display: inline-block;
+	height: 13px;
+	width: 13px;
+	margin-right: 6px;
+	border-radius: 3px;
+	vertical-align: -2px;
+	box-shadow: 0 0 3px rgba(0, 0, 0, 0.3);
+}
+
+.letterify-admin-wrapper .letterify-admin-tag .ant-tag-close-icon {
+	margin-left: 6px;
+	padding: 2px 0 2px 5px;
+	border-left: 1px solid #d9d9d9;
 }

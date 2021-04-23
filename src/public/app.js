@@ -1,49 +1,90 @@
 import Select from 'react-select';
+import chroma from 'chroma-js';
 import TextToImage from './utils/TextToImage';
 
-const fonts = [
-	'Almibar',
-	'AlwaysAGoodTime',
-	'Betterfly',
-	'BreakingBread',
-	'Brusher',
-	'BukhariScript',
-	'GrandHotel',
-	'HickoryJack',
-	'Kaleidos',
-	'Lavanderia',
-	'Norican',
-	'PermanentMarker',
-	'Sanelma',
-	'Sophia',
-	'StorytellerScript',
-];
-
+const fonts_fallback = require( '../configs/fonts.json' );
 const colors_fallback = require( '../configs/colors.json' );
+
+const dot = ( color = '#ccc' ) => ( {
+	alignItems: 'center',
+	display: 'flex',
+	':before': {
+		backgroundColor: color,
+		borderRadius: 3,
+		content: '" "',
+		display: 'block',
+		marginRight: 8,
+		height: 16,
+		width: 16,
+		border: '1px solid #f2f2f2',
+	},
+} );
+
+const fontsStyles = {
+	control: styles => ( { ...styles } ),
+	option: ( styles, { data } ) => {
+		return { ...styles, fontFamily: data.value };
+	},
+	input: ( styles, { data } ) => {
+		return { ...styles, fontFamily: data.value };
+	},
+	placeholder: styles => ( { ...styles } ),
+	singleValue: styles => ( { ...styles } ),
+};
+
+const colourStyles = {
+	control: styles => ( { ...styles, backgroundColor: 'white' } ),
+	option: ( styles, { data, isDisabled, isSelected } ) => {
+		const color = chroma( data.value );
+		return {
+			...styles,
+			// backgroundColor: isDisabled ? null : isSelected ? data.color : isFocused ? color.alpha( 0.1 ).css() : null,
+			// color: isDisabled ? '#ccc' : isSelected ? chroma.contrast( color, 'white' ) > 2 ? 'white' : 'black' : data.color,
+			cursor: isDisabled ? 'not-allowed' : 'default',
+			':active': {
+				...styles[':active'],
+				backgroundColor: ! isDisabled && ( isSelected ? data.value : color.alpha( 0.3 ).css() ),
+			},
+			...dot( color.css() ),
+		};
+	},
+	input: styles => ( { ...styles, ...dot() } ),
+	placeholder: styles => ( { ...styles, ...dot() } ),
+	singleValue: ( styles, { data } ) => ( { ...styles, ...dot( data.value ) } ),
+};
 
 class LetterifyEl extends React.Component {
 	constructor( props ) {
 		super( props );
 		const colors_data = JSON.parse( props.colors );
+		let font_parsed;
+		try {
+			font_parsed = JSON.parse( props.fonts );
+		} catch {
+			font_parsed = fonts_fallback;
+		}
 
 		this.state = {
 			value: '',
 			height: '',
 			width: 0,
-			finish: '',
-			color: '#343234',
-			colors: ( props.colors !== '' && Array.isArray( colors_data.data ) ) ? colors_data.data : colors_fallback.data,
+			finish: JSON.parse( this.props.settings ).finish || '',
+			color: JSON.parse( this.props.settings ).color || '#343234',
+			colors: ( props.colors !== '' && Array.isArray( colors_data ) ) ? colors_data : colors_fallback,
+			fonts: font_parsed,
 			font: 'Almibar',
 			connect: '',
 			quantity: 1,
 			loaded: false,
-			price: 0.59,
+			price: 0,
 			mounting: '',
+			add_to_cart_text: 'Add to cart',
+			added_to_cart: false,
+			settings: JSON.parse( this.props.settings ) || {},
 		};
 	}
 
-	componentDidUpdate( ) {
-	}
+	componentDidUpdate( ) { }
 
 	componentDidMount( ) {
 		this.setState( { loaded: true } );
@@ -56,34 +97,37 @@ class LetterifyEl extends React.Component {
 	}
 
 	handleChange = ( e ) => {
-		const { name, value } = e.target;
-
-		if ( this.state[name] !== value ) {
-			this.setState( {
-				[name]: value,
-			} );
+		if ( e.value ) {
+			this.setState( { color: e.value } );
+		} else {
+			const { name, value } = e.target;
+			if ( this.state[name] !== value ) {
+				this.setState( {
+					[name]: value,
+				} );
+			}
 		}
 	}
 
 	handleSubmit = ( e ) => {
 		e.preventDefault();
+		if ( this.state.added_to_cart ) {
+			window.location = letterify_admin_var.cart_url;
+			return;
+		}
+
 		this.setState( { loading: true } );
 
 		var image = document.getElementById( 'canvasComponent' );
 		var imageURL = image.toDataURL( 'image/png' );
 
-		// jQuery.ajax( {
-		// 	type: 'POST',
-		// 	url: this.props.ajaxurl,
-		// 	data: { action: 'ajax_save_photo', title: this.state.value + Math.floor( ( Math.random() * 100 ) + 1 ), imgBase64: imageURL },
-		// } ).done( function() {
-		// 	console.log( 'saved' );
-		// } );
+		const { value } = this.state;
+		const { base_price } = this.props;
 
 		var data = {
 			action: 'woocommerce_ajax_add_to_cart',
 			value: this.state.value,
-			price: ( 0.59 * ( this.state.value.replace( /\s/g, '' ).length > 0 ? this.state.value.replace( /\s/g, '' ).length : 1 ) ).toFixed( 2 ),
+			price: ( base_price * ( value.replace( /\s/g, '' ).length > 0 ? value.replace( /\s/g, '' ).length : 1 ) ).toFixed( 2 ),
 			quantity: this.state.quantity,
 			variation_id: null,
 			imgBase64: imageURL,
@@ -97,25 +141,32 @@ class LetterifyEl extends React.Component {
 			font: this.state.font,
 		};
 
-		// jQuery( document.body ).trigger( 'adding_to_cart', [ e.target, data ] );
-
 		jQuery.ajax( {
 			type: 'post',
 			url: wc_add_to_cart_params.ajax_url,
 			data: data,
+			// eslint-disable-next-line
 			beforeSend: ( response ) => {
-				// $thisbutton.removeClass('added').addClass('loading');
+				this.setState( { add_to_cart_text: 'Adding to cart' } );
 			},
+			// eslint-disable-next-line
 			complete: ( response ) => {
 				setTimeout( ( ) => {
 					this.setState( { loading: false } );
 				}, 1000 );
-				// $thisbutton.addClass('added').removeClass('loading');
 			},
+			// eslint-disable-next-line
 			success: ( response ) => {
 				if ( ! response.error ) {
-					// jQuery( document.body ).trigger('added_to_cart', [ response.fragments, response.cart_hash, e.target ]);
+					this.setState( { add_to_cart_text: 'View Cart', added_to_cart: true } );
 				}
+			},
+			// eslint-disable-next-line
+			error: ( error ) => {
+				this.setState( { add_to_cart_text: 'Unsuccessful' } );
+				setTimeout( () => {
+					this.setState( { add_to_cart_text: 'Add to cart' } );
+				}, 1000 );
 			},
 		} );
 	}
@@ -123,6 +174,7 @@ class LetterifyEl extends React.Component {
 	render() {
 		const parent = this;
 		const { state } = parent;
+		const { base_price } = this.props;
 
 		if ( ! state.loaded ) {
 			return <><h4>Loading</h4></>;
@@ -154,11 +206,15 @@ class LetterifyEl extends React.Component {
 					</div>
 					<div className="xm-input-wrap">
 						<label htmlFor="font" className="text-right"><strong>Choose Font</strong></label>
-						<select name="font" id="font" onChange={ this.handleChange } value={ state.font }>
-							{ fonts.map( ( f, i ) => <option key={ i } value={ f }>{ f }</option> ) }
-						</select>
+						<Select
+							className="" name="font"
+							id="font" onChange={ e => this.handleChange( { target: { name: 'font', value: e.value } } ) }
+							isSearchable={ false }
+							styles={ fontsStyles }
+							options={ this.state.fonts }
+						/>
 					</div>
-					<div className="xm-input-wrap">
+					<div className="xm-input-wrap" style={ { display: ( state.settings.finish ? 'none' : 'flex' ) } }>
 						<label htmlFor="finish" className="text-right"><strong>Finish</strong></label>
 						<select name="finish" id="finish" onChange={ this.handleChange } value={ state.finish }>
 							<option value="">Choose Finish...</option>
@@ -190,6 +246,7 @@ class LetterifyEl extends React.Component {
 							<option value="18">18 inch</option>
 						</select>
 					</div>
+
 					<div className="xm-input-wrap" style={ { display: ( state.height === '' ? 'none' : 'flex' ) } }>
 						<label htmlFor="thickness" className="text-right"><strong>Thickness</strong></label>
 						<select name="thickness" id="thickness" onChange={ this.handleChange }>
@@ -211,23 +268,15 @@ class LetterifyEl extends React.Component {
 						</select>
 					</div>
 
-					{ /* <Select
-						name="let-color"
-						isSearchable={ false }
-						options={ [ { value: 'one', label: 'One' }, { value: 'two', label: 'Two' } ] }
-					/> */ }
-
 					<div className="xm-input-wrap" style={ { display: ( this.state.finish === 'painted' ? 'flex' : 'none' ) } }>
 						<label htmlFor="color" className="text-right"><strong>Color</strong></label>
-						<select className="" name="color" id="color" onChange={ this.handleChange } data-dot-style={ state.color }>
-							{ state.colors.map(
-								( f, i ) =>
-									<option
-										style={ { background: 'linear-gradient(to right , ' + f.value + ' 20%, #ffffff 20%)' } }
-										className={ 'xm-input-color-' + f.value }
-										key={ i } value={ f.value }>{ f.label }</option> )
-							}
-						</select>
+						<Select
+							className="" name="color"
+							id="color" onChange={ this.handleChange }
+							isSearchable={ false }
+							styles={ colourStyles }
+							options={ this.state.colors }
+						/>
 					</div>
 					<div className="xm-input-wrap text-center xm-input-sm">
 						<p>
@@ -257,7 +306,10 @@ class LetterifyEl extends React.Component {
 					<div className="xm-input-wrap">
 						<div className="xm-input-frag">
 							Starting At: ${
-								( 0.59 * ( this.state.value.replace( /\s/g, '' ).length > 0 ? this.state.value.replace( /\s/g, '' ).length : 1 ) * ( state.quantity > 0 ? state.quantity : 1 ) ).toFixed( 2 )
+								( base_price *
+									this.state.value.replace( /\s/g, '' ).length *
+									( state.quantity > 0 ? state.quantity : 1 )
+								).toFixed( 2 )
 							}
 						</div>
 						<div className="xm-input-frag">
@@ -271,7 +323,7 @@ class LetterifyEl extends React.Component {
 								type='submit' name='submit'
 								className='xm-input-submit'
 								disabled={ state.loading }
-								value={ state.loading ? 'Loading...' : 'Add to cart' }
+								value={ this.state.add_to_cart_text }
 								onClick={ this.handleSubmit } />
 						</div>
 					</div>
@@ -291,7 +343,7 @@ let init = function( $scope ) {
 	if ( ! el ) {
 		return;
 	}
-	const { ajaxurl, wpNonce, colors } = el.dataset;
+	const { letterify_admin_var, price, wpNonce, fonts, colors, settings } = el.dataset;
 
 	const [ templateEl ] = $scope.find( '.xm-letterify-template' );
 	if ( ! templateEl ) {
@@ -304,9 +356,12 @@ let init = function( $scope ) {
 	ReactDOM.render(
 		React.createElement( LetterifyEl, {
 			templateEl: templateEl,
-			ajaxurl: ajaxurl,
+			base_price: price,
+			letterify_admin_var: letterify_admin_var,
 			wpNonce: wpNonce,
+			fonts: fonts,
 			colors: colors,
+			settings: settings,
 		} ),
 		el,
 	);

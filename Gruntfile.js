@@ -35,13 +35,23 @@ module.exports = function (grunt) {
 				cwd: 'public/assets/scss/',
 				src: ['*.scss'],
 				dest: 'public/assets/css/'
+			},
+			{
+				cwd: 'core/assets/scss/',
+				src: ['*.scss'],
+				dest: 'core/assets/css/'
 			}
 		],
 		js: [
 			{
-				cwd: projectConfig.srcDir + 'src/',
+				cwd: projectConfig.srcDir + 'src/public',
 				src: ['app.js'],
 				dest: projectConfig.srcDir + 'public/assets/js/'
+			},
+			{
+				cwd: projectConfig.srcDir + 'src/admin',
+				src: ['app.js'],
+				dest: projectConfig.srcDir + 'core/assets/js/'
 			}
 		]
 	}
@@ -59,16 +69,37 @@ module.exports = function (grunt) {
 							'@babel/preset-env',
 							'@babel/preset-react',
 							{
-								plugins: ['@babel/plugin-proposal-class-properties']
+								plugins: [
+									'@babel/plugin-proposal-class-properties',
+									[ "import", {
+										"libraryName": "antd",
+										"style": "css",
+									} ]
+								]
 							}
 						],
 					}
 				}
+			},
+			{
+				test: /\.css$/i,
+				use: ['style-loader', 'css-loader'],
+			},
+			{
+				test: /\.(png|jpe?g|gif)$/i,
+				loader: 'file-loader',
+				options: {
+				  name: '[path][name].[ext]',
+				},
 			}]
 		},
 		performance: { hints: false },
 		resolve: {
 			fallback: { fs: false }
+		},
+		externals: {
+			"react": "React",
+			"react-dom": "ReactDOM"
 		},
 	}
 
@@ -385,7 +416,7 @@ module.exports = function (grunt) {
 		'log:begin',
 		( projectConfig.ignoreLint ? 'log:nolintwarning' : 'lint' ),
         'fixtextdomain',
-        'makepot',
+        // 'makepot',
         'boot',
 		'minify',
 		'compress',
