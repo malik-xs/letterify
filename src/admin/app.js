@@ -11,11 +11,13 @@ class LetterifyAdminEl extends React.Component {
 
 		try {
 			colors_parsed = JSON.parse( colors );
+			colors_parsed = Array.isArray( colors_parsed ) ? colors_parsed : Colors;
 		} catch {
 			colors_parsed = Colors;
 		}
 		try {
 			font_parsed = JSON.parse( fonts );
+			font_parsed = Array.isArray( font_parsed ) ? font_parsed : Fonts;
 		} catch {
 			font_parsed = Fonts;
 		}

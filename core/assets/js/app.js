@@ -12260,6 +12260,10 @@ var badge = __webpack_require__(4996);
 var message_style_css = __webpack_require__(9373);
 // EXTERNAL MODULE: ./node_modules/antd/lib/message/index.js
 var message = __webpack_require__(1187);
+// EXTERNAL MODULE: ./node_modules/antd/lib/tooltip/style/css.js
+var tooltip_style_css = __webpack_require__(7373);
+// EXTERNAL MODULE: ./node_modules/antd/lib/tooltip/index.js
+var tooltip = __webpack_require__(4055);
 // EXTERNAL MODULE: ./node_modules/antd/lib/tag/style/css.js
 var tag_style_css = __webpack_require__(2559);
 // EXTERNAL MODULE: ./node_modules/antd/lib/tag/index.js
@@ -12674,6 +12678,8 @@ function _typeof(obj) { "@babel/helpers - typeof"; if (typeof Symbol === "functi
 
 
 
+
+
 function _slicedToArray(arr, i) { return _arrayWithHoles(arr) || _iterableToArrayLimit(arr, i) || _unsupportedIterableToArray(arr, i) || _nonIterableRest(); }
 
 function _nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
@@ -12735,6 +12741,8 @@ var LetterifyAdminEl = /*#__PURE__*/function (_React$Component) {
     _defineProperty(_assertThisInitialized(_this), "colorMap", function (color) {
       return /*#__PURE__*/React.createElement("span", {
         key: color.value
+      }, /*#__PURE__*/React.createElement(tooltip.default, {
+        title: color.value
       }, /*#__PURE__*/React.createElement(tag/* default */.Z, {
         className: "letterify-admin-tag",
         closable: true,
@@ -12752,7 +12760,7 @@ var LetterifyAdminEl = /*#__PURE__*/function (_React$Component) {
         style: {
           background: color.value
         }
-      }), color.label));
+      }), color.label)));
     });
 
     _defineProperty(_assertThisInitialized(_this), "fontMap", function (font) {
@@ -12869,12 +12877,14 @@ var LetterifyAdminEl = /*#__PURE__*/function (_React$Component) {
 
     try {
       colors_parsed = JSON.parse(_colors);
+      colors_parsed = Array.isArray(colors_parsed) ? colors_parsed : colors_namespaceObject;
     } catch (_unused) {
       colors_parsed = colors_namespaceObject;
     }
 
     try {
       font_parsed = JSON.parse(_fonts);
+      font_parsed = Array.isArray(font_parsed) ? font_parsed : fonts_namespaceObject;
     } catch (_unused2) {
       font_parsed = fonts_namespaceObject;
     }

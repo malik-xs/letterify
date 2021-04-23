@@ -2,6 +2,7 @@
 **/lang/*.js
 **/lib/*.js
 **/public/**/js/*.js
+**/core/**/js/*.js
 chart.js
 widget-scripts.js
 ekit-widget-builder-editor.js
