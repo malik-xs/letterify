@@ -403,7 +403,7 @@ final class Plugin {
             'label'                 => esc_html__( 'Order entry', 'letterify' ),
             'description'           => esc_html__( 'letterify-orders', 'letterify' ),
 			'labels'				=> $labels,
-            'supports'              => ['title', 'editor'],
+			'supports'				=> ['title', 'editor', 'thumbnail', 'excerpt'],
             'capabilities'          => ['create_posts' => 'do_not_allow'],
             'map_meta_cap'          => true,
             'hierarchical'          => false,
