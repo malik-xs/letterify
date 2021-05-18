@@ -10673,10 +10673,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         styles: fontsStyles,
         options: this.state.fonts
       })), /*#__PURE__*/React.createElement("div", {
-        className: "xm-input-wrap",
-        style: {
-          display: state.settings.finish ? 'none' : 'flex'
-        }
+        className: "xm-input-wrap"
       }, /*#__PURE__*/React.createElement("label", {
         htmlFor: "finish",
         className: "text-right"
@@ -10692,10 +10689,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       }, "Painted"), /*#__PURE__*/React.createElement("option", {
         value: "unpainted"
       }, "Unpainted"))), /*#__PURE__*/React.createElement("div", {
-        className: "xm-input-wrap",
-        style: {
-          display: state.finish === '' ? 'none' : 'flex'
-        }
+        className: "xm-input-wrap"
       }, /*#__PURE__*/React.createElement("label", {
         htmlFor: "height",
         className: "text-right"
@@ -10707,20 +10701,11 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       }, /*#__PURE__*/React.createElement("option", {
         value: ""
       }, "Choose Height..."), /*#__PURE__*/React.createElement("option", {
-        value: "1",
-        style: {
-          display: state.finish === 'painted' ? 'none' : 'block'
-        }
+        value: "1"
       }, "1 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "2",
-        style: {
-          display: state.finish === 'painted' ? 'none' : 'block'
-        }
+        value: "2"
       }, "2 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "3",
-        style: {
-          display: state.finish === 'painted' ? 'none' : 'block'
-        }
+        value: "3"
       }, "3 inch"), /*#__PURE__*/React.createElement("option", {
         value: "4"
       }, "4 inch"), /*#__PURE__*/React.createElement("option", {
@@ -10752,10 +10737,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       }, "17 inch"), /*#__PURE__*/React.createElement("option", {
         value: "18"
       }, "18 inch"))), /*#__PURE__*/React.createElement("div", {
-        className: "xm-input-wrap",
-        style: {
-          display: state.height === '' ? 'none' : 'flex'
-        }
+        className: "xm-input-wrap"
       }, /*#__PURE__*/React.createElement("label", {
         htmlFor: "thickness",
         className: "text-right"
@@ -10776,10 +10758,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       }, "1/2 inch"), /*#__PURE__*/React.createElement("option", {
         value: "3/4 inch"
       }, "3/4 inch"))), /*#__PURE__*/React.createElement("div", {
-        className: "xm-input-wrap",
-        style: {
-          display: state.height === '' ? 'none' : 'flex'
-        }
+        className: "xm-input-wrap"
       }, /*#__PURE__*/React.createElement("label", {
         htmlFor: "mounting",
         className: "text-right"
@@ -10794,10 +10773,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       }, "Hanging Strips & Paper Template (+10%)"), /*#__PURE__*/React.createElement("option", {
         value: ""
       }, "None"))), /*#__PURE__*/React.createElement("div", {
-        className: "xm-input-wrap",
-        style: {
-          display: this.state.finish === 'painted' ? 'flex' : 'none'
-        }
+        className: "xm-input-wrap"
       }, /*#__PURE__*/React.createElement("label", {
         htmlFor: "color",
         className: "text-right"

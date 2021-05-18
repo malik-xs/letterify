@@ -214,7 +214,7 @@ class LetterifyEl extends React.Component {
 							options={ this.state.fonts }
 						/>
 					</div>
-					<div className="xm-input-wrap" style={ { display: ( state.settings.finish ? 'none' : 'flex' ) } }>
+					<div className="xm-input-wrap">
 						<label htmlFor="finish" className="text-right"><strong>Finish</strong></label>
 						<select name="finish" id="finish" onChange={ this.handleChange } value={ state.finish }>
 							<option value="">Choose Finish...</option>
@@ -222,13 +222,13 @@ class LetterifyEl extends React.Component {
 							<option value="unpainted">Unpainted</option>
 						</select>
 					</div>
-					<div className="xm-input-wrap" style={ { display: ( state.finish === '' ? 'none' : 'flex' ) } }>
+					<div className="xm-input-wrap">
 						<label htmlFor="height" className="text-right"><strong>Height</strong></label>
 						<select name="height" id="height" onChange={ this.handleChange } value={ state.height }>
 							<option value="">Choose Height...</option>
-							<option value="1" style={ { display: ( state.finish === 'painted' ? 'none' : 'block' ) } }>1 inch</option>
-							<option value="2" style={ { display: ( state.finish === 'painted' ? 'none' : 'block' ) } }>2 inch</option>
-							<option value="3" style={ { display: ( state.finish === 'painted' ? 'none' : 'block' ) } }>3 inch</option>
+							<option value="1">1 inch</option>
+							<option value="2">2 inch</option>
+							<option value="3">3 inch</option>
 							<option value="4">4 inch</option>
 							<option value="5">5 inch</option>
 							<option value="6">6 inch</option>
@@ -247,7 +247,7 @@ class LetterifyEl extends React.Component {
 						</select>
 					</div>
 
-					<div className="xm-input-wrap" style={ { display: ( state.height === '' ? 'none' : 'flex' ) } }>
+					<div className="xm-input-wrap">
 						<label htmlFor="thickness" className="text-right"><strong>Thickness</strong></label>
 						<select name="thickness" id="thickness" onChange={ this.handleChange }>
 							<option value="">Choose Thickness...</option>
@@ -259,7 +259,7 @@ class LetterifyEl extends React.Component {
 						</select>
 					</div>
 
-					<div className="xm-input-wrap" style={ { display: ( state.height === '' ? 'none' : 'flex' ) } }>
+					<div className="xm-input-wrap">
 						<label htmlFor="mounting" className="text-right"><strong>Mounting</strong></label>
 						<select name="mounting" id="mounting" onChange={ this.handleChange }>
 							<option value="">- Select an Option -</option>
@@ -268,7 +268,7 @@ class LetterifyEl extends React.Component {
 						</select>
 					</div>
 
-					<div className="xm-input-wrap" style={ { display: ( this.state.finish === 'painted' ? 'flex' : 'none' ) } }>
+					<div className="xm-input-wrap">
 						<label htmlFor="color" className="text-right"><strong>Color</strong></label>
 						<Select
 							className="" name="color"
