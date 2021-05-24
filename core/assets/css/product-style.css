@@ -1,0 +1,22 @@
+.term-meta-text-wrap {
+	display: -ms-inline-flexbox;
+	display: inline-flex;
+	-ms-flex-align: center;
+	    align-items: center;
+	margin-bottom: 1em;
+	width: 50%;
+}
+
+.term-meta-text-wrap input[type="checkbox"] {
+	margin-top: 1px;
+	margin-right: 10px;
+}
+
+.term-meta-text-wrap label {
+	min-width: 150px;
+	font-weight: 500;
+}
+
+.term-meta-text-wrap select {
+	min-width: 350px;
+}

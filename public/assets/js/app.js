@@ -10350,13 +10350,21 @@ function app_slicedToArray(arr, i) { return app_arrayWithHoles(arr) || app_itera
 
 function app_nonIterableRest() { throw new TypeError("Invalid attempt to destructure non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
 
-function app_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return app_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return app_arrayLikeToArray(o, minLen); }
-
-function app_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
-
 function app_iterableToArrayLimit(arr, i) { var _i = arr && (typeof Symbol !== "undefined" && arr[Symbol.iterator] || arr["@@iterator"]); if (_i == null) return; var _arr = []; var _n = true; var _d = false; var _s, _e; try { for (_i = _i.call(arr); !(_n = (_s = _i.next()).done); _n = true) { _arr.push(_s.value); if (i && _arr.length === i) break; } } catch (err) { _d = true; _e = err; } finally { try { if (!_n && _i["return"] != null) _i["return"](); } finally { if (_d) throw _e; } } return _arr; }
 
 function app_arrayWithHoles(arr) { if (Array.isArray(arr)) return arr; }
+
+function app_toConsumableArray(arr) { return app_arrayWithoutHoles(arr) || app_iterableToArray(arr) || app_unsupportedIterableToArray(arr) || app_nonIterableSpread(); }
+
+function app_nonIterableSpread() { throw new TypeError("Invalid attempt to spread non-iterable instance.\nIn order to be iterable, non-array objects must have a [Symbol.iterator]() method."); }
+
+function app_unsupportedIterableToArray(o, minLen) { if (!o) return; if (typeof o === "string") return app_arrayLikeToArray(o, minLen); var n = Object.prototype.toString.call(o).slice(8, -1); if (n === "Object" && o.constructor) n = o.constructor.name; if (n === "Map" || n === "Set") return Array.from(o); if (n === "Arguments" || /^(?:Ui|I)nt(?:8|16|32)(?:Clamped)?Array$/.test(n)) return app_arrayLikeToArray(o, minLen); }
+
+function app_iterableToArray(iter) { if (typeof Symbol !== "undefined" && iter[Symbol.iterator] != null || iter["@@iterator"] != null) return Array.from(iter); }
+
+function app_arrayWithoutHoles(arr) { if (Array.isArray(arr)) return app_arrayLikeToArray(arr); }
+
+function app_arrayLikeToArray(arr, len) { if (len == null || len > arr.length) len = arr.length; for (var i = 0, arr2 = new Array(len); i < len; i++) { arr2[i] = arr[i]; } return arr2; }
 
 function app_classCallCheck(instance, Constructor) { if (!(instance instanceof Constructor)) { throw new TypeError("Cannot call a class as a function"); } }
 
@@ -10490,6 +10498,8 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
     });
 
     app_defineProperty(app_assertThisInitialized(_this), "handleChange", function (e) {
+      console.log(e);
+
       if (e.value) {
         _this.setState({
           color: e.value
@@ -10589,6 +10599,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
     }
 
     _this.state = {
+      fields_data: [],
       value: '',
       height: '',
       width: 0,
@@ -10615,14 +10626,26 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
   }, {
     key: "componentDidMount",
     value: function componentDidMount() {
-      this.setState({
-        loaded: true
+      var _this2 = this;
+
+      fetch(letterify_admin_var.rest_api).then(function (res) {
+        return res.json();
+      }).then(function (result) {
+        _this2.setState({
+          loaded: true,
+          fields_data: result
+        });
+      }, function (error) {
+        _this2.setState({
+          loaded: true,
+          error: error
+        });
       });
     }
   }, {
     key: "render",
     value: function render() {
-      var _this2 = this;
+      var _this3 = this;
 
       var parent = this;
       var state = parent.state;
@@ -10632,14 +10655,47 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h4", null, "Loading"));
       }
 
-      return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("form", null, /*#__PURE__*/React.createElement("div", {
+      return /*#__PURE__*/React.createElement(React.Fragment, null, Object.keys(this.state.fields_data).map(function (key) {
+        var val = _this3.state.fields_data[key];
+        var options = [{
+          value: '',
+          label: 'Choose ' + val.name + '...'
+        }];
+        Object.keys(val.values).forEach(function (key) {
+          options = [].concat(app_toConsumableArray(options), [{
+            value: key,
+            label: val.values[key]
+          }]);
+        });
+        return /*#__PURE__*/React.createElement("div", {
+          className: "xm-input-wrap",
+          key: val.slug
+        }, /*#__PURE__*/React.createElement("label", {
+          htmlFor: val.slug,
+          className: "text-right"
+        }, /*#__PURE__*/React.createElement("strong", null, val.name)), /*#__PURE__*/React.createElement(react_select_browser_esm, {
+          className: "",
+          name: val.slug,
+          id: val.slug,
+          onChange: function onChange(e) {
+            return _this3.handleChange({
+              target: {
+                name: val.slug,
+                value: e.value
+              }
+            });
+          },
+          isSearchable: false,
+          options: options || []
+        }));
+      }), /*#__PURE__*/React.createElement("form", null, /*#__PURE__*/React.createElement("div", {
         className: "xm-input-wrap text-center"
       }, React.createElement(function () {
         return /*#__PURE__*/React.createElement(TextToImage, {
           font: state.font,
           color: state.color,
           connect: state.connect,
-          callbackWidth: _this2.callbackWidth,
+          callbackWidth: _this3.callbackWidth,
           value: state.value || '',
           x: "0",
           y: "10"
@@ -10662,7 +10718,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         name: "font",
         id: "font",
         onChange: function onChange(e) {
-          return _this2.handleChange({
+          return _this3.handleChange({
             target: {
               name: 'font',
               value: e.value

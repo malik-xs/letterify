@@ -2,6 +2,8 @@
 namespace Letterify;
 use Letterify;
 
+require_once plugin_dir_path(__FILE__) . 'core/fields/fields.php';
+
 defined('ABSPATH') || exit;
 
 final class Plugin {
@@ -77,6 +79,18 @@ final class Plugin {
 		add_action( 'add_meta_boxes', [$this, 'add_meta_box'] );
 
 		add_action('save_post', [$this, 'letterify_save_meta']);
+
+		add_action('rest_api_init', function() {
+			register_rest_route(untrailingslashit('letterify/v1/'), '/fields/get', array(
+				'methods'  => 'GET',
+				'callback' => [$this, 'api_endpoint'],
+				'permission_callback' => '__return_true',
+			));
+		});
+	}
+
+	public function api_endpoint($request) {
+		return \Letterify\Fields_Schema::get_list();
 	}
 
 	function my_woocommerce_data_stores( $stores ) {
@@ -330,6 +344,7 @@ final class Plugin {
 		wp_localize_script('letterify-js', 'letterify_admin_var', array(
 			'ajax_url' => admin_url('admin-ajax.php'),
 			'cart_url' => wc_get_cart_url(),
+			'rest_api' => get_rest_url(null, 'letterify/v1/fields/get')
 		) );
 	}
 
@@ -350,6 +365,7 @@ final class Plugin {
 				'plugin_url' => self::plugin_url(),
 			) );
 		}
+		wp_enqueue_style('letterify-admin-css', plugin_dir_url(__FILE__) . 'core/assets/css/product-style.css', false, $this->version());
 	}
 
 

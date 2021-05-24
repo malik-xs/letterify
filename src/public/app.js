@@ -65,6 +65,7 @@ class LetterifyEl extends React.Component {
 		}
 
 		this.state = {
+			fields_data: [],
 			value: '',
 			height: '',
 			width: 0,
@@ -87,7 +88,13 @@ class LetterifyEl extends React.Component {
 	componentDidUpdate( ) { }
 
 	componentDidMount( ) {
-		this.setState( { loaded: true } );
+		fetch( letterify_admin_var.rest_api )
+			.then( res => res.json() )
+			.then( result => {
+				this.setState( { loaded: true, fields_data: result } );
+			}, error => {
+				this.setState( { loaded: true, error } );
+			} );
 	}
 
 	callbackWidth = ( v ) => {
@@ -97,6 +104,7 @@ class LetterifyEl extends React.Component {
 	}
 
 	handleChange = ( e ) => {
+		console.log( e );
 		if ( e.value ) {
 			this.setState( { color: e.value } );
 		} else {
@@ -182,6 +190,22 @@ class LetterifyEl extends React.Component {
 
 		return (
 			<>
+				{ Object.keys( this.state.fields_data ).map( k => {
+					let val = this.state.fields_data[ k ];
+					let options = [ { value: '', label: 'Choose ' + val.name + '...' } ];
+					Object.keys( val.values ).forEach( key => {
+						options = [ ...options, { value: key, label: val.values[key] } ];
+					} );
+					return <div className="xm-input-wrap" key={ val.slug }>
+						<label htmlFor={ val.slug } className="text-right"><strong>{ val.name }</strong></label>
+						<Select
+							className="" name={ val.slug }
+							id={ val.slug } onChange={ e => this.handleChange( { target: { name: val.slug, value: e.value } } ) }
+							isSearchable={ false }
+							options={ options || [] }
+						/>
+					</div>;
+				} ) }
 				<form>
 					<div className="xm-input-wrap text-center">
 						{ React.createElement( () => {
