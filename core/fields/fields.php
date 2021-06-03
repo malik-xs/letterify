@@ -46,7 +46,7 @@ class Fields_Schema {
 		],
 		'edge-2' => [
 			'name' => 'Edge',
-			'slug' => 'letterify-edge',
+			'slug' => 'letterify-edge-2',
 			'values' => [
 				'regular' => 'regular',
 				'rustic' => 'rustic',
@@ -96,6 +96,7 @@ class Fields_Schema {
 		'stain-color' => [
 			'name' => 'Stain color',
 			'slug' => 'letterify-stain-color',
+			'type' => 'color',
 			'values' => [
 				'dark-walnut' => 'Dark walnut',
 				'classic-grey' => 'Classic grey',
@@ -106,7 +107,7 @@ class Fields_Schema {
 			],
 		],
 		'paper-template' => [
-			'name' => 'paper template',
+			'name' => 'Paper Template',
 			'slug' => 'letterify-paper-template',
 			'values' => [
 				'yes' => 'Yes ($1.00 per letter)',
@@ -172,7 +173,7 @@ class Fields_Schema {
 		],
 		'frame' => [
 			'name' => 'Frame',
-			'slug' => 'frame',
+			'slug' => 'letterify-frame',
 			'values' => [
 				'none' => 'none',
 				'circular' => 'circular(+10%)',
@@ -180,8 +181,8 @@ class Fields_Schema {
 			],
 		],
 		'size' => [
-			'name' => 'Frame',
-			'slug' => 'frame',
+			'name' => 'Size',
+			'slug' => 'letterify-size',
 			'values' => [
 				'small' => 'small (8 x 20 ) in',
 				'medium' => 'medium (12 x 30) in',
@@ -217,7 +218,7 @@ class Fields_Schema {
 			],
 		],
 		'circle-backer' => [
-			'name' => 'circle backer',
+			'name' => 'Circle Backer',
 			'slug' => 'letterify-circle-backer',
 			'values' => [
 				'18 in x 3/8 in (Baltic birch) +10%' => '18 in x 3/8 in (Baltic birch) +10%',
@@ -248,8 +249,9 @@ class Fields_Schema {
 			],
 		],
 		'ribbon-color' => [
-			'name' => 'ribbon color',
+			'name' => 'Ribbon Color',
 			'slug' => 'letterify-ribbon-color',
+			'type' => 'color',
 			'values' => [
 				'solid royal' => 'solid royal',
 				'polka dot royal blue' => 'polka dot royal blue',
@@ -278,8 +280,9 @@ class Fields_Schema {
 			],
 		],
 		'ribbon-color-2' => [
-			'name' => 'ribbon color',
-			'slug' => 'letterify-ribbon-color',
+			'name' => 'Ribbon Color',
+			'slug' => 'letterify-ribbon-color-2',
+			'type' => 'color',
 			'values' => [
 				'red (+2.00$)' => 'red (+2.00$)',
 				'green (+2.00$)' => 'green (+2.00$)',
@@ -290,7 +293,7 @@ class Fields_Schema {
 			],
 		],
 		'frame-shape' => [
-			'name' => 'Frame shape',
+			'name' => 'Frame Shape',
 			'slug' => 'letterify-frame-shape',
 			'values' => [
 				'round' => 'round',
@@ -300,7 +303,7 @@ class Fields_Schema {
 			],
 		],
 		'add-ribbon' => [
-			'name' => 'add ribbon',
+			'name' => 'Add Ribbon',
 			'slug' => 'letterify-add-ribbon',
 			'values' => [
 				'yes' => 'yes ($4.00 per letter)',

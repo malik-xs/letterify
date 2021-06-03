@@ -57,6 +57,9 @@ final class Plugin {
 		add_action('wp_ajax_woocommerce_ajax_add_to_cart', [$this, 'woocommerce_ajax_add_to_cart']);
 		add_action('wp_ajax_nopriv_woocommerce_ajax_add_to_cart', [$this, 'woocommerce_ajax_add_to_cart']);
 
+		add_action('wp_ajax_letterify_save_meta', [$this, 'letterify_save_meta']);
+		add_action('wp_ajax_nopriv_letterify_save_meta', [$this, 'letterify_save_meta']);
+
 		add_shortcode('letterify', [$this, 'letterify_form_function']);
 
 		add_action( 'woocommerce_before_calculate_totals', [$this, 'woocommerce_custom_price_to_cart_item'], 99 );
@@ -78,7 +81,7 @@ final class Plugin {
 
 		add_action( 'add_meta_boxes', [$this, 'add_meta_box'] );
 
-		add_action('save_post', [$this, 'letterify_save_meta']);
+		// add_action('save_post', [$this, 'letterify_save_meta']);
 
 		add_action('rest_api_init', function() {
 			register_rest_route(untrailingslashit('letterify/v1/'), '/fields/get', array(
@@ -122,25 +125,21 @@ final class Plugin {
 		\Letterify\MetaBox_View::render_meta_box_content();
 	}
 
-	function letterify_save_meta( $post_id ) {
-		if ( !current_user_can( 'edit_post', $post_id ) ) return;
+	function letterify_save_meta( ) {
+		$post_id = $_POST['post_id'];
+		// if ( isset($_POST['letterify_settings']) ) {
+			$value = json_encode( $_POST['letterify_settings'] );
 
-		if ( isset($_POST['letterify-finish']) ) {
-			$this->letterify_update_meta( $post_id, 'letterify-finish', sanitize_text_field($_POST['letterify-finish']));
-		}
-		if ( isset($_POST['letterify-color']) ) {
-			$this->letterify_update_meta( $post_id, 'letterify-color', sanitize_text_field($_POST['letterify-color']));
-		}
-	}
-
-	function letterify_update_meta( $post_id, $term, $value ) {
-		if ( get_post_meta( $post_id, $term, true ) ) {
-			if ( isset( $value ) ) {        
-				update_post_meta($post_id, $term, $value);
+			if ( get_post_meta( $post_id, 'letterify-settings', true ) ) {
+				if ( $value ) {        
+					update_post_meta($post_id, 'letterify-settings', $value);
+				}
+			} else {
+				add_post_meta($post_id, 'letterify-settings', $value, true);
 			}
-		} else {
-			add_post_meta($post_id, $term, sanitize_text_field( $value ), true);
-		}
+		// }
+
+		wp_die();
 	}
 
 	function cart_description( $name, $cart_item, $cart_item_key ) {
@@ -365,7 +364,11 @@ final class Plugin {
 				'plugin_url' => self::plugin_url(),
 			) );
 		}
-		wp_enqueue_style('letterify-admin-css', plugin_dir_url(__FILE__) . 'core/assets/css/product-style.css', false, $this->version());
+		wp_enqueue_style('letterify-admin-product-css', plugin_dir_url(__FILE__) . 'core/assets/css/product-style.css', false, $this->version());
+		wp_enqueue_script('letterify-admin-product-js', plugin_dir_url(__FILE__) . 'core/assets/js/admin-scripts.js', false, $this->version(), true);
+		wp_localize_script('letterify-admin-product-js', 'letterify_admin_product_var', array(
+			'ajax_url' => admin_url('admin-ajax.php'),
+		) );
 	}
 
 

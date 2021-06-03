@@ -10485,34 +10485,21 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
 
     _this = _super.call(this, props);
 
-    app_defineProperty(app_assertThisInitialized(_this), "callbackWidth", function (v) {
-      var height = _this.state.height;
-      var width = Number(v) * Number(height);
-
-      _this.handleChange({
-        target: {
-          name: 'width',
-          value: width
-        }
-      });
+    app_defineProperty(app_assertThisInitialized(_this), "callbackWidth", function (v) {// const { height } = this.state;
+      // const width = Number( v ) * Number( height );
+      // this.handleChange( { target: { name: 'width', value: width } } );
     });
 
     app_defineProperty(app_assertThisInitialized(_this), "handleChange", function (e) {
-      console.log(e);
+      var _e$target = e.target,
+          name = _e$target.name,
+          value = _e$target.value;
+      var new_data = _this.state.form_data;
+      new_data[name] = value;
 
-      if (e.value) {
-        _this.setState({
-          color: e.value
-        });
-      } else {
-        var _e$target = e.target,
-            name = _e$target.name,
-            value = _e$target.value;
-
-        if (_this.state[name] !== value) {
-          _this.setState(app_defineProperty({}, name, value));
-        }
-      }
+      _this.setState({
+        form_data: new_data
+      });
     });
 
     app_defineProperty(app_assertThisInitialized(_this), "handleSubmit", function (e) {
@@ -10531,9 +10518,9 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       var imageURL = image.toDataURL('image/png');
       var value = _this.state.value;
       var base_price = _this.props.base_price;
-      var data = {
+
+      var data = app_objectSpread({
         action: 'woocommerce_ajax_add_to_cart',
-        value: _this.state.value,
         price: (base_price * (value.replace(/\s/g, '').length > 0 ? value.replace(/\s/g, '').length : 1)).toFixed(2),
         quantity: _this.state.quantity,
         variation_id: null,
@@ -10542,30 +10529,25 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         height: _this.state.height,
         thickness: _this.state.thickness,
         mounting: _this.state.mounting,
-        color: _this.state.color,
-        width: _this.state.width,
-        connect: _this.state.connect,
-        font: _this.state.font
-      };
+        width: _this.state.width
+      }, _this.state.form_data);
+
       jQuery.ajax({
         type: 'post',
         url: wc_add_to_cart_params.ajax_url,
         data: data,
-        // eslint-disable-next-line
-        beforeSend: function beforeSend(response) {
+        beforeSend: function beforeSend() {
           _this.setState({
             add_to_cart_text: 'Adding to cart'
           });
         },
-        // eslint-disable-next-line
-        complete: function complete(response) {
+        complete: function complete() {
           setTimeout(function () {
             _this.setState({
               loading: false
             });
           }, 1000);
         },
-        // eslint-disable-next-line
         success: function success(response) {
           if (!response.error) {
             _this.setState({
@@ -10574,8 +10556,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
             });
           }
         },
-        // eslint-disable-next-line
-        error: function error(_error) {
+        error: function error() {
           _this.setState({
             add_to_cart_text: 'Unsuccessful'
           });
@@ -10590,7 +10571,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
     });
 
     var colors_data = JSON.parse(props.colors);
-    var font_parsed;
+    var font_parsed, settings_parsed;
 
     try {
       font_parsed = JSON.parse(props.fonts);
@@ -10598,24 +10579,33 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       font_parsed = fonts_fallback;
     }
 
+    try {
+      settings_parsed = JSON.parse(props.settings);
+      settings_parsed = settings_parsed !== null ? settings_parsed : {};
+    } catch (_unused2) {
+      settings_parsed = {};
+    }
+
     _this.state = {
+      form_data: {
+        value: '',
+        connect: '',
+        font: 'Almibar',
+        color: settings_parsed.color || '#343234'
+      },
       fields_data: [],
-      value: '',
       height: '',
       width: 0,
-      finish: JSON.parse(_this.props.settings).finish || '',
-      color: JSON.parse(_this.props.settings).color || '#343234',
+      finish: settings_parsed.finish || '',
       colors: props.colors !== '' && Array.isArray(colors_data) ? colors_data : colors_fallback,
       fonts: font_parsed,
-      font: 'Almibar',
-      connect: '',
       quantity: 1,
       loaded: false,
       price: 0,
       mounting: '',
       add_to_cart_text: 'Add to cart',
       added_to_cart: false,
-      settings: JSON.parse(_this.props.settings) || {}
+      settings: settings_parsed
     };
     return _this;
   }
@@ -10630,10 +10620,10 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
 
       fetch(letterify_admin_var.rest_api).then(function (res) {
         return res.json();
-      }).then(function (result) {
+      }).then(function (res) {
         _this2.setState({
           loaded: true,
-          fields_data: result
+          fields_data: res
         });
       }, function (error) {
         _this2.setState({
@@ -10655,48 +10645,15 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("h4", null, "Loading"));
       }
 
-      return /*#__PURE__*/React.createElement(React.Fragment, null, Object.keys(this.state.fields_data).map(function (key) {
-        var val = _this3.state.fields_data[key];
-        var options = [{
-          value: '',
-          label: 'Choose ' + val.name + '...'
-        }];
-        Object.keys(val.values).forEach(function (key) {
-          options = [].concat(app_toConsumableArray(options), [{
-            value: key,
-            label: val.values[key]
-          }]);
-        });
-        return /*#__PURE__*/React.createElement("div", {
-          className: "xm-input-wrap",
-          key: val.slug
-        }, /*#__PURE__*/React.createElement("label", {
-          htmlFor: val.slug,
-          className: "text-right"
-        }, /*#__PURE__*/React.createElement("strong", null, val.name)), /*#__PURE__*/React.createElement(react_select_browser_esm, {
-          className: "",
-          name: val.slug,
-          id: val.slug,
-          onChange: function onChange(e) {
-            return _this3.handleChange({
-              target: {
-                name: val.slug,
-                value: e.value
-              }
-            });
-          },
-          isSearchable: false,
-          options: options || []
-        }));
-      }), /*#__PURE__*/React.createElement("form", null, /*#__PURE__*/React.createElement("div", {
+      return /*#__PURE__*/React.createElement(React.Fragment, null, /*#__PURE__*/React.createElement("form", null, /*#__PURE__*/React.createElement("div", {
         className: "xm-input-wrap text-center"
       }, React.createElement(function () {
         return /*#__PURE__*/React.createElement(TextToImage, {
-          font: state.font,
-          color: state.color,
+          font: state.form_data.font,
+          color: state.form_data.color,
           connect: state.connect,
           callbackWidth: _this3.callbackWidth,
-          value: state.value || '',
+          value: state.form_data.value || '',
           x: "0",
           y: "10"
         });
@@ -10705,7 +10662,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       }, /*#__PURE__*/React.createElement("input", {
         name: "value",
         className: "xm-entry-text",
-        value: state.value,
+        value: state.form_data.value,
         onChange: this.handleChange,
         placeholder: 'Enter your text'
       })), /*#__PURE__*/React.createElement("div", {
@@ -10728,107 +10685,47 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         isSearchable: false,
         styles: fontsStyles,
         options: this.state.fonts
-      })), /*#__PURE__*/React.createElement("div", {
-        className: "xm-input-wrap"
-      }, /*#__PURE__*/React.createElement("label", {
-        htmlFor: "finish",
-        className: "text-right"
-      }, /*#__PURE__*/React.createElement("strong", null, "Finish")), /*#__PURE__*/React.createElement("select", {
-        name: "finish",
-        id: "finish",
-        onChange: this.handleChange,
-        value: state.finish
-      }, /*#__PURE__*/React.createElement("option", {
-        value: ""
-      }, "Choose Finish..."), /*#__PURE__*/React.createElement("option", {
-        value: "painted"
-      }, "Painted"), /*#__PURE__*/React.createElement("option", {
-        value: "unpainted"
-      }, "Unpainted"))), /*#__PURE__*/React.createElement("div", {
-        className: "xm-input-wrap"
-      }, /*#__PURE__*/React.createElement("label", {
-        htmlFor: "height",
-        className: "text-right"
-      }, /*#__PURE__*/React.createElement("strong", null, "Height")), /*#__PURE__*/React.createElement("select", {
-        name: "height",
-        id: "height",
-        onChange: this.handleChange,
-        value: state.height
-      }, /*#__PURE__*/React.createElement("option", {
-        value: ""
-      }, "Choose Height..."), /*#__PURE__*/React.createElement("option", {
-        value: "1"
-      }, "1 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "2"
-      }, "2 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "3"
-      }, "3 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "4"
-      }, "4 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "5"
-      }, "5 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "6"
-      }, "6 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "7"
-      }, "7 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "8"
-      }, "8 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "9"
-      }, "9 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "10"
-      }, "10 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "11"
-      }, "11 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "12"
-      }, "12 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "13"
-      }, "13 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "14"
-      }, "14 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "15"
-      }, "15 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "16"
-      }, "16 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "17"
-      }, "17 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "18"
-      }, "18 inch"))), /*#__PURE__*/React.createElement("div", {
-        className: "xm-input-wrap"
-      }, /*#__PURE__*/React.createElement("label", {
-        htmlFor: "thickness",
-        className: "text-right"
-      }, /*#__PURE__*/React.createElement("strong", null, "Thickness")), /*#__PURE__*/React.createElement("select", {
-        name: "thickness",
-        id: "thickness",
-        onChange: this.handleChange
-      }, /*#__PURE__*/React.createElement("option", {
-        value: ""
-      }, "Choose Thickness..."), /*#__PURE__*/React.createElement("option", {
-        value: "1/8 inch"
-      }, "1/8 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "1/4 inch"
-      }, "1/4 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "3/8 inch"
-      }, "3/8 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "1/2 inch"
-      }, "1/2 inch"), /*#__PURE__*/React.createElement("option", {
-        value: "3/4 inch"
-      }, "3/4 inch"))), /*#__PURE__*/React.createElement("div", {
-        className: "xm-input-wrap"
-      }, /*#__PURE__*/React.createElement("label", {
-        htmlFor: "mounting",
-        className: "text-right"
-      }, /*#__PURE__*/React.createElement("strong", null, "Mounting")), /*#__PURE__*/React.createElement("select", {
-        name: "mounting",
-        id: "mounting",
-        onChange: this.handleChange
-      }, /*#__PURE__*/React.createElement("option", {
-        value: ""
-      }, "- Select an Option -"), /*#__PURE__*/React.createElement("option", {
-        value: ""
-      }, "Hanging Strips & Paper Template (+10%)"), /*#__PURE__*/React.createElement("option", {
-        value: ""
-      }, "None"))), /*#__PURE__*/React.createElement("div", {
+      })), Object.keys(this.state.fields_data).map(function (k) {
+        var _this3$state = _this3.state,
+            settings = _this3$state.settings,
+            fields_data = _this3$state.fields_data;
+        var key_slug = fields_data[k].slug;
+        var settings_exists = Object.keys(settings).indexOf(key_slug) > -1;
+        if (!settings_exists) return /*#__PURE__*/React.createElement(React.Fragment, null);
+        var val = _this3.state.fields_data[k],
+            options = [{
+          value: '',
+          label: 'Select' + val.name + '...'
+        }];
+        Object.keys(val.values).forEach(function (key) {
+          options = [].concat(app_toConsumableArray(options), [{
+            value: key,
+            label: val.values[key]
+          }]);
+        });
+        return /*#__PURE__*/React.createElement("div", {
+          className: "xm-input-wrap",
+          key: val.slug
+        }, /*#__PURE__*/React.createElement("label", {
+          htmlFor: val.slug,
+          className: "text-right"
+        }, /*#__PURE__*/React.createElement("strong", null, val.name)), /*#__PURE__*/React.createElement(react_select_browser_esm, {
+          id: val.slug,
+          name: val.slug,
+          className: "xm-letterify-input",
+          isSearchable: false,
+          options: options || [],
+          onChange: function onChange(e) {
+            return _this3.handleChange({
+              target: {
+                name: val.slug,
+                value: e.value
+              }
+            });
+          } // styles={ val.type && val.type === 'color' ? colourStyles : '' }
+
+        }));
+      }), /*#__PURE__*/React.createElement("div", {
         className: "xm-input-wrap"
       }, /*#__PURE__*/React.createElement("label", {
         htmlFor: "color",
@@ -10837,40 +10734,22 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         className: "",
         name: "color",
         id: "color",
-        onChange: this.handleChange,
+        onChange: function onChange(e) {
+          return _this3.handleChange({
+            target: {
+              name: 'color',
+              value: e.value
+            }
+          });
+        },
         isSearchable: false,
         styles: colourStyles,
         options: this.state.colors
       })), /*#__PURE__*/React.createElement("div", {
-        className: "xm-input-wrap text-center xm-input-sm"
-      }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Approx. Width: "), state.value !== '' && state.height !== '' ? state.width.toFixed(2) + '"' : 'Enter text and select a Height to see Approx. Width.')), /*#__PURE__*/React.createElement("div", {
-        className: "xm-input-wrap xm-input-sm"
-      }, /*#__PURE__*/React.createElement("p", null, /*#__PURE__*/React.createElement("strong", null, "Total Letter Count: "), state.value.replace(/\s/g, '').length)), /*#__PURE__*/React.createElement("div", {
-        className: "xm-input-wrap xm-input-full"
-      }, /*#__PURE__*/React.createElement("label", {
-        htmlFor: "connect",
-        className: "text-right"
-      }, /*#__PURE__*/React.createElement("strong", null, "Letter Connect")), /*#__PURE__*/React.createElement("select", {
-        name: "connect",
-        id: "connect",
-        onChange: this.handleChange,
-        value: state.connect
-      }, /*#__PURE__*/React.createElement("option", {
-        value: ""
-      }, "-- Please Select --"), /*#__PURE__*/React.createElement("option", {
-        value: "shown",
-        price: "0"
-      }, "As Shown "), /*#__PURE__*/React.createElement("option", {
-        value: "connect",
-        price: "0"
-      }, "Each Word Connected "), /*#__PURE__*/React.createElement("option", {
-        value: "individual",
-        price: "0"
-      }, "Individual Letters "))), /*#__PURE__*/React.createElement("div", {
         className: "xm-input-wrap"
       }, /*#__PURE__*/React.createElement("div", {
         className: "xm-input-frag"
-      }, "Starting At: $", (base_price * this.state.value.replace(/\s/g, '').length * (state.quantity > 0 ? state.quantity : 1)).toFixed(2)), /*#__PURE__*/React.createElement("div", {
+      }, "Starting At: $", (base_price * this.state.form_data.value.replace(/\s/g, '').length * (state.quantity > 0 ? state.quantity : 1)).toFixed(2)), /*#__PURE__*/React.createElement("div", {
         className: "xm-input-frag"
       }, /*#__PURE__*/React.createElement("label", {
         htmlFor: "quantity",
@@ -10913,7 +10792,6 @@ var init = function init($scope) {
   }
 
   var _el$dataset = el.dataset,
-      letterify_admin_var = _el$dataset.letterify_admin_var,
       price = _el$dataset.price,
       wpNonce = _el$dataset.wpNonce,
       fonts = _el$dataset.fonts,
@@ -10935,7 +10813,6 @@ var init = function init($scope) {
   ReactDOM.render(React.createElement(LetterifyEl, {
     templateEl: templateEl,
     base_price: price,
-    letterify_admin_var: letterify_admin_var,
     wpNonce: wpNonce,
     fonts: fonts,
     colors: colors,

@@ -9,21 +9,39 @@ class MetaBox_View {
 
 	public static function render_meta_box_content() {
 		global $post;
+		$value = get_post_meta( $post->ID, 'letterify-settings', true );
+		$value = json_decode( $value );
+		?>
+		<form id="letterify-product-option-form-main">
+			<button id="letterify-product-option-enable-all">Enable All</button>
+			<button id="letterify-product-option-disable-all">Disable All</button>
+			<div class="letterify-product-option-form">
+				<?php foreach( \Letterify\Fields_Schema::get_list() as $meta ) : ?>
+					<div class="form-field term-meta-text-wrap">
+						<input type="checkbox"
+							id="<?php echo $meta['slug'] ?>"
+							name="<?php echo $meta['slug'] ?>"
+							<?php checked( $value->{$meta['slug']}, 'true' ) ?> >
 
-		foreach( \Letterify\Fields_Schema::get_list() as $meta ) :
-			$value = get_post_meta( $post->ID, 'letterify-finish', true ); ?>
-
-				<div class="form-field term-meta-text-wrap">
-					<input type="checkbox">
-					<label for="<?php echo $meta['slug'] ?>"><?php esc_html_e( $meta['name'] , 'letterify' ); ?></label>
-					<select name="<?php echo $meta['slug'] ?>" id="<?php echo $meta['slug'] ?>" class="<?php echo $meta['slug'] ?>">
-						<option value="" <?php selected( $value, $key ); ?>>-- Choose Option ---</option>
-						<?php foreach( $meta['values'] as $key => $val ) : ?>
-							<option value="<?php echo $key ?>" <?php selected( $value, $key ); ?>><?php echo $val ?></option>
-						<?php endforeach; ?>
-					</select>
-				</div>
-
-		<?php endforeach;
+						<label for="<?php echo $meta['slug'] ?>">
+							<strong><?php esc_html_e( $meta['name'] , 'letterify' ); ?></strong>
+							<br><small>( <?php esc_html_e( $meta['slug'] , 'letterify' ); ?> )</small>
+						</label>
+						<!-- <select name="<?php echo $meta['slug'] ?>--value" id="<?php echo $meta['slug'] ?>--value" class="<?php echo $meta['slug'] ?>">
+							<option>-- Choose Option ---</option>
+							<?php foreach( $meta['values'] as $key => $val ) : ?>
+								<option value="<?php echo $key ?>"><?php echo $val ?></option>
+							<?php endforeach; ?>
+						</select> -->
+					</div>
+				<?php endforeach; ?>
+				
+				<hr />
+			</div>
+			<div>
+				<input data-post_id="<?php echo $post->ID; ?>" class="letterify-product-option-form-submit button button-primary button-large" type="submit" value="Save Settings" style="margin: 20px 0 0; margin-left: auto" />
+			</div>
+		</form>
+		<?php
 	}
 }
