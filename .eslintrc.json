@@ -43,6 +43,7 @@
         "jsdoc/require-param-type": 0,
 		"no-alert": 0,
 		"vars-on-top": 0,
+		"curly": 0,
 		"indent": [
 			"error",
 			"tab"

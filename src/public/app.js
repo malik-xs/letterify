@@ -57,56 +57,65 @@ class LetterifyEl extends React.Component {
 	constructor( props ) {
 		super( props );
 		const colors_data = JSON.parse( props.colors );
-		let font_parsed;
+		let font_parsed, settings_parsed;
 		try {
 			font_parsed = JSON.parse( props.fonts );
 		} catch {
 			font_parsed = fonts_fallback;
 		}
+		try {
+			settings_parsed = JSON.parse( props.settings );
+			settings_parsed = settings_parsed !== null ? settings_parsed : {};
+		} catch {
+			settings_parsed = {};
+		}
 
 		this.state = {
-			value: '',
+			form_data: {
+				value: '',
+				connect: '',
+				font: 'Almibar',
+				color: settings_parsed.color || '#343234',
+			},
+			fields_data: [],
 			height: '',
 			width: 0,
-			finish: JSON.parse( this.props.settings ).finish || '',
-			color: JSON.parse( this.props.settings ).color || '#343234',
+			finish: settings_parsed.finish || '',
 			colors: ( props.colors !== '' && Array.isArray( colors_data ) ) ? colors_data : colors_fallback,
 			fonts: font_parsed,
-			font: 'Almibar',
-			connect: '',
 			quantity: 1,
 			loaded: false,
 			price: 0,
 			mounting: '',
 			add_to_cart_text: 'Add to cart',
 			added_to_cart: false,
-			settings: JSON.parse( this.props.settings ) || {},
+			settings: settings_parsed,
 		};
 	}
 
 	componentDidUpdate( ) { }
 
 	componentDidMount( ) {
-		this.setState( { loaded: true } );
+		fetch( letterify_admin_var.rest_api )
+			.then( res => res.json() )
+			.then( res => {
+				this.setState( { loaded: true, fields_data: res } );
+			}, error => {
+				this.setState( { loaded: true, error } );
+			} );
 	}
 
 	callbackWidth = ( v ) => {
-		const { height } = this.state;
-		const width = Number( v ) * Number( height );
-		this.handleChange( { target: { name: 'width', value: width } } );
+		// const { height } = this.state;
+		// const width = Number( v ) * Number( height );
+		// this.handleChange( { target: { name: 'width', value: width } } );
 	}
 
 	handleChange = ( e ) => {
-		if ( e.value ) {
-			this.setState( { color: e.value } );
-		} else {
-			const { name, value } = e.target;
-			if ( this.state[name] !== value ) {
-				this.setState( {
-					[name]: value,
-				} );
-			}
-		}
+		const { name, value } = e.target;
+		let new_data = this.state.form_data;
+		new_data[name] = value;
+		this.setState( { form_data: new_data } );
 	}
 
 	handleSubmit = ( e ) => {
@@ -126,7 +135,6 @@ class LetterifyEl extends React.Component {
 
 		var data = {
 			action: 'woocommerce_ajax_add_to_cart',
-			value: this.state.value,
 			price: ( base_price * ( value.replace( /\s/g, '' ).length > 0 ? value.replace( /\s/g, '' ).length : 1 ) ).toFixed( 2 ),
 			quantity: this.state.quantity,
 			variation_id: null,
@@ -135,34 +143,28 @@ class LetterifyEl extends React.Component {
 			height: this.state.height,
 			thickness: this.state.thickness,
 			mounting: this.state.mounting,
-			color: this.state.color,
 			width: this.state.width,
-			connect: this.state.connect,
-			font: this.state.font,
+			...this.state.form_data,
 		};
 
 		jQuery.ajax( {
 			type: 'post',
 			url: wc_add_to_cart_params.ajax_url,
 			data: data,
-			// eslint-disable-next-line
-			beforeSend: ( response ) => {
+			beforeSend: () => {
 				this.setState( { add_to_cart_text: 'Adding to cart' } );
 			},
-			// eslint-disable-next-line
-			complete: ( response ) => {
+			complete: () => {
 				setTimeout( ( ) => {
 					this.setState( { loading: false } );
 				}, 1000 );
 			},
-			// eslint-disable-next-line
 			success: ( response ) => {
 				if ( ! response.error ) {
 					this.setState( { add_to_cart_text: 'View Cart', added_to_cart: true } );
 				}
 			},
-			// eslint-disable-next-line
-			error: ( error ) => {
+			error: () => {
 				this.setState( { add_to_cart_text: 'Unsuccessful' } );
 				setTimeout( () => {
 					this.setState( { add_to_cart_text: 'Add to cart' } );
@@ -187,11 +189,11 @@ class LetterifyEl extends React.Component {
 						{ React.createElement( () => {
 							return (
 								<TextToImage
-									font={ state.font }
-									color={ state.color }
+									font={ state.form_data.font }
+									color={ state.form_data.color }
 									connect={ state.connect }
 									callbackWidth={ this.callbackWidth }
-									value={ state.value || '' }
+									value={ state.form_data.value || '' }
 									x="0" y="10" />
 							);
 						} ) }
@@ -200,7 +202,7 @@ class LetterifyEl extends React.Component {
 						<input
 							name='value'
 							className="xm-entry-text"
-							value={ state.value }
+							value={ state.form_data.value }
 							onChange={ this.handleChange }
 							placeholder={ 'Enter your text' } />
 					</div>
@@ -214,7 +216,44 @@ class LetterifyEl extends React.Component {
 							options={ this.state.fonts }
 						/>
 					</div>
-					<div className="xm-input-wrap" style={ { display: ( state.settings.finish ? 'none' : 'flex' ) } }>
+					{ Object.keys( this.state.fields_data ).map( k => {
+						const { settings, fields_data } = this.state;
+						const key_slug = fields_data[k].slug;
+						const settings_exists = Object.keys( settings ).indexOf( key_slug ) > -1;
+
+						if ( ! settings_exists ) return <></>;
+
+						let val = this.state.fields_data[ k ],
+							options = [ { value: '', label: 'Select' + val.name + '...' } ];
+
+						Object.keys( val.values ).forEach( key => {
+							options = [ ...options, { value: key, label: val.values[key] } ];
+						} );
+
+						return <div className="xm-input-wrap" key={ val.slug }>
+							<label htmlFor={ val.slug } className="text-right"><strong>{ val.name }</strong></label>
+							<Select
+								id={ val.slug }
+								name={ val.slug }
+								className="xm-letterify-input"
+								isSearchable={ false }
+								options={ options || [] }
+								onChange={ e => this.handleChange( { target: { name: val.slug, value: e.value } } ) }
+								// styles={ val.type && val.type === 'color' ? colourStyles : '' }
+							/>
+						</div>;
+					} ) }
+					<div className="xm-input-wrap">
+						<label htmlFor="color" className="text-right"><strong>Color</strong></label>
+						<Select
+							className="" name="color" id="color"
+							onChange={ e => this.handleChange( { target: { name: 'color', value: e.value } } ) }
+							isSearchable={ false }
+							styles={ colourStyles }
+							options={ this.state.colors }
+						/>
+					</div>
+					{ /* <div className="xm-input-wrap">
 						<label htmlFor="finish" className="text-right"><strong>Finish</strong></label>
 						<select name="finish" id="finish" onChange={ this.handleChange } value={ state.finish }>
 							<option value="">Choose Finish...</option>
@@ -222,13 +261,13 @@ class LetterifyEl extends React.Component {
 							<option value="unpainted">Unpainted</option>
 						</select>
 					</div>
-					<div className="xm-input-wrap" style={ { display: ( state.finish === '' ? 'none' : 'flex' ) } }>
+					<div className="xm-input-wrap">
 						<label htmlFor="height" className="text-right"><strong>Height</strong></label>
 						<select name="height" id="height" onChange={ this.handleChange } value={ state.height }>
 							<option value="">Choose Height...</option>
-							<option value="1" style={ { display: ( state.finish === 'painted' ? 'none' : 'block' ) } }>1 inch</option>
-							<option value="2" style={ { display: ( state.finish === 'painted' ? 'none' : 'block' ) } }>2 inch</option>
-							<option value="3" style={ { display: ( state.finish === 'painted' ? 'none' : 'block' ) } }>3 inch</option>
+							<option value="1">1 inch</option>
+							<option value="2">2 inch</option>
+							<option value="3">3 inch</option>
 							<option value="4">4 inch</option>
 							<option value="5">5 inch</option>
 							<option value="6">6 inch</option>
@@ -247,7 +286,7 @@ class LetterifyEl extends React.Component {
 						</select>
 					</div>
 
-					<div className="xm-input-wrap" style={ { display: ( state.height === '' ? 'none' : 'flex' ) } }>
+					<div className="xm-input-wrap">
 						<label htmlFor="thickness" className="text-right"><strong>Thickness</strong></label>
 						<select name="thickness" id="thickness" onChange={ this.handleChange }>
 							<option value="">Choose Thickness...</option>
@@ -259,24 +298,13 @@ class LetterifyEl extends React.Component {
 						</select>
 					</div>
 
-					<div className="xm-input-wrap" style={ { display: ( state.height === '' ? 'none' : 'flex' ) } }>
+					<div className="xm-input-wrap">
 						<label htmlFor="mounting" className="text-right"><strong>Mounting</strong></label>
 						<select name="mounting" id="mounting" onChange={ this.handleChange }>
 							<option value="">- Select an Option -</option>
 							<option value="">Hanging Strips & Paper Template (+10%)</option>
 							<option value="">None</option>
 						</select>
-					</div>
-
-					<div className="xm-input-wrap" style={ { display: ( this.state.finish === 'painted' ? 'flex' : 'none' ) } }>
-						<label htmlFor="color" className="text-right"><strong>Color</strong></label>
-						<Select
-							className="" name="color"
-							id="color" onChange={ this.handleChange }
-							isSearchable={ false }
-							styles={ colourStyles }
-							options={ this.state.colors }
-						/>
 					</div>
 					<div className="xm-input-wrap text-center xm-input-sm">
 						<p>
@@ -302,12 +330,12 @@ class LetterifyEl extends React.Component {
 							<option value="connect" price="0">Each Word Connected </option>
 							<option value="individual" price="0">Individual Letters </option>
 						</select>
-					</div>
+					</div>*/ }
 					<div className="xm-input-wrap">
 						<div className="xm-input-frag">
 							Starting At: ${
 								( base_price *
-									this.state.value.replace( /\s/g, '' ).length *
+									this.state.form_data.value.replace( /\s/g, '' ).length *
 									( state.quantity > 0 ? state.quantity : 1 )
 								).toFixed( 2 )
 							}
@@ -343,7 +371,7 @@ let init = function( $scope ) {
 	if ( ! el ) {
 		return;
 	}
-	const { letterify_admin_var, price, wpNonce, fonts, colors, settings } = el.dataset;
+	const { price, wpNonce, fonts, colors, settings } = el.dataset;
 
 	const [ templateEl ] = $scope.find( '.xm-letterify-template' );
 	if ( ! templateEl ) {
@@ -357,7 +385,6 @@ let init = function( $scope ) {
 		React.createElement( LetterifyEl, {
 			templateEl: templateEl,
 			base_price: price,
-			letterify_admin_var: letterify_admin_var,
 			wpNonce: wpNonce,
 			fonts: fonts,
 			colors: colors,

@@ -1,0 +1,38 @@
+.letterify-product-option-form {
+	overflow: auto;
+	display: -ms-flexbox;
+	display: flex;
+	-ms-flex-wrap: wrap;
+	    flex-wrap: wrap;
+}
+
+.letterify-product-option-form .term-meta-text-wrap {
+	-ms-flex: 0 0 50%;
+	    flex: 0 0 50%;
+	width: 50%;
+	display: -ms-inline-flexbox;
+	display: inline-flex;
+	-ms-flex-align: start;
+	    align-items: flex-start;
+	padding: 1em 2em 1em 1em;
+	box-sizing: border-box;
+}
+
+.letterify-product-option-form .term-meta-text-wrap input[type="checkbox"] {
+	margin-top: 4px;
+	margin-right: 10px;
+}
+
+.letterify-product-option-form .term-meta-text-wrap label {
+	min-width: 200px;
+}
+
+.letterify-product-option-form .term-meta-text-wrap label strong {
+	font-weight: 500;
+	text-transform: capitalize;
+}
+
+.letterify-product-option-form .term-meta-text-wrap select {
+	width: 350px;
+	display: block;
+}

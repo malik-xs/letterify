@@ -103,18 +103,19 @@ module.exports = function (grunt) {
 		},
 	}
 
-    // Grunt task begins
-	grunt.initConfig({
+	// Grunt task begins
+	grunt.initConfig( {
+
 		// Watch for file changes and compile onChange
 		watch: {
 			css: {
-				files: [projectConfig.srcDir + '**/*.scss', '!' + projectConfig.srcDir + 'node_modules'],
-				tasks: ['css', (projectConfig.ignoreLint ? 'log:nolintwarning' : 'stylelint')]
+				files: [ projectConfig.srcDir + '**/*.scss', '!' + projectConfig.srcDir + 'node_modules' ],
+				tasks: [ 'css', ( projectConfig.ignoreLint ? 'log:nolintwarning' : 'stylelint' ) ],
 			},
 			js: {
-				files: [projectConfig.srcDir + '**/src/**/*.js', '!' + projectConfig.srcDir + 'node_modules'],
-				tasks: ['js', (projectConfig.ignoreLint ? 'log:nolintwarning' : 'eslint')]
-			}
+				files: [ projectConfig.srcDir + '**/src/**/*.js', '!' + projectConfig.srcDir + 'node_modules' ],
+				tasks: [ 'js', ( projectConfig.ignoreLint ? 'log:nolintwarning' : 'eslint' ) ],
+			},
 		},
 
 		// Compile all .scss files from src to dest
@@ -129,119 +130,125 @@ module.exports = function (grunt) {
 					outputStyle: 'expanded',
 					force: true,
 				},
-				files: projectFiles.scss.map((value, index, array) => ({
+				files: projectFiles.scss.map( value => ( {
 					expand: true,
 					extDot: 'last',
 					ext: '.css',
 					cwd: value.cwd,
 					src: value.src,
-					dest: value.dest
-				}))
-			}
+					dest: value.dest,
+				} ) ),
+			},
 		},
 
-		// Auto prefixing CSS files
-		autoprefixer: {
+		// Autoprefixer.
+		postcss: {
 			options: {
-				browsers: ['last 2 version', 'ie 11', 'ios 5']
+				processors: [
+					require( 'autoprefixer' ),
+				],
 			},
 			dist: {
-				files: projectFiles.scss.map( (value, index, array) => ( {
-					src: [projectConfig.srcDir + value.dest + '*.css', '!' + projectConfig.srcDir + value.dest + '*.min.css']
-				} ))
-			}
+				files: projectFiles.scss.map( value => ( {
+					src: [
+						projectConfig.srcDir + value.dest + '*.css',
+						'!' + projectConfig.srcDir + value.dest + '*.min.css',
+					],
+				} ) ),
+			},
 		},
 
 		// Compile app.js files from src to dest
 		webpack: {
-			configs: projectFiles.js.map((value, index, array) =>
-				value.src.map((val, index, array) => ({
+			configs: projectFiles.js.map( value =>
+				value.src.map( val => ( {
 					mode: 'production',
-					entry: path.join(__dirname, projectConfig.srcDir, value.cwd, val),
+					entry: path.join( __dirname, projectConfig.srcDir, value.cwd, val ),
 					output: {
-						path: path.resolve(__dirname, projectConfig.srcDir, value.dest), // string (default)
-						filename: val.replace(/^.*[\\\/]/, ''),
+						path: path.resolve( __dirname, projectConfig.srcDir, value.dest ), // string (default)
+						filename: val.replace( /^.*[\\\/]/, '' ),
 					},
 					optimization: {
-						minimize: false
+						minimize: false,
 					},
-					...webpackConfig // Additional webpack configuration
-				})
-			)).flat(1)
+					...webpackConfig, // Additional webpack configuration
+				} ),
+				) ).flat( 1 ),
 		},
 
-        // i18n
-        addtextdomain: {
-            options: {
-                // textdomain: 'foobar',
-                updateDomains: true  // List of text domains to replace.
-            },
-            target: {
-                src: [
-                    projectConfig.srcDir + '*.php',
+		// i18n
+		addtextdomain: {
+			options: {
+				// textdomain: 'foobar',
+				updateDomains: true, // List of text domains to replace.
+			},
+			target: {
+				src: [
+					projectConfig.srcDir + '*.php',
 					projectConfig.srcDir + '**/*.php',
-					'!' + projectConfig.srcDir + 'node_modules/**'
-                ]
-            }
-        },
+					'!' + projectConfig.srcDir + 'node_modules/**',
+					'!' + projectConfig.srcDir + 'dev-*/**',
+				],
+			},
+		},
 
 		checktextdomain: {
 			standard: {
-			options:{
-				text_domain: projectConfig.name, //Specify allowed domain(s)
-				// correct_domain: true, // don't use it, it has bugs
-				keywords: [ //List keyword specifications
-					'__:1,2d',
-					'_e:1,2d',
-					'_x:1,2c,3d',
-					'esc_html__:1,2d',
-					'esc_html_e:1,2d',
-					'esc_html_x:1,2c,3d',
-					'esc_attr__:1,2d', 
-					'esc_attr_e:1,2d', 
-					'esc_attr_x:1,2c,3d', 
-					'_ex:1,2c,3d',
-					'_n:1,2,4d', 
-					'_nx:1,2,4c,5d',
-					'_n_noop:1,2,3d',
-					'_nx_noop:1,2,3c,4d'
-				]
+				options: {
+					text_domain: projectConfig.name, //Specify allowed domain(s)
+					// correct_domain: true, // don't use it, it has bugs
+					keywords: [ //List keyword specifications
+						'__:1,2d',
+						'_e:1,2d',
+						'_x:1,2c,3d',
+						'esc_html__:1,2d',
+						'esc_html_e:1,2d',
+						'esc_html_x:1,2c,3d',
+						'esc_attr__:1,2d',
+						'esc_attr_e:1,2d',
+						'esc_attr_x:1,2c,3d',
+						'_ex:1,2c,3d',
+						'_n:1,2,4d',
+						'_nx:1,2,4c,5d',
+						'_n_noop:1,2,3d',
+						'_nx_noop:1,2,3c,4d',
+					],
+				},
+				files: [ {
+					src: [
+						projectConfig.srcDir + '**/*.php',
+						'!' + projectConfig.srcDir + 'node_modules/**',
+					], //all php
+					expand: true,
+				} ],
 			},
-			files: [{
-				src: [
-					projectConfig.srcDir + '**/*.php', 
-					'!' + projectConfig.srcDir + 'node_modules/**'
-				], //all php 
-				expand: true,
-			}],
-			}
 		},
 
-        makepot: {
-            target: {
-                options: {
-                    cwd: projectConfig.srcDir,         // Directory of files to internationalize.
-                    mainFile: '',                      // Main project file.
-                    type: 'wp-plugin',                 // Type of project (wp-plugin or wp-theme).
-                    updateTimestamp: true,             // Whether the POT-Creation-Date should be updated without other changes.
-                    updatePoFiles: true                // Whether to update PO files in the same directory as the POT file.
-                }
-            }
-        },
-        
+		makepot: {
+			target: {
+				options: {
+					cwd: projectConfig.srcDir, // Directory of files to internationalize.
+					mainFile: '', // Main project file.
+					type: 'wp-plugin', // Type of project (wp-plugin or wp-theme).
+					updateTimestamp: false, // Whether the POT-Creation-Date should be updated without other changes.
+					updatePoFiles: false, // Whether to update PO files in the same directory as the POT file.
+				},
+			},
+		},
+
 		// Deleting previous build files & .zip
 		clean: {
 			options: { force: true },
 			dist: [
 				projectConfig.distDir + '/**',
-				projectConfig.distDir.replace(/\/$/, "") + '.zip'
-			]
+				projectConfig.distDir.replace( /\/$/, '' ) + '.zip',
+			],
 		},
 
 		// Copying project files to ../dist/ directory
 		copy: {
 			dist: {
-				files: [{
+				files: [ {
 					expand: true,
 					src: [
 						'' + projectConfig.srcDir + '**',
@@ -262,8 +269,8 @@ module.exports = function (grunt) {
 						'!' + projectConfig.srcDir + 'Built',
 						'!' + projectConfig.srcDir + 'Installable',
 					],
-					dest: projectConfig.distDir
-				}]
+					dest: projectConfig.distDir,
+				} ],
 			},
 		},
 
@@ -273,13 +280,13 @@ module.exports = function (grunt) {
 				options: {
 					force: true,
 					mode: 'zip',
-					archive: projectConfig.distDir.replace(projectConfig.name, '') + projectConfig.name + `.zip`
+					archive: projectConfig.distDir.replace( projectConfig.name, '' ) + projectConfig.name + '.zip',
 				},
 				expand: true,
 				cwd: projectConfig.distDir,
-				src: ['**'],
-				dest: '../' + projectConfig.name
-			}
+				src: [ '**' ],
+				dest: '../' + projectConfig.name,
+			},
 		},
 
 		// Minify all .js files.
@@ -287,16 +294,16 @@ module.exports = function (grunt) {
 			options: {
 				ie8: true,
 				parse: {
-					strict: false
+					strict: false,
 				},
 			},
 			js: {
-				files: [{
+				files: [ {
 					expand: true,
-					src: [projectConfig.distDir + '**/*.js'],
+					src: [ projectConfig.distDir + '**/*.js' ],
 					dest: '',
-				}],
-			}
+				} ],
+			},
 		},
 
 		// Minify all .css files.
@@ -307,18 +314,36 @@ module.exports = function (grunt) {
 				sourcemaps: false,
 			},
 			minify: {
-				files: [{
+				files: [ {
 					expand: true,
-					src: [projectConfig.distDir + '**/*.css'],
+					src: [ projectConfig.distDir + '**/*.css' ],
 					dest: '',
-				}]
-			}
+				} ],
+			},
+		},
+
+		// PHP Code Sniffer.
+		phpcs: {
+			options: {
+				bin: projectConfig.srcDir + 'vendor/phpcs/bin/phpcs',
+			},
+			dist: {
+				src: [
+					'**/*.php', // Include all php files.
+					'!includes/api/legacy/**',
+					'!includes/libraries/**',
+					'!node_modules/**',
+					'!tests/cli/**',
+					'!tmp/**',
+					'!vendor/**',
+				],
+			},
 		},
 
 		// JavaScript linting with ESLint.
 		eslint: {
 			options: {
-				fix: true
+				fix: true,
 			},
 			default: [
 				'' + projectConfig.srcDir + '/**/*.js',
@@ -331,9 +356,9 @@ module.exports = function (grunt) {
 		stylelint: {
 			options: {
 				fix: true,
-				configFile: '.stylelintrc'
+				configFile: '.stylelintrc',
 			},
-			default: [projectConfig.srcDir + '**/*.scss'],
+			default: [ projectConfig.srcDir + '**/*.scss' ],
 		},
 
 		// All logging configuration
@@ -345,16 +370,16 @@ module.exports = function (grunt) {
 # Dist: ${projectConfig.distDir}
 # Script Version: ${gruntScriptVersion}
 ───────────────────────────────────────────────────────────────────
-			`['cyan'],
+			`.cyan,
 
 			// before build starts log
-			nolintwarning: `\n>>`['red'] + ` Linting is not enabled for this project.`,
+			nolintwarning: '\n>>'.red + ' Linting is not enabled for this project.',
 
 			// before textdomain tasks starts log
-			textdomainchecking: `\n>>`['green'] + ` Checking textdomain [${projectConfig.name}].`,
+			textdomainchecking: '\n>>'.green + ` Checking textdomain [${projectConfig.name}].`,
 
 			// before textdomain tasks starts log
-			minifying: `\n>>`['green'] + ` Minifying js & css files.`,
+			minifying: '\n>>'.green + ' Minifying js & css files.',
 
 			// After finishing all tasks
 			finish: `
@@ -365,82 +390,82 @@ module.exports = function (grunt) {
 │                        ~ XpeedStudio ~                          │
 │                                                                 │
 ╰─────────────────────────────────────────────────────────────────╯
-			`['green'],
+			`.green,
 		},
-	});
+	} );
 
 	// Stopping Grunt header logs before every task
-	grunt.log.header = function () { }
+	grunt.log.header = function() { };
 
 	// Load all Grunt library tasks
-    require('jit-grunt')(grunt);
+	require( 'jit-grunt' )( grunt, {
+		postcss: 'grunt-postcss',
+	} );
 
 	// Loading modules that are not autoloaded by jit-grant
-	grunt.loadNpmTasks('grunt-wp-i18n');          // Load wp-i18n lib
-	grunt.loadNpmTasks('grunt-checktextdomain');
-	grunt.loadNpmTasks('grunt-stylelint');          // Loading Stylelint manually
+	grunt.loadNpmTasks( 'grunt-wp-i18n' ); // Load wp-i18n lib
 
-	/* ---------------------------------------- * 
+	/* ---------------------------------------- *
 	 *  Registering TASKS
 	 * ---------------------------------------- */
 	// Default tasks
-	grunt.registerTask('default', [
+	grunt.registerTask( 'default', [
 		'log:begin',
 		'js',
 		'css',
 		( projectConfig.ignoreLint ? 'log:nolintwarning' : 'lint' ),
-		'watch'
-	]);
+		'watch',
+	] );
 
-	grunt.registerTask('js', [
-		'webpack'
-	]);
+	grunt.registerTask( 'js', [
+		'webpack',
+	] );
 
-	grunt.registerTask('css', [
+	grunt.registerTask( 'css', [
 		'sass',
-		'autoprefixer'
-	]);
+		'postcss',
+	] );
 
-	grunt.registerTask('minify', [
+	grunt.registerTask( 'minify', [
 		'log:minifying',
 		'terser:js',
-		'cssmin'
-	]);
+		'cssmin',
+	] );
 
-	grunt.registerTask('boot', [
+	grunt.registerTask( 'boot', [
 		'clean',
-		'copy'
-	]);
+		'copy',
+	] );
 
-	grunt.registerTask('build', [
+	grunt.registerTask( 'build', [
 		'log:begin',
 		( projectConfig.ignoreLint ? 'log:nolintwarning' : 'lint' ),
-        'fixtextdomain',
-        // 'makepot',
-        'boot',
+		'fixtextdomain',
+		'makepot',
+		'boot',
 		'minify',
 		'compress',
-		'log:finish'
-	]);
+		'log:finish',
+	] );
 
-	grunt.registerTask('lint', [
+	grunt.registerTask( 'lint', [
 		'eslint',
-		'stylelint'
-	]);
+		'stylelint',
+	] );
 
-	grunt.registerTask('fixtextdomain', [
+	grunt.registerTask( 'fixtextdomain', [
 		'log:textdomainchecking',
 		'addtextdomain',
-		'checktextdomain'
-	]);
+		'checktextdomain',
+	] );
 
 	// Only an alias to 'default' task.
-	grunt.registerTask('dev', [
-		'default'
-	]);
+	grunt.registerTask( 'dev', [
+		'default',
+	] );
 
 	// Logging multi task
-	grunt.registerMultiTask('log', function () {
-		grunt.log.writeln(this.data);
-	});
-}
+	grunt.registerMultiTask( 'log', function() {
+		grunt.log.writeln( this.data );
+	} );
+};
