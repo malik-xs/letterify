@@ -130,21 +130,21 @@ class LetterifyEl extends React.Component {
 		var image = document.getElementById( 'canvasComponent' );
 		var imageURL = image.toDataURL( 'image/png' );
 
-		const { value } = this.state;
+		const { value } = this.state.form_data;
 		const { base_price } = this.props;
 
 		var data = {
 			action: 'woocommerce_ajax_add_to_cart',
 			price: ( base_price * ( value.replace( /\s/g, '' ).length > 0 ? value.replace( /\s/g, '' ).length : 1 ) ).toFixed( 2 ),
 			quantity: this.state.quantity,
-			variation_id: null,
+			// variation_id: null,
 			imgBase64: imageURL,
-			finish: this.state.finish,
-			height: this.state.height,
-			thickness: this.state.thickness,
-			mounting: this.state.mounting,
-			width: this.state.width,
-			...this.state.form_data,
+			// finish: this.state.finish,
+			// height: this.state.height,
+			// thickness: this.state.thickness,
+			// mounting: this.state.mounting,
+			// width: this.state.width,
+			data: this.state.form_data,
 		};
 
 		jQuery.ajax( {

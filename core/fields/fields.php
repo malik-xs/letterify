@@ -6,7 +6,7 @@ class Fields_Schema {
     static $fields_list = [
 		'finish' => [
 			'name' => 'Finish',
-			'slug' => 'letterify-finish',
+			'slug' => 'finish',
 			'values' => [
 				'unpainted' => 'Unpainted',
 				'painted' => 'Painted',
@@ -14,7 +14,7 @@ class Fields_Schema {
 		],
 		'height' => [
 			'name' => 'Height',
-			'slug' => 'letterify-height',
+			'slug' => 'height',
 			'values' => [
 				'4 Inch',
 				'5 Inch',
@@ -37,7 +37,7 @@ class Fields_Schema {
 		],
 		'edge' => [
 			'name' => 'Edge',
-			'slug' => 'letterify-edge',
+			'slug' => 'edge',
 			'values' => [
 				'straight-edge' => 'Straight Edge',
 				'beveled-edge' => 'Beveled edge',
@@ -46,7 +46,7 @@ class Fields_Schema {
 		],
 		'edge-2' => [
 			'name' => 'Edge',
-			'slug' => 'letterify-edge-2',
+			'slug' => 'edge-2',
 			'values' => [
 				'regular' => 'regular',
 				'rustic' => 'rustic',
@@ -54,13 +54,13 @@ class Fields_Schema {
 		],
 		'form' => [
 			'name' => 'A form',
-			'slug' => 'letterify-form',
+			'slug' => 'form',
 			'values' => [
 			],
 		],
 		'mounting-hardware' => [
 			'name' => 'Mounting Hardware',
-			'slug' => 'letterify-mounting-hardware',
+			'slug' => 'mounting-hardware',
 			'values' => [
 				'flush-stud-mount' => 'flush stud mount',
 				'projected-stud-mount' => 'projected stud mount (1/2 inch)',
@@ -68,7 +68,7 @@ class Fields_Schema {
 		],
 		'mounting-1' => [
 			'name' => 'Mounting',
-			'slug' => 'letterify-mounting-1',
+			'slug' => 'mounting-1',
 			'values' => [
 				'hanging-stripes-and-paper-template' => 'hanging stripes and paper template (4.50$ per letter)',
 				'no-mounting-paper-template-only' => 'no mounting - paper template only (1.0$ per letter)',
@@ -77,7 +77,7 @@ class Fields_Schema {
 		],
 		'mounting-2' => [
 			'name' => 'Mounting',
-			'slug' => 'letterify-mounting-2',
+			'slug' => 'mounting-2',
 			'values' => [
 				'hanging-stripes-and-paper-template' => 'hanging stripes and paper template ( 4.50$ per letter )',
 				'metal-mounting-studs' => 'metal mounting studs( 4.50$ per letters )',
@@ -87,7 +87,7 @@ class Fields_Schema {
 		],																	
 		'mounting-3' => [
 			'name' => 'Mounting',
-			'slug' => 'letterify-mounting-3',
+			'slug' => 'mounting-3',
 			'values' => [
 				'hanging-stripes-and-paper-template' => 'hanging stripes and paper template (+10%)',
 				'none' => 'none',
@@ -95,7 +95,7 @@ class Fields_Schema {
 		],
 		'stain-color' => [
 			'name' => 'Stain color',
-			'slug' => 'letterify-stain-color',
+			'slug' => 'stain-color',
 			'type' => 'color',
 			'values' => [
 				'dark-walnut' => 'Dark walnut',
@@ -108,7 +108,7 @@ class Fields_Schema {
 		],
 		'paper-template' => [
 			'name' => 'Paper Template',
-			'slug' => 'letterify-paper-template',
+			'slug' => 'paper-template',
 			'values' => [
 				'yes' => 'Yes ($1.00 per letter)',
 				'no' => 'No',
@@ -116,7 +116,7 @@ class Fields_Schema {
 		],
 		'material-1' => [
 			'name' => 'Material 1',
-			'slug' => 'letterify-material-1',
+			'slug' => 'material-1',
 			'values' => [
 				'alder' => 'Alder',
 				'alder-clear-coat' => 'Alder clear coat',
@@ -130,7 +130,7 @@ class Fields_Schema {
 		],
 		'material-2' => [
 			'name' => 'Material 2',
-			'slug' => 'letterify-material-2',
+			'slug' => 'material-2',
 			'values' => [
 				'baltic birch plywood' => 'baltic birch plywood',
 				'MDF' => 'MDF',
@@ -147,7 +147,7 @@ class Fields_Schema {
 		],
 		'material-finish' => [
 			'name' => 'Material/finish',
-			'slug' => 'letterify-material-finish',
+			'slug' => 'material-finish',
 			'values' => [
 				'alder' => 'alder',
 				'alder satin clear coat' => 'alder satin clear coat(+25% per letter)',
@@ -165,7 +165,7 @@ class Fields_Schema {
 		],
 		'flat-bottom-standing' => [
 			'name' => 'Flat bottom(standing)',
-			'slug' => 'letterify-flat-bottom-standing',
+			'slug' => 'flat-bottom-standing',
 			'values' => [
 				'yes' => 'Yes ($1.00 per letter)',
 				'no' => 'No',
@@ -173,7 +173,7 @@ class Fields_Schema {
 		],
 		'frame' => [
 			'name' => 'Frame',
-			'slug' => 'letterify-frame',
+			'slug' => 'frame',
 			'values' => [
 				'none' => 'none',
 				'circular' => 'circular(+10%)',
@@ -182,7 +182,7 @@ class Fields_Schema {
 		],
 		'size' => [
 			'name' => 'Size',
-			'slug' => 'letterify-size',
+			'slug' => 'size',
 			'values' => [
 				'small' => 'small (8 x 20 ) in',
 				'medium' => 'medium (12 x 30) in',
@@ -191,7 +191,7 @@ class Fields_Schema {
 		],
 		'letter-finish' => [
 			'name' => 'Letter Finish',
-			'slug' => 'letterify-letter-finish',
+			'slug' => 'letter-finish',
 			'values' => [
 				'unpainted' => 'Unpainted',
 				'painted' => 'Painted',
@@ -199,7 +199,7 @@ class Fields_Schema {
 		],
 		'letter-finish-2' => [
 			'name' => 'Letter Finish',
-			'slug' => 'letterify-letter-finish-2',
+			'slug' => 'letter-finish-2',
 			'values' => [
 				'gloss' => 'gloss',
 				'matte' => 'matte',
@@ -207,19 +207,19 @@ class Fields_Schema {
 		],
 		'letter-height' => [
 			'name' => 'Letter height',
-			'slug' => 'letterify-letter-height',
+			'slug' => 'letter-height',
 			'values' => [
 			],
 		],
 		'letter-thickness' => [
 			'name' => 'Letter thickness',
-			'slug' => 'letterify-letter-thickness',
+			'slug' => 'letter-thickness',
 			'values' => [
 			],
 		],
 		'circle-backer' => [
 			'name' => 'Circle Backer',
-			'slug' => 'letterify-circle-backer',
+			'slug' => 'circle-backer',
 			'values' => [
 				'18 in x 3/8 in (Baltic birch) +10%' => '18 in x 3/8 in (Baltic birch) +10%',
 				'22 in x 3/8 in (Baltic birch) +10%' => '22 in x 3/8 in (Baltic birch) +10%',
@@ -227,7 +227,7 @@ class Fields_Schema {
 		],
 		'mounting-hardware-2' => [
 			'name' => 'Mounting Hardware',
-			'slug' => 'letterify-mounting-hardware-2',
+			'slug' => 'mounting-hardware-2',
 			'values' => [
 				'none' => 'none',
 				'flush (3.00$ per letter)' => 'flush (3.00$ per letter)',
@@ -237,20 +237,20 @@ class Fields_Schema {
 		],
 		'wood-backer' => [
 			'name' => 'Wood Backer',
-			'slug' => 'letterify-wood-backer',
+			'slug' => 'wood-backer',
 			'values' => [
 				'1/4 in baltic birch (+10$)' => '1/4 in baltic birch (+10$)',
 			],
 		],
 		'thickness' => [
 			'name' => 'Thickness',
-			'slug' => 'letterify-thickness',
+			'slug' => 'thickness',
 			'values' => [
 			],
 		],
 		'ribbon-color' => [
 			'name' => 'Ribbon Color',
-			'slug' => 'letterify-ribbon-color',
+			'slug' => 'ribbon-color',
 			'type' => 'color',
 			'values' => [
 				'solid royal' => 'solid royal',
@@ -281,7 +281,7 @@ class Fields_Schema {
 		],
 		'ribbon-color-2' => [
 			'name' => 'Ribbon Color',
-			'slug' => 'letterify-ribbon-color-2',
+			'slug' => 'ribbon-color-2',
 			'type' => 'color',
 			'values' => [
 				'red (+2.00$)' => 'red (+2.00$)',
@@ -294,7 +294,7 @@ class Fields_Schema {
 		],
 		'frame-shape' => [
 			'name' => 'Frame Shape',
-			'slug' => 'letterify-frame-shape',
+			'slug' => 'frame-shape',
 			'values' => [
 				'round' => 'round',
 				'square' => 'square',
@@ -304,7 +304,7 @@ class Fields_Schema {
 		],
 		'add-ribbon' => [
 			'name' => 'Add Ribbon',
-			'slug' => 'letterify-add-ribbon',
+			'slug' => 'add-ribbon',
 			'values' => [
 				'yes' => 'yes ($4.00 per letter)',
 				'no' => 'no',
@@ -312,7 +312,7 @@ class Fields_Schema {
 		],
 		'longest-dimension' => [
 			'name' => 'Longest Dimension',
-			'slug' => 'letterify-longest-dimension',
+			'slug' => 'longest-dimension',
 			'values' => [
 			],
 		],

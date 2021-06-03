@@ -223,49 +223,37 @@ final class Plugin {
 	}
 
 	function woocommerce_ajax_add_to_cart() {
+		$list = \Letterify\Fields_Schema::get_list();
 		$content = '<table class="letterify-cart-desc"><tbody>';
-		if ( isset($_POST['font']) && $_POST['font'] !== '' ) {
-			$content .= '<tr><td>Font: </td><td>' . esc_html($_POST['font']) . '</td></tr>';
+		foreach( $_POST['data'] as $key => $value ) {
+			$name = isset( $list[$key]['name'] ) ? $list[$key]['name'] : ucfirst($key);
+			$content .= '<tr><td>' . $name . ': </td><td>' . esc_html($value) . '</td></tr>';
 		}
-		if ( isset($_POST['finish']) && $_POST['finish'] !== '' ) {
-			$content .= '<tr><td>Finish: </td><td>' . esc_html($_POST['finish']) . '</td></tr>';
-		}
-		if ( isset($_POST['height']) && $_POST['height'] !== '' ) {
-			$content .= '<tr><td>Height: </td><td>' . esc_html($_POST['height']) . '</td></tr>';
-		}
-		if ( isset($_POST['thickness']) && $_POST['thickness'] !== '' ) {
-			$content .= '<tr><td>Thickness: </td><td>' . esc_html($_POST['thickness']) . '</td></tr>';
-		}
-		if ( isset($_POST['mounting']) && $_POST['mounting'] !== '' ) {
-			$content .= '<tr><td>Mounting: </td><td>' . esc_html($_POST['mounting']) . '</td></tr>';
-		}
-		if ( isset($_POST['color']) && $_POST['color'] !== '' ) {
-			$content .= '<tr><td>Color: </td><td>' . esc_html($_POST['color']) . '</td></tr>';
-		}
-		if ( isset($_POST['width']) && $_POST['width'] !== '' ) {
-			$content .= '<tr><td>Width: </td><td>' . esc_html($_POST['width']) . '</td></tr>';
-		}
-		if ( isset($_POST['connect']) && $_POST['connect'] !== '' ) {
-			$content .= '<tr><td>Connect: </td><td>' . esc_html($_POST['connect']) . '</td></tr>';
-		}
+		// if ( isset($_POST['font']) && $_POST['font'] !== '' ) {
+		// 	$content .= '<tr><td>Font: </td><td>' . esc_html($_POST['font']) . '</td></tr>';
+		// }
+		// if ( isset($_POST['finish']) && $_POST['finish'] !== '' ) {
+		// 	$content .= '<tr><td>Finish: </td><td>' . esc_html($_POST['finish']) . '</td></tr>';
+		// }
+		// if ( isset($_POST['height']) && $_POST['height'] !== '' ) {
+		// 	$content .= '<tr><td>Height: </td><td>' . esc_html($_POST['height']) . '</td></tr>';
+		// }
+		// if ( isset($_POST['thickness']) && $_POST['thickness'] !== '' ) {
+		// 	$content .= '<tr><td>Thickness: </td><td>' . esc_html($_POST['thickness']) . '</td></tr>';
+		// }
+		// if ( isset($_POST['mounting']) && $_POST['mounting'] !== '' ) {
+		// 	$content .= '<tr><td>Mounting: </td><td>' . esc_html($_POST['mounting']) . '</td></tr>';
+		// }
+		// if ( isset($_POST['color']) && $_POST['color'] !== '' ) {
+		// 	$content .= '<tr><td>Color: </td><td>' . esc_html($_POST['color']) . '</td></tr>';
+		// }
+		// if ( isset($_POST['width']) && $_POST['width'] !== '' ) {
+		// 	$content .= '<tr><td>Width: </td><td>' . esc_html($_POST['width']) . '</td></tr>';
+		// }
+		// if ( isset($_POST['connect']) && $_POST['connect'] !== '' ) {
+		// 	$content .= '<tr><td>Connect: </td><td>' . esc_html($_POST['connect']) . '</td></tr>';
+		// }
 		$content .= '</tbody></table>';
-
-		// $data = [
-		// 	'post_title' => $_POST['value'],
-		// 	'post_status' => 'publish',
-		// 	'post_content' => $content,
-		// 	'post_type' => 'product',
-		// 	'meta_input'	=> [
-		// 		[
-		// 			'key'   => 'name',
-		// 			'value' => 'hidden'
-		// 		],
-		// 	]
-		// ];
-
-		// include_once 'core/entries/entry.php';
-		// $entry_id = wp_insert_post( $data );
-		// wp_set_object_terms( $entry_id, $location, 'location' );
 
 		$entry_id_letter = wp_insert_post( 
 			array(

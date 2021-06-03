@@ -10516,22 +10516,21 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
 
       var image = document.getElementById('canvasComponent');
       var imageURL = image.toDataURL('image/png');
-      var value = _this.state.value;
+      var value = _this.state.form_data.value;
       var base_price = _this.props.base_price;
-
-      var data = app_objectSpread({
+      var data = {
         action: 'woocommerce_ajax_add_to_cart',
         price: (base_price * (value.replace(/\s/g, '').length > 0 ? value.replace(/\s/g, '').length : 1)).toFixed(2),
         quantity: _this.state.quantity,
-        variation_id: null,
+        // variation_id: null,
         imgBase64: imageURL,
-        finish: _this.state.finish,
-        height: _this.state.height,
-        thickness: _this.state.thickness,
-        mounting: _this.state.mounting,
-        width: _this.state.width
-      }, _this.state.form_data);
-
+        // finish: this.state.finish,
+        // height: this.state.height,
+        // thickness: this.state.thickness,
+        // mounting: this.state.mounting,
+        // width: this.state.width,
+        data: _this.state.form_data
+      };
       jQuery.ajax({
         type: 'post',
         url: wc_add_to_cart_params.ajax_url,
