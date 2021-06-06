@@ -11,17 +11,19 @@ class MetaBox_View {
 		global $post;
 		$value = get_post_meta( $post->ID, 'letterify-settings', true );
 		$value = json_decode( $value );
+		// var_dump( $value )
 		?>
 		<form id="letterify-product-option-form-main">
-			<button id="letterify-product-option-enable-all">Enable All</button>
-			<button id="letterify-product-option-disable-all">Disable All</button>
+			<button class="letterify-product-option-master-button" data-value="enable">Enable All</button>
+			<button class="letterify-product-option-master-button" data-value="disable">Disable All</button>
 			<div class="letterify-product-option-form">
+
 				<?php foreach( \Letterify\Fields_Schema::get_list() as $meta ) : ?>
 					<div class="form-field term-meta-text-wrap">
 						<input type="checkbox"
 							id="<?php echo $meta['slug'] ?>"
 							name="<?php echo $meta['slug'] ?>"
-							<?php checked( $value->{$meta['slug']}, 'true' ) ?> >
+							<?php checked( isset( $value->{$meta['slug']} ) ? $value->{$meta['slug']} : '', 'true' ) ?> >
 
 						<label for="<?php echo $meta['slug'] ?>">
 							<strong><?php esc_html_e( $meta['name'] , 'letterify' ); ?></strong>
@@ -39,7 +41,9 @@ class MetaBox_View {
 				<hr />
 			</div>
 			<div>
-				<input data-post_id="<?php echo $post->ID; ?>" class="letterify-product-option-form-submit button button-primary button-large" type="submit" value="Save Settings" style="margin: 20px 0 0; margin-left: auto" />
+				<input data-post_id="<?php echo $post->ID; ?>"
+					class="letterify-product-option-form-submit button button-primary button-large"
+					type="submit" value="Save Settings" style="margin: 20px 0 0; margin-left: auto" />
 			</div>
 		</form>
 		<?php

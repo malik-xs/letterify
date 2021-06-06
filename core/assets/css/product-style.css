@@ -7,9 +7,9 @@
 }
 
 .letterify-product-option-form .term-meta-text-wrap {
-	-ms-flex: 0 0 50%;
-	    flex: 0 0 50%;
-	width: 50%;
+	-ms-flex: 0 0 33.333333%;
+	    flex: 0 0 33.333333%;
+	width: 33.333333%;
 	display: -ms-inline-flexbox;
 	display: inline-flex;
 	-ms-flex-align: start;

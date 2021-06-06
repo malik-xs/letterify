@@ -1,107 +1,86 @@
-/* eslint-disable */
-/**************************************************
+/** ────────────────────────────────────────────────────────────── *
  * Grunt build script.
- * @description Automate several processes and compilations on `watch`. Export installable projects and zip on dist directory on `build`.
+ *
+ * @description Task runner for node projects. Build  on `build`.
  * @version 1.0.0
  * @author xianmalik
- * @organization Wpmet
-**************************************************/
+ * @license NONE
+ * @copyright Malik Zubayer Ul Haider, 2021
+ * ────────────────────────────────────────────────────────────── **/
 
-const gruntScriptVersion = '1.0.0';
-
-const path = require('path');
-const sass = require('node-sass');
-
-/**
- * Grunt Configuration start Here
- * # Configuration intialization : initConfig
- * # Loading grunt modules
- * # Registering tasks
- */
-module.exports = function (grunt) {
+module.exports = function( grunt ) {
 	'use strict';
 
-	const projectConfig = {
-		name: 			'letterify', 					// should be the text domain of the project (todo: spilt it)
-		srcDir: 		'./', 							// the source directory of the plugin
-		distDir: 		'../dist/letterify/', 		// where to save the built files
-		ignoreLint:		true, 							// ignore the linting (coding standard checking) during 'build' task (true/ false)
-	}
+	const script_version = '1.0.0';
+	const path = require( 'path' );
+	const sass = require( 'node-sass' );
 
-	const projectFiles = {
-		// SCSS & JScript Compile lists
+	const config = {
+		name: 'letterify',
+		srcDir: './',
+		distDir: '../dist/letterify/',
+		ignoreLint: true,
+	};
+
+	// SCSS & JScript Compile lists
+	const files = {
 		scss: [
 			{
 				cwd: 'public/assets/scss/',
-				src: ['*.scss'],
-				dest: 'public/assets/css/'
+				src: [ '*.scss' ],
+				dest: 'public/assets/css/',
 			},
 			{
 				cwd: 'core/assets/scss/',
-				src: ['*.scss'],
-				dest: 'core/assets/css/'
-			}
+				src: [ '*.scss' ],
+				dest: 'core/assets/css/',
+			},
 		],
 		js: [
 			{
-				cwd: projectConfig.srcDir + 'src/public',
-				src: ['app.js'],
-				dest: projectConfig.srcDir + 'public/assets/js/'
+				cwd: config.srcDir + 'src/public',
+				src: [ 'app.js' ],
+				dest: config.srcDir + 'public/assets/js/',
 			},
 			{
-				cwd: projectConfig.srcDir + 'src/admin',
-				src: ['app.js'],
-				dest: projectConfig.srcDir + 'core/assets/js/'
-			}
-		]
-	}
+				cwd: config.srcDir + 'src/admin',
+				src: [ 'app.js' ],
+				dest: config.srcDir + 'core/assets/js/',
+			},
+		],
+	};
 
 	// Webpack Config
 	const webpackConfig = {
 		module: {
-			rules: [{
+			rules: [ {
 				test: /\.m?(js|jsx)$/,
 				exclude: /(node_modules|bower_components)/,
 				use: {
 					loader: 'babel-loader',
-					options: {
-						presets: [
-							'@babel/preset-env',
-							'@babel/preset-react',
-							{
-								plugins: [
-									'@babel/plugin-proposal-class-properties',
-									[ "import", {
-										"libraryName": "antd",
-										"style": "css",
-									} ]
-								]
-							}
-						],
-					}
-				}
+				},
 			},
 			{
 				test: /\.css$/i,
-				use: ['style-loader', 'css-loader'],
+				use: [ 'style-loader', 'css-loader' ],
 			},
 			{
 				test: /\.(png|jpe?g|gif)$/i,
 				loader: 'file-loader',
 				options: {
-				  name: '[path][name].[ext]',
+					name: '[path][name].[ext]',
 				},
-			}]
+			} ],
 		},
 		performance: { hints: false },
 		resolve: {
-			fallback: { fs: false }
+			fallback: { fs: false },
 		},
 		externals: {
-			"react": "React",
-			"react-dom": "ReactDOM"
+			react: 'React',
+			'react-dom': 'ReactDOM',
 		},
-	}
+	};
 
 	// Grunt task begins
 	grunt.initConfig( {
@@ -109,12 +88,12 @@ module.exports = function (grunt) {
 		// Watch for file changes and compile onChange
 		watch: {
 			css: {
-				files: [ projectConfig.srcDir + '**/*.scss', '!' + projectConfig.srcDir + 'node_modules' ],
-				tasks: [ 'css', ( projectConfig.ignoreLint ? 'log:nolintwarning' : 'stylelint' ) ],
+				files: [ config.srcDir + '**/*.scss', '!' + config.srcDir + 'node_modules' ],
+				tasks: [ 'css', ( config.ignoreLint ? 'log:nolintwarning' : 'stylelint' ) ],
 			},
 			js: {
-				files: [ projectConfig.srcDir + '**/src/**/*.js', '!' + projectConfig.srcDir + 'node_modules' ],
-				tasks: [ 'js', ( projectConfig.ignoreLint ? 'log:nolintwarning' : 'eslint' ) ],
+				files: [ config.srcDir + '**/src/**/*.js', '!' + config.srcDir + 'node_modules' ],
+				tasks: [ 'js', ( config.ignoreLint ? 'log:nolintwarning' : 'eslint' ) ],
 			},
 		},
 
@@ -122,15 +101,14 @@ module.exports = function (grunt) {
 		sass: {
 			compile: {
 				options: {
-					implementation: sass,
+					indentWidth: 1,
 					sourceMap: 'none',
 					indentType: 'tab',
 					omitSourceMapUrl: true,
-					indentWidth: 1,
 					outputStyle: 'expanded',
-					force: true,
+					implementation: sass,
 				},
-				files: projectFiles.scss.map( value => ( {
+				files: files.scss.map( value => ( {
 					expand: true,
 					extDot: 'last',
 					ext: '.css',
@@ -149,10 +127,10 @@ module.exports = function (grunt) {
 				],
 			},
 			dist: {
-				files: projectFiles.scss.map( value => ( {
+				files: files.scss.map( value => ( {
 					src: [
-						projectConfig.srcDir + value.dest + '*.css',
-						'!' + projectConfig.srcDir + value.dest + '*.min.css',
+						config.srcDir + value.dest + '*.css',
+						'!' + config.srcDir + value.dest + '*.min.css',
 					],
 				} ) ),
 			},
@@ -160,12 +138,12 @@ module.exports = function (grunt) {
 
 		// Compile app.js files from src to dest
 		webpack: {
-			configs: projectFiles.js.map( value =>
+			configs: files.js.map( value =>
 				value.src.map( val => ( {
 					mode: 'production',
-					entry: path.join( __dirname, projectConfig.srcDir, value.cwd, val ),
+					entry: path.join( __dirname, config.srcDir, value.cwd, val ),
 					output: {
-						path: path.resolve( __dirname, projectConfig.srcDir, value.dest ), // string (default)
+						path: path.resolve( __dirname, config.srcDir, value.dest ), // string (default)
 						filename: val.replace( /^.*[\\\/]/, '' ),
 					},
 					optimization: {
@@ -184,10 +162,10 @@ module.exports = function (grunt) {
 			},
 			target: {
 				src: [
-					projectConfig.srcDir + '*.php',
-					projectConfig.srcDir + '**/*.php',
-					'!' + projectConfig.srcDir + 'node_modules/**',
-					'!' + projectConfig.srcDir + 'dev-*/**',
+					config.srcDir + '*.php',
+					config.srcDir + '**/*.php',
+					'!' + config.srcDir + 'node_modules/**',
+					'!' + config.srcDir + 'dev-*/**',
 				],
 			},
 		},
@@ -195,7 +173,7 @@ module.exports = function (grunt) {
 		checktextdomain: {
 			standard: {
 				options: {
-					text_domain: projectConfig.name, //Specify allowed domain(s)
+					text_domain: config.name, //Specify allowed domain(s)
 					// correct_domain: true, // don't use it, it has bugs
 					keywords: [ //List keyword specifications
 						'__:1,2d',
@@ -216,8 +194,8 @@ module.exports = function (grunt) {
 				},
 				files: [ {
 					src: [
-						projectConfig.srcDir + '**/*.php',
-						'!' + projectConfig.srcDir + 'node_modules/**',
+						config.srcDir + '**/*.php',
+						'!' + config.srcDir + 'node_modules/**',
 					], //all php
 					expand: true,
 				} ],
@@ -227,7 +205,7 @@ module.exports = function (grunt) {
 		makepot: {
 			target: {
 				options: {
-					cwd: projectConfig.srcDir, // Directory of files to internationalize.
+					cwd: config.srcDir, // Directory of files to internationalize.
 					mainFile: '', // Main project file.
 					type: 'wp-plugin', // Type of project (wp-plugin or wp-theme).
 					updateTimestamp: false, // Whether the POT-Creation-Date should be updated without other changes.
@@ -240,8 +218,8 @@ module.exports = function (grunt) {
 		clean: {
 			options: { force: true },
 			dist: [
-				projectConfig.distDir + '/**',
-				projectConfig.distDir.replace( /\/$/, '' ) + '.zip',
+				config.distDir + '/**',
+				config.distDir.replace( /\/$/, '' ) + '.zip',
 			],
 		},
 
@@ -251,25 +229,25 @@ module.exports = function (grunt) {
 				files: [ {
 					expand: true,
 					src: [
-						'' + projectConfig.srcDir + '**',
-						'!' + projectConfig.srcDir + 'Gruntfile.js',
-						'!' + projectConfig.srcDir + 'package.json',
-						'!' + projectConfig.srcDir + 'package-lock.json',
-						'!' + projectConfig.srcDir + 'node_modules/**',
-						'!' + projectConfig.srcDir + '**/dev-*/**',
-						'!' + projectConfig.srcDir + '**/*-test/**',
-						'!' + projectConfig.srcDir + '**/*-beta/**',
-						'!' + projectConfig.srcDir + '**/scss/**',
-						'!' + projectConfig.srcDir + '**/sass/**',
-						'!' + projectConfig.srcDir + '**/src/**',
-						'!' + projectConfig.srcDir + '**/.*',
-						'!' + projectConfig.srcDir + '**/*.config',
-						'!' + projectConfig.srcDir + 'build-package/**',
-						'!' + projectConfig.srcDir + 'none',
-						'!' + projectConfig.srcDir + 'Built',
-						'!' + projectConfig.srcDir + 'Installable',
+						'' + config.srcDir + '**',
+						'!' + config.srcDir + 'Gruntfile.js',
+						'!' + config.srcDir + 'package.json',
+						'!' + config.srcDir + 'package-lock.json',
+						'!' + config.srcDir + 'node_modules/**',
+						'!' + config.srcDir + '**/dev-*/**',
+						'!' + config.srcDir + '**/*-test/**',
+						'!' + config.srcDir + '**/*-beta/**',
+						'!' + config.srcDir + '**/scss/**',
+						'!' + config.srcDir + '**/sass/**',
+						'!' + config.srcDir + '**/src/**',
+						'!' + config.srcDir + '**/.*',
+						'!' + config.srcDir + '**/*.config',
+						'!' + config.srcDir + 'build-package/**',
+						'!' + config.srcDir + 'none',
+						'!' + config.srcDir + 'Built',
+						'!' + config.srcDir + 'Installable',
 					],
-					dest: projectConfig.distDir,
+					dest: config.distDir,
 				} ],
 			},
 		},
@@ -280,12 +258,12 @@ module.exports = function (grunt) {
 				options: {
 					force: true,
 					mode: 'zip',
-					archive: projectConfig.distDir.replace( projectConfig.name, '' ) + projectConfig.name + '.zip',
+					archive: config.distDir.replace( config.name, '' ) + config.name + '.zip',
 				},
 				expand: true,
-				cwd: projectConfig.distDir,
+				cwd: config.distDir,
 				src: [ '**' ],
-				dest: '../' + projectConfig.name,
+				dest: '../' + config.name,
 			},
 		},
 
@@ -300,7 +278,7 @@ module.exports = function (grunt) {
 			js: {
 				files: [ {
 					expand: true,
-					src: [ projectConfig.distDir + '**/*.js' ],
+					src: [ config.distDir + '**/*.js' ],
 					dest: '',
 				} ],
 			},
@@ -316,7 +294,7 @@ module.exports = function (grunt) {
 			minify: {
 				files: [ {
 					expand: true,
-					src: [ projectConfig.distDir + '**/*.css' ],
+					src: [ config.distDir + '**/*.css' ],
 					dest: '',
 				} ],
 			},
@@ -325,7 +303,7 @@ module.exports = function (grunt) {
 		// PHP Code Sniffer.
 		phpcs: {
 			options: {
-				bin: projectConfig.srcDir + 'vendor/phpcs/bin/phpcs',
+				bin: config.srcDir + 'vendor/phpcs/bin/phpcs',
 			},
 			dist: {
 				src: [
@@ -346,9 +324,9 @@ module.exports = function (grunt) {
 				fix: true,
 			},
 			default: [
-				'' + projectConfig.srcDir + '/**/*.js',
-				'!' + projectConfig.srcDir + '/**/*.min.js',
-				'!' + projectConfig.srcDir + 'node_modules/**',
+				'' + config.srcDir + '/**/*.js',
+				'!' + config.srcDir + '/**/*.min.js',
+				'!' + config.srcDir + 'node_modules/**',
 			],
 		},
 
@@ -358,39 +336,39 @@ module.exports = function (grunt) {
 				fix: true,
 				configFile: '.stylelintrc',
 			},
-			default: [ projectConfig.srcDir + '**/*.scss' ],
+			default: [ config.srcDir + '**/*.scss' ],
 		},
 
 		// All logging configuration
 		log: {
 			// before build starts log
 			begin: `
-───────────────────────────────────────────────────────────────────
-# Project: ${projectConfig.name}
-# Dist: ${projectConfig.distDir}
-# Script Version: ${gruntScriptVersion}
-───────────────────────────────────────────────────────────────────
+╭─────────────────────────────────────────────────────────────────
+│ » Project: ${config.name}
+│ » Dist: ${config.distDir}
+│ » Script Version: ${script_version}
+╰─────────────────────────────────────────────────────────────────
 			`.cyan,
 
 			// before build starts log
-			nolintwarning: '\n>>'.red + ' Linting is not enabled for this project.',
+			nolintwarning: '\n►'.red + ' Linting is not enabled for this project.',
 
 			// before textdomain tasks starts log
-			textdomainchecking: '\n>>'.green + ` Checking textdomain [${projectConfig.name}].`,
+			textdomainchecking: '\n►'.green + ` Checking textdomain [${config.name}].`,
 
 			// before textdomain tasks starts log
-			minifying: '\n>>'.green + ' Minifying js & css files.',
+			minifying: '\n►'.green + ' Minifying js & css files.',
 
 			// After finishing all tasks
 			finish: `
-╭─────────────────────────────────────────────────────────────────╮
-│                                                                 │
-│                      All tasks completed.                       │
-│   Built files & Installable zip copied to the dist directory.   │
-│                        ~ XpeedStudio ~                          │
-│                                                                 │
-╰─────────────────────────────────────────────────────────────────╯
-			`.green,
+╭────────────────────────────────────────────────────────────────╮
+│                                                                │
+│                      All tasks completed.                      │
+│   Built files & Installable zip copied to the dist directory   │
+│                        ~ Xian Malik ~                          │
+│                                                                │
+╰────────────────────────────────────────────────────────────────╯
+			`.yellow,
 		},
 	} );
 
@@ -408,13 +386,22 @@ module.exports = function (grunt) {
 	/* ---------------------------------------- *
 	 *  Registering TASKS
 	 * ---------------------------------------- */
+	grunt.task.renameTask( 'watch', '_watch' );
+
 	// Default tasks
+	grunt.registerTask( 'watch', [
+		'log:begin',
+		'js',
+		'css',
+		( config.ignoreLint ? 'log:nolintwarning' : 'lint' ),
+		'_watch',
+	] );
 	grunt.registerTask( 'default', [
 		'log:begin',
 		'js',
 		'css',
-		( projectConfig.ignoreLint ? 'log:nolintwarning' : 'lint' ),
-		'watch',
+		( config.ignoreLint ? 'log:nolintwarning' : 'lint' ),
+		'_watch',
 	] );
 
 	grunt.registerTask( 'js', [
@@ -439,7 +426,7 @@ module.exports = function (grunt) {
 
 	grunt.registerTask( 'build', [
 		'log:begin',
-		( projectConfig.ignoreLint ? 'log:nolintwarning' : 'lint' ),
+		( config.ignoreLint ? 'log:nolintwarning' : 'lint' ),
 		'fixtextdomain',
 		'makepot',
 		'boot',

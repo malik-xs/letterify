@@ -62,5 +62,25 @@
 	"repository": {
 		"type": "git",
 		"url": "git+https://github.com/malik-xs/letterify.git"
+	},
+	"browserslist": [
+		"last 2 version",
+		"> 1%",
+		"IE 11",
+		"iOS 5"
+	],
+	"babel": {
+		"presets": [
+			"@babel/preset-env",
+			"@babel/preset-react"
+		],
+		"plugins": [
+			"@babel/plugin-syntax-jsx",
+			"@babel/plugin-proposal-class-properties",
+			[ "import", {
+				"libraryName": "antd",
+				"style": "css"
+			} ]
+		]
 	}
 }

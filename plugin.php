@@ -202,7 +202,7 @@ final class Plugin {
 		$img             = str_replace( 'data:image/png;base64,', '', $imgBase64 );
 		$img             = str_replace( ' ', '+', $img );
 		$decoded         = base64_decode( $img );
-		$filename        = $_POST['value'] . '.png';
+		$filename        = $_POST['data']['value']. time() . '.png';
 		$file_type       = 'image/png';
 		$hashed_filename = md5( $filename . microtime() ) . '_' . $filename;
 
@@ -257,26 +257,48 @@ final class Plugin {
 
 		$entry_id_letter = wp_insert_post( 
 			array(
-				'post_title'	=> $_POST['value'],
+				'post_title'	=> isset( $_POST['data']['value'] ) ? $_POST['data']['value'] : '#New Entry : ' . time(),
 				'post_status'	=> 'publish',
 				'post_content'	=> $content,
-				'post_type'		=> 'letterify-orders',
+				'post_type'		=> 'product',
 			)
 		);
 
 		$price = $_POST['price'] / $_POST['quantity'];
 		$quantity = $_POST['quantity'];
 
+		/** Set thumbnail */
 		$thumbnail_id = $this->save_photo($_POST['imgBase64']);
-
-		// set_post_thumbnail( $entry_id, $thumbnail_id );
 		set_post_thumbnail( $entry_id_letter, $thumbnail_id );
 
-        //add price to the product,
+        /** add price to the product */
         add_post_meta($entry_id_letter, '_regular_price', $price);
         add_post_meta($entry_id_letter, '_sale_price', $price);
         add_post_meta($entry_id_letter, '_price', $price);
         add_post_meta($entry_id_letter, 'price', $price);
+		
+		/** Set product as downloadable */
+        add_post_meta($entry_id_letter, '_downloadable', 'yes');
+        add_post_meta($entry_id_letter, '_download_limit', '-1');
+        add_post_meta($entry_id_letter, '_download_expiry', '-1');
+
+        include_once WC_ABSPATH . 'includes/class-wc-product-download.php';
+
+		$product = wc_get_product( $entry_id_letter );
+		var_dump( $product );
+		$downloads = (array) $product->get_downloads(); 
+
+        // Set the download data
+        $download = new \WC_Product_Download(); // Get an instance of the WC_Product_Download Object
+        $file_url = wp_get_attachment_url( $thumbnail_id );
+        $file_md5 = md5($file_url);
+        $download->set_name( 'Downloadable File' );
+        $download->set_id($file_md5);
+        $download->set_file(apply_filters('woocommerce_file_download_path', $img, $product, $key));
+
+		var_dump( $download );
+        $downloads[0] = $download; // Insert the new download to the array of downloads
+        var_dump( $product->set_downloads($downloads) ); // Set new array of downloads
 
         /** Include required files */
         include_once WC_ABSPATH . 'includes/wc-cart-functions.php';
