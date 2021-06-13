@@ -22,7 +22,7 @@ module.exports = function( grunt ) {
 		ignoreLint: true,
 	};
 
-	// SCSS & JScript Compile lists
+	// File lists lists
 	const files = {
 		scss: [
 			{
@@ -138,12 +138,12 @@ module.exports = function( grunt ) {
 
 		// Compile app.js files from src to dest
 		webpack: {
-			configs: files.js.map( value =>
+			configs: files.js.flatMap( value =>
 				value.src.map( val => ( {
 					mode: 'production',
 					entry: path.join( __dirname, config.srcDir, value.cwd, val ),
 					output: {
-						path: path.resolve( __dirname, config.srcDir, value.dest ), // string (default)
+						path: path.resolve( __dirname, config.srcDir, value.dest ),
 						filename: val.replace( /^.*[\\\/]/, '' ),
 					},
 					optimization: {
@@ -300,24 +300,6 @@ module.exports = function( grunt ) {
 			},
 		},
 
-		// PHP Code Sniffer.
-		phpcs: {
-			options: {
-				bin: config.srcDir + 'vendor/phpcs/bin/phpcs',
-			},
-			dist: {
-				src: [
-					'**/*.php', // Include all php files.
-					'!includes/api/legacy/**',
-					'!includes/libraries/**',
-					'!node_modules/**',
-					'!tests/cli/**',
-					'!tmp/**',
-					'!vendor/**',
-				],
-			},
-		},
-
 		// JavaScript linting with ESLint.
 		eslint: {
 			options: {
@@ -386,22 +368,14 @@ module.exports = function( grunt ) {
 	/* ---------------------------------------- *
 	 *  Registering TASKS
 	 * ---------------------------------------- */
-	grunt.task.renameTask( 'watch', '_watch' );
 
 	// Default tasks
-	grunt.registerTask( 'watch', [
-		'log:begin',
-		'js',
-		'css',
-		( config.ignoreLint ? 'log:nolintwarning' : 'lint' ),
-		'_watch',
-	] );
 	grunt.registerTask( 'default', [
 		'log:begin',
 		'js',
 		'css',
 		( config.ignoreLint ? 'log:nolintwarning' : 'lint' ),
-		'_watch',
+		'watch',
 	] );
 
 	grunt.registerTask( 'js', [

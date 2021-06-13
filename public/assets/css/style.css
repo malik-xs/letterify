@@ -4,10 +4,12 @@
 
 .xm-letterify .text-center {
 	text-align: center;
-	-ms-flex-pack: center;
-	    justify-content: center;
-	-ms-flex-align: center;
-	    align-items: center;
+	-webkit-box-pack: center;
+	    -ms-flex-pack: center;
+	        justify-content: center;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
 }
 
 .xm-letterify .text-right {
@@ -125,20 +127,25 @@
 }
 
 .xm-letterify .xm-input-wrap {
+	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
-	-ms-flex-align: center;
-	    align-items: center;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
 	padding: 0.75rem 1.25rem;
 }
 
 .xm-letterify .xm-input-wrap .xm-input-frag {
-	-ms-flex: 1;
-	    flex: 1;
+	-webkit-box-flex: 1;
+	    -ms-flex: 1;
+	        flex: 1;
+	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
-	-ms-flex-align: center;
-	    align-items: center;
+	-webkit-box-align: center;
+	    -ms-flex-align: center;
+	        align-items: center;
 }
 
 .xm-letterify .xm-input-wrap .xm-input-frag:not(:first-child):not(:last-child) {
@@ -162,6 +169,7 @@
 	background-clip: padding-box;
 	border: 1px solid #b4b4b3;
 	border-radius: 0.25rem;
+	-webkit-transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 	transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
 }
 
@@ -218,13 +226,13 @@
 	white-space: nowrap;
 	vertical-align: middle;
 	-webkit-user-select: none;
-	   -moz-user-select: none;
 	    -ms-user-select: none;
 	        user-select: none;
 	padding: 0.375rem 0.75rem;
 	font-size: 1rem;
 	line-height: 1.5;
 	border-radius: 0.25rem;
+	-webkit-transition: all 0.15s ease-in-out;
 	transition: all 0.15s ease-in-out;
 }
 

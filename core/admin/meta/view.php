@@ -11,14 +11,30 @@ class MetaBox_View {
 		global $post;
 		$value = get_post_meta( $post->ID, 'letterify-settings', true );
 		$value = json_decode( $value );
-		// var_dump( $value )
 		?>
 		<form id="letterify-product-option-form-main">
 			<button class="letterify-product-option-master-button" data-value="enable">Enable All</button>
 			<button class="letterify-product-option-master-button" data-value="disable">Disable All</button>
 			<div class="letterify-product-option-form">
+				<?php $multipliers = [
+					[ 'slug' => 'height-multiplier', 'name' => 'Height Multiplier' ],
+					[ 'slug' => 'thickness-multiplier', 'name' => 'Thickness Multiplier' ],
+				];
+				foreach( $multipliers as $multiplier ) : ?>
+					<div class="form-field term-meta-text-wrap">
+						<label for="<?php echo $multiplier['slug'] ?>">
+							<strong><?php esc_html_e( $multiplier['name'] , 'letterify' ); ?></strong>
+							<br><small>( <?php esc_html_e( $multiplier['slug'] , 'letterify' ); ?> )</small>
+						</label>
 
-				<?php foreach( \Letterify\Fields_Schema::get_list() as $meta ) : ?>
+						<input type="number"
+							id="<?php echo $multiplier['slug'] ?>"
+							name="<?php echo $multiplier['slug'] ?>">
+					</div>
+				<?php
+				endforeach;
+				echo '<div class="form-field term-meta-text-wrap"></div>';
+				foreach( \Letterify\Fields_Schema::get_list() as $meta ) : ?>
 					<div class="form-field term-meta-text-wrap">
 						<input type="checkbox"
 							id="<?php echo $meta['slug'] ?>"
@@ -37,7 +53,6 @@ class MetaBox_View {
 						</select> -->
 					</div>
 				<?php endforeach; ?>
-				
 				<hr />
 			</div>
 			<div>

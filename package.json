@@ -8,8 +8,7 @@
 		"grunt": "grunt",
 		"watch": "grunt",
 		"dev": "grunt",
-		"lint": "grunt lint",
-		"fixtextdomain": "grunt fixtextdomain"
+		"lint": "grunt lint"
 	},
 	"keywords": [],
 	"author": "WPmet",

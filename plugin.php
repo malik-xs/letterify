@@ -104,25 +104,42 @@ final class Plugin {
 	}
 
 	function add_meta_box( $post_type ) {
-		require_once 'core/admin/meta/view.php';
-
-		$post_types = array('product');     //limit meta box to certain post types
 		global $post;
+		
 		$product = wc_get_product( $post->ID );
-		if ( in_array( $post->post_type, $post_types ) ) {
+		
+		if ( in_array( $post->post_type, [ 'product' ] ) ) {
+			require_once 'core/admin/meta/view.php';
+			
 			add_meta_box(
 				'letterify_values',
 				esc_html__( 'Letterify Preview', 'letterify' ),
-				[$this, 'render_meta_box_content'],
-				$post_types,
+				[ new MetaBox_View, 'render_meta_box_content'],
+				[ 'product' ],
+				'advanced',
+				'high'
+			);
+		} else if ( in_array( $post->post_type, [ 'letterify-orders' ] ) ) {
+			require_once 'core/cpt/meta.php';
+
+			add_meta_box(
+				'letterify_order_details',
+				esc_html__( 'Order Details', 'letterify' ),
+				[ new Cpt_MetaBox, 'render_metabox'],
+				[ 'letterify-orders' ],
+				'advanced',
+				'high'
+			);
+
+			add_meta_box(
+				'letterify_order_details_download',
+				esc_html__( 'Order Details', 'letterify' ),
+				[ new Cpt_MetaBox, 'render_metabox_download'],
+				[ 'letterify-orders' ],
 				'advanced',
 				'high'
 			);
 		}
-	}
-
-	function render_meta_box_content() {
-		\Letterify\MetaBox_View::render_meta_box_content();
 	}
 
 	function letterify_save_meta( ) {
@@ -143,13 +160,10 @@ final class Plugin {
 	}
 
 	function cart_description( $name, $cart_item, $cart_item_key ) {
-		// Get the corresponding WC_Product
 		$product_item = $cart_item['data'];
 	
-		if(!empty($product_item)) {
-			// WC 3+ compatibility
+		if( ! empty( $product_item ) ) {
 			$description = $product_item->get_description();
-			// $result = esc_html__( 'Description: ', 'letterify' ) . $description;
 			return $name . '<br>' . $description;
 		} else {
 			return $name;
@@ -256,12 +270,12 @@ final class Plugin {
 		$content .= '</tbody></table>';
 
 		$entry_id_letter = wp_insert_post( 
-			array(
-				'post_title'	=> isset( $_POST['data']['value'] ) ? $_POST['data']['value'] : '#New Entry : ' . time(),
+			[
+				'post_title'	=> '#New Entry : ' . time() . '( ' . isset( $_POST['data']['value'] ) ? $_POST['data']['value'] : '' . ' )',
 				'post_status'	=> 'publish',
 				'post_content'	=> $content,
-				'post_type'		=> 'product',
-			)
+				'post_type'		=> 'letterify-orders',
+			]
 		);
 
 		$price = $_POST['price'] / $_POST['quantity'];
@@ -285,7 +299,6 @@ final class Plugin {
         include_once WC_ABSPATH . 'includes/class-wc-product-download.php';
 
 		$product = wc_get_product( $entry_id_letter );
-		var_dump( $product );
 		$downloads = (array) $product->get_downloads(); 
 
         // Set the download data
@@ -294,11 +307,12 @@ final class Plugin {
         $file_md5 = md5($file_url);
         $download->set_name( 'Downloadable File' );
         $download->set_id($file_md5);
-        $download->set_file(apply_filters('woocommerce_file_download_path', $img, $product, $key));
+        $download->set_file($file_url);
 
-		var_dump( $download );
-        $downloads[0] = $download; // Insert the new download to the array of downloads
-        var_dump( $product->set_downloads($downloads) ); // Set new array of downloads
+        $downloads[$file_md5] = $download; // Insert the new download to the array of downloads
+        $product->set_downloads($downloads); // Set new array of downloads
+		// var_dump( $downloads );
+		// var_dump( $product->get_downloads() );
 
         /** Include required files */
         include_once WC_ABSPATH . 'includes/wc-cart-functions.php';
@@ -432,7 +446,7 @@ final class Plugin {
             'label'                 => esc_html__( 'Order entry', 'letterify' ),
             'description'           => esc_html__( 'letterify-orders', 'letterify' ),
 			'labels'				=> $labels,
-			'supports'				=> ['title', 'editor', 'thumbnail', 'excerpt'],
+			'supports'				=> ['title', 'thumbnail'],
             'capabilities'          => ['create_posts' => 'do_not_allow'],
             'map_meta_cap'          => true,
             'hierarchical'          => false,

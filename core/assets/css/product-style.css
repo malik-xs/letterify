@@ -1,5 +1,6 @@
 .letterify-product-option-form {
 	overflow: auto;
+	display: -webkit-box;
 	display: -ms-flexbox;
 	display: flex;
 	-ms-flex-wrap: wrap;
@@ -7,13 +8,16 @@
 }
 
 .letterify-product-option-form .term-meta-text-wrap {
-	-ms-flex: 0 0 33.333333%;
-	    flex: 0 0 33.333333%;
+	-webkit-box-flex: 0;
+	    -ms-flex: 0 0 33.333333%;
+	        flex: 0 0 33.333333%;
 	width: 33.333333%;
+	display: -webkit-inline-box;
 	display: -ms-inline-flexbox;
 	display: inline-flex;
-	-ms-flex-align: start;
-	    align-items: flex-start;
+	-webkit-box-align: start;
+	    -ms-flex-align: start;
+	        align-items: flex-start;
 	padding: 1em 2em 1em 1em;
 	box-sizing: border-box;
 }
@@ -35,4 +39,32 @@
 .letterify-product-option-form .term-meta-text-wrap select {
 	width: 350px;
 	display: block;
+}
+
+/**
+ * Order CPT metabox styles
+ */
+.post-type-letterify-orders .letterify-cart-desc {
+	width: 100%;
+	border-collapse: collapse;
+}
+
+.post-type-letterify-orders .letterify-cart-desc tr td {
+	padding: 6px 12px;
+	border: 1px solid #efefef;
+}
+
+.post-type-letterify-orders .letterify-cart-desc tr td:first-child {
+	width: 100px;
+	font-weight: bold;
+	border-right-width: 0;
+}
+
+.post-type-letterify-orders .letterify-cart-desc tr:nth-child(odd) {
+	background-color: #f7fafd;
+}
+
+.post-type-letterify-orders .letterify-download-preview img {
+	margin: 0 0 1rem;
+	border: 2px solid rgba(0, 0, 0, 0.1);
 }
