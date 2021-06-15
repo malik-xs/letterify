@@ -90,6 +90,16 @@ final class Plugin {
 				'permission_callback' => '__return_true',
 			));
 		});
+
+		add_action('woocommerce_before_order_itemmeta',[$this, 'woocommerce_before_order_itemmeta'],10,3);
+	}
+	
+	public function woocommerce_before_order_itemmeta($item_id, $item, $product){
+		var_dump( $item );
+		// echo $item->get_description();
+		// echo ($shippingclass) ? __('<hr><b>Shipping with: </b> <i style = "text-transform:uppercase">'. $shippingclass .'</i><hr>','woocommerce') : 'No Shipping Class is assigned to this product';
+		// echo '<p><b>Category:</b>  <i>'.get_the_term_list($product->id, 'product_cat').'</i></p>';
+		echo "howdy";
 	}
 
 	public function api_endpoint($request) {
@@ -243,38 +253,22 @@ final class Plugin {
 			$name = isset( $list[$key]['name'] ) ? $list[$key]['name'] : ucfirst($key);
 			$content .= '<tr><td>' . $name . ': </td><td>' . esc_html($value) . '</td></tr>';
 		}
-		// if ( isset($_POST['font']) && $_POST['font'] !== '' ) {
-		// 	$content .= '<tr><td>Font: </td><td>' . esc_html($_POST['font']) . '</td></tr>';
-		// }
-		// if ( isset($_POST['finish']) && $_POST['finish'] !== '' ) {
-		// 	$content .= '<tr><td>Finish: </td><td>' . esc_html($_POST['finish']) . '</td></tr>';
-		// }
-		// if ( isset($_POST['height']) && $_POST['height'] !== '' ) {
-		// 	$content .= '<tr><td>Height: </td><td>' . esc_html($_POST['height']) . '</td></tr>';
-		// }
-		// if ( isset($_POST['thickness']) && $_POST['thickness'] !== '' ) {
-		// 	$content .= '<tr><td>Thickness: </td><td>' . esc_html($_POST['thickness']) . '</td></tr>';
-		// }
-		// if ( isset($_POST['mounting']) && $_POST['mounting'] !== '' ) {
-		// 	$content .= '<tr><td>Mounting: </td><td>' . esc_html($_POST['mounting']) . '</td></tr>';
-		// }
-		// if ( isset($_POST['color']) && $_POST['color'] !== '' ) {
-		// 	$content .= '<tr><td>Color: </td><td>' . esc_html($_POST['color']) . '</td></tr>';
-		// }
-		// if ( isset($_POST['width']) && $_POST['width'] !== '' ) {
-		// 	$content .= '<tr><td>Width: </td><td>' . esc_html($_POST['width']) . '</td></tr>';
-		// }
-		// if ( isset($_POST['connect']) && $_POST['connect'] !== '' ) {
-		// 	$content .= '<tr><td>Connect: </td><td>' . esc_html($_POST['connect']) . '</td></tr>';
-		// }
+
 		$content .= '</tbody></table>';
 
 		$entry_id_letter = wp_insert_post( 
 			[
-				'post_title'	=> '#New Entry : ' . time() . '( ' . isset( $_POST['data']['value'] ) ? $_POST['data']['value'] : '' . ' )',
+				'post_title'	=> isset( $_POST['data']['value'] ) ? $_POST['data']['value'] : '',
 				'post_status'	=> 'publish',
 				'post_content'	=> $content,
 				'post_type'		=> 'letterify-orders',
+			]
+		);
+
+		wp_update_post(
+			[
+				'ID'         => $entry_id_letter,
+				'post_title' => 'Order id #' . $entry_id_letter . ' : ' . ( isset( $_POST['data']['value'] ) ? $_POST['data']['value'] : '' ),
 			]
 		);
 
@@ -450,7 +444,7 @@ final class Plugin {
             'capabilities'          => ['create_posts' => 'do_not_allow'],
             'map_meta_cap'          => true,
             'hierarchical'          => false,
-            'public'                => false,
+            'public'                => true,
             'show_ui'               => true,
             'show_in_menu'          => "letterify-menu",
             'menu_icon'             => 'dashicons-format-aside',
@@ -459,7 +453,7 @@ final class Plugin {
             'show_in_nav_menus'     => false,
             'can_export'            => true,
             'has_archive'           => false,
-            'publicly_queryable'    => false,
+            'publicly_queryable'    => true,
             'rewrite'               => false,
             'query_var'             => true,
             'exclude_from_search'   => true,
@@ -470,6 +464,7 @@ final class Plugin {
 
 		register_post_type( 'letterify-orders', $args );
         flush_rewrite_rules();
+		wp_reset_postdata(); 
 	}
 
 	function letterify_menu() {

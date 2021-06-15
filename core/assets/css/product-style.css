@@ -65,6 +65,8 @@
 }
 
 .post-type-letterify-orders .letterify-download-preview img {
+	height: auto;
+	min-width: 50%;
 	margin: 0 0 1rem;
 	border: 2px solid rgba(0, 0, 0, 0.1);
 }
