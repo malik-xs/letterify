@@ -128,7 +128,9 @@ class LetterifyEl extends React.Component {
 		this.setState( { loading: true } );
 
 		var image = document.getElementById( 'canvasComponent' );
-		var imageURL = image.toDataURL( 'image/png' );
+		// var imageURL = image.toDataURL( 'image/png' );
+		console.log( image.outerHTML );
+		// return;
 
 		const { value } = this.state.form_data;
 		const { base_price } = this.props;
@@ -138,7 +140,7 @@ class LetterifyEl extends React.Component {
 			price: ( base_price * ( value.replace( /\s/g, '' ).length > 0 ? value.replace( /\s/g, '' ).length : 1 ) ).toFixed( 2 ),
 			quantity: this.state.quantity,
 			// variation_id: null,
-			imgBase64: imageURL,
+			imgBase64: image.outerHTML,
 			// finish: this.state.finish,
 			// height: this.state.height,
 			// thickness: this.state.thickness,

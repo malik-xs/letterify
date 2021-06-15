@@ -10301,41 +10301,45 @@ var TextToImage = /*#__PURE__*/function (_React$Component) {
 
   TextToImage_createClass(TextToImage, [{
     key: "componentDidMount",
-    value: function componentDidMount() {
-      var _this$state = this.state,
-          value = _this$state.value,
-          color = _this$state.color,
-          fontFamily = _this$state.fontFamily,
-          fontSize = _this$state.fontSize;
-      var font = 'bold ' + fontSize + 'px "' + fontFamily + '"';
-      var canvasTxt = document.getElementById('canvasComponent').getContext('2d');
-      canvasTxt.canvas.width = 500;
-      canvasTxt.canvas.height = 100;
-      canvasTxt.clearRect(0, 0, 500, 100);
-      canvasTxt.font = font;
-      canvasTxt.fillStyle = color;
-      canvasTxt.textAlign = 'center';
-      canvasTxt.textBaseline = 'middle';
-      var text = this.props.connect === 'individual' ? value.split('').join(' ') : value; // Canvas can tell us the width
-
-      this.props.callbackWidth(canvasTxt.measureText(value).width / fontSize);
-      canvasTxt.fillText(text, canvasTxt.canvas.width / 2, canvasTxt.canvas.height / 2);
-      this.setState({
-        img: canvasTxt.canvas.toDataURL()
-      });
+    value: function componentDidMount() {// const { value, color, fontFamily, fontSize } = this.state;
+      // const font = 'bold ' + fontSize + 'px '' + fontFamily + ''';
+      // let canvasTxt = document.getElementById( 'canvasComponent' ).getContext( '2d' );
+      // canvasTxt.canvas.width = 500;
+      // canvasTxt.canvas.height = 100;
+      // canvasTxt.clearRect( 0, 0, 500, 100 );
+      // canvasTxt.font = font;
+      // canvasTxt.fillStyle = color;
+      // canvasTxt.textAlign = 'center';
+      // canvasTxt.textBaseline = 'middle';
+      // let text = this.props.connect === 'individual' ? value.split( '' ).join( ' ' ) : value;
+      // // Canvas can tell us the width
+      // this.props.callbackWidth( canvasTxt.measureText( value ).width / fontSize );
+      // canvasTxt.fillText( text, canvasTxt.canvas.width / 2, canvasTxt.canvas.height / 2 );
+      // this.setState( {
+      // 	img: canvasTxt.canvas.toDataURL(),
+      // } );
     }
   }, {
     key: "render",
     value: function render() {
-      return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("canvas", {
+      return /*#__PURE__*/React.createElement("svg", {
+        height: "100",
+        width: "500",
+        version: "1.1",
         id: "canvasComponent",
+        xmlns: "http://www.w3.org/2000/svg"
+      }, /*#__PURE__*/React.createElement("text", {
+        x: "50%",
+        y: "50%",
+        dominantBaseline: "middle",
+        textAnchor: "middle",
         style: {
-          display: 'none'
+          fill: this.state.color,
+          fontFamily: this.state.fontFamily,
+          fontSize: this.state.fontSize,
+          lineHeight: 2
         }
-      }), this.state.img ? /*#__PURE__*/React.createElement("img", {
-        id: "imageComponent",
-        src: this.state.img
-      }) : null);
+      }, this.state.value));
     }
   }]);
 
@@ -10514,8 +10518,10 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         loading: true
       });
 
-      var image = document.getElementById('canvasComponent');
-      var imageURL = image.toDataURL('image/png');
+      var image = document.getElementById('canvasComponent'); // var imageURL = image.toDataURL( 'image/png' );
+
+      console.log(image.outerHTML); // return;
+
       var value = _this.state.form_data.value;
       var base_price = _this.props.base_price;
       var data = {
@@ -10523,7 +10529,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         price: (base_price * (value.replace(/\s/g, '').length > 0 ? value.replace(/\s/g, '').length : 1)).toFixed(2),
         quantity: _this.state.quantity,
         // variation_id: null,
-        imgBase64: imageURL,
+        imgBase64: image.outerHTML,
         // finish: this.state.finish,
         // height: this.state.height,
         // thickness: this.state.thickness,
