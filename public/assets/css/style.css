@@ -253,3 +253,7 @@
 	width: 1rem;
 	background: var(--background);
 }
+
+.letterify-orders-template-default .post-thumb-img-content img {
+	width: auto !important;
+}

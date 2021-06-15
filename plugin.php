@@ -91,15 +91,38 @@ final class Plugin {
 			));
 		});
 
-		add_action('woocommerce_before_order_itemmeta',[$this, 'woocommerce_before_order_itemmeta'],10,3);
+		// add_action('woocommerce_before_order_itemmeta',[$this, 'woocommerce_before_order_itemmeta'],10,3);
+
+		add_filter( 'woocommerce_order_item_name', function( $item_name, $item ) {
+			$order_item_id = (int) substr($item_name, strpos($item_name, "#") + 1, strpos($item_name, ' ') - 1 ); ?>
+			<a href='<?php echo get_permalink(); ?>/?p=<?php echo $order_item_id; ?>'><?php echo $item_name; ?></a>
+			<?php
+		}, 99, 2 );
+
+		// add_filter('single_template', function($original){
+		// 	global $post;
+		// 	$post_name = $post->post_name;
+		// 	$post_type = $post->post_type;
+		// 	if ( $post_type === 'letterify-orders' ) {
+		// 		$base_name = 'single-blog';
+		// 		$template = locate_template($base_name);
+		// 		error_log( $template );
+		// 		if ($template && ! empty($template)) return $template;
+		// 		return $original;
+		// 	} else {
+		// 		error_log( 'nayy');
+		// 		return $original;
+		// 	}
+		// });
 	}
 	
+
 	public function woocommerce_before_order_itemmeta($item_id, $item, $product){
-		var_dump( $item );
+		// var_dump( $item );
 		// echo $item->get_description();
 		// echo ($shippingclass) ? __('<hr><b>Shipping with: </b> <i style = "text-transform:uppercase">'. $shippingclass .'</i><hr>','woocommerce') : 'No Shipping Class is assigned to this product';
 		// echo '<p><b>Category:</b>  <i>'.get_the_term_list($product->id, 'product_cat').'</i></p>';
-		echo "howdy";
+		// echo "howdy";
 	}
 
 	public function api_endpoint($request) {
