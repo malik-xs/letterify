@@ -1,57 +1,13 @@
 import Select from 'react-select';
-import chroma from 'chroma-js';
 import TextToImage from './utils/TextToImage';
+
+import { FONT_STYLE, COLOR_STYLE } from './styles/styles';
 
 const fonts_fallback = require( '../configs/fonts.json' );
 const colors_fallback = require( '../configs/colors.json' );
 
-const dot = ( color = '#ccc' ) => ( {
-	alignItems: 'center',
-	display: 'flex',
-	':before': {
-		backgroundColor: color,
-		borderRadius: 3,
-		content: '" "',
-		display: 'block',
-		marginRight: 8,
-		height: 16,
-		width: 16,
-		border: '1px solid #f2f2f2',
-	},
-} );
-
-const fontsStyles = {
-	control: styles => ( { ...styles } ),
-	option: ( styles, { data } ) => {
-		return { ...styles, fontFamily: data.value };
-	},
-	input: ( styles, { data } ) => {
-		return { ...styles, fontFamily: data.value };
-	},
-	placeholder: styles => ( { ...styles } ),
-	singleValue: styles => ( { ...styles } ),
-};
-
-const colourStyles = {
-	control: styles => ( { ...styles, backgroundColor: 'white' } ),
-	option: ( styles, { data, isDisabled, isSelected } ) => {
-		const color = chroma( data.value );
-		return {
-			...styles,
-			// backgroundColor: isDisabled ? null : isSelected ? data.color : isFocused ? color.alpha( 0.1 ).css() : null,
-			// color: isDisabled ? '#ccc' : isSelected ? chroma.contrast( color, 'white' ) > 2 ? 'white' : 'black' : data.color,
-			cursor: isDisabled ? 'not-allowed' : 'default',
-			':active': {
-				...styles[':active'],
-				backgroundColor: ! isDisabled && ( isSelected ? data.value : color.alpha( 0.3 ).css() ),
-			},
-			...dot( color.css() ),
-		};
-	},
-	input: styles => ( { ...styles, ...dot() } ),
-	placeholder: styles => ( { ...styles, ...dot() } ),
-	singleValue: ( styles, { data } ) => ( { ...styles, ...dot( data.value ) } ),
-};
+const fontsStyles = FONT_STYLE;
+const colourStyles = COLOR_STYLE;
 
 class LetterifyEl extends React.Component {
 	constructor( props ) {

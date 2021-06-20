@@ -1,3 +1,5 @@
+import process from 'process';
+
 export default class TextToImage extends React.Component {
 	constructor( props ) {
 		super( props );
@@ -12,6 +14,7 @@ export default class TextToImage extends React.Component {
 	}
 
 	componentDidMount() {
+		console.log( process );
 		// const { value, color, fontFamily, fontSize } = this.state;
 
 		// const font = 'bold ' + fontSize + 'px '' + fontFamily + ''';
@@ -39,17 +42,6 @@ export default class TextToImage extends React.Component {
 	}
 
 	render() {
-		return (
-			<svg height='100' width='500'
-				version="1.1" id='canvasComponent'
-				xmlns='http://www.w3.org/2000/svg'>
-				<text x='50%' y='50%' dominantBaseline='middle' textAnchor='middle' style={ {
-					fill: this.state.color,
-					fontFamily: this.state.fontFamily,
-					fontSize: this.state.fontSize,
-					lineHeight: 2,
-				} }>{ this.state.value }</text>
-			</svg>
-		);
+		return '';
 	}
 }
