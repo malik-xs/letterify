@@ -45,7 +45,8 @@ class MetaBox_View {
 
 						<input type="number"
 							id="<?php echo $multiplier['slug'] ?>"
-							name="<?php echo $multiplier['slug'] ?>">
+							name="<?php echo $multiplier['slug'] ?>"
+							value="<?php echo $value->{$multiplier['slug']} ?>">
 					</div>
 				<?php
 				endforeach;

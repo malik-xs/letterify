@@ -39,14 +39,14 @@ class LetterifyEl extends React.Component {
 			fonts: font_parsed,
 			quantity: 1,
 			loaded: false,
-			price: 0,
+			price: parseFloat( props.base_price ),
 			mounting: '',
 			add_to_cart_text: 'Add to cart',
 			added_to_cart: false,
 			settings: settings_parsed,
 			multipliers: {
-				height: settings_parsed['height-multiplier'],
-				thickness: settings_parsed['thickness-multiplier']
+				height: ! isNaN( settings_parsed['height-multiplier'] ) ? settings_parsed['height-multiplier'] : 1,
+				thickness: ! isNaN( settings_parsed['thickness-multiplier'] ) ? settings_parsed['thickness-multiplier'] : 1,
 			},
 		};
 	}
@@ -87,24 +87,28 @@ class LetterifyEl extends React.Component {
 
 		var image = document.getElementById( 'canvasComponent' );
 		// var imageURL = image.toDataURL( 'image/png' );
-		console.log( value.replace( /\s/g, '' ).length );
 		// return;
 
-		const { value } = this.state.form_data;
+		const { multipliers, quantity, form_data } = this.state.form_data;
 		const { base_price } = this.props;
+		const { value } = form_data;
 
 		var data = {
 			action: 'woocommerce_ajax_add_to_cart',
-			price: ( base_price * ( value.replace( /\s/g, '' ).length > 0 ? value.replace( /\s/g, '' ).length : 1 ) ).toFixed( 2 ),
-			quantity: this.state.quantity,
-			// variation_id: null,
+			price: parseFloat( base_price ) *
+				( value.replace( /\s/g, '' ).length > 0 ? value.replace( /\s/g, '' ).length : 1 ) *
+				multipliers.height *
+				multipliers.thickness *
+				( quantity > 0 ? quantity : 1 ),
+			quantity: quantity,
 			imgBase64: image.outerHTML,
+			data: form_data,
+			// variation_id: null,
 			// finish: this.state.finish,
 			// height: this.state.height,
 			// thickness: this.state.thickness,
 			// mounting: this.state.mounting,
 			// width: this.state.width,
-			data: this.state.form_data,
 		};
 
 		jQuery.ajax( {
@@ -146,7 +150,7 @@ class LetterifyEl extends React.Component {
 			<>
 				<form>
 					<div className="xm-input-wrap text-center">
-						{/* { React.createElement( () => {
+						{ React.createElement( () => {
 							return (
 								<TextToImage
 									font={ state.form_data.font }
@@ -156,7 +160,7 @@ class LetterifyEl extends React.Component {
 									value={ state.form_data.value || '' }
 									x="0" y="10" />
 							);
-						} ) } */}
+						} ) }
 					</div>
 					<div className="xm-input-wrap">
 						<input
@@ -294,8 +298,10 @@ class LetterifyEl extends React.Component {
 					<div className="xm-input-wrap">
 						<div className="xm-input-frag">
 							Starting At: ${
-								( base_price *
-									this.state.form_data.value.replace( /\s/g, '' ).length *
+								( parseFloat( base_price ) *
+									( this.state.form_data.value.replace( /\s/g, '' ).length > 0 ? this.state.form_data.value.replace( /\s/g, '' ).length : 1 ) *
+									this.state.multipliers.height *
+									this.state.multipliers.thickness *
 									( state.quantity > 0 ? state.quantity : 1 )
 								).toFixed( 2 )
 							}

@@ -5264,7 +5264,7 @@ function UnitNumber(_ref) {
     };
   }
 
-  return /*#__PURE__*/React.createElement("p", {
+  return /*#__PURE__*/React.createElement("span", {
     style: style,
     className: (0, _classnames["default"])("".concat(prefixCls, "-only-unit"), {
       current: current
@@ -10889,7 +10889,7 @@ var Base = /*#__PURE__*/function (_React$Component) {
           tooltip = _this$getEllipsis5.tooltip;
 
       var prefixCls = this.getPrefixCls();
-      var textProps = (0, _omit["default"])(restProps, ['prefixCls', 'editable', 'copyable', 'ellipsis', 'mark', 'code', 'delete', 'underline', 'strong', 'keyboard'].concat((0, _toConsumableArray2["default"])(_configProvider.configConsumerProps)));
+      var textProps = (0, _omit["default"])(restProps, ['prefixCls', 'editable', 'copyable', 'ellipsis', 'mark', 'code', 'delete', 'underline', 'strong', 'keyboard', 'italic'].concat((0, _toConsumableArray2["default"])(_configProvider.configConsumerProps)));
       var cssEllipsis = this.canUseCSSEllipsis();
       var cssTextOverflow = rows === 1 && cssEllipsis;
       var cssLineClamp = rows && rows > 1 && cssEllipsis;

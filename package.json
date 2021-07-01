@@ -14,7 +14,7 @@
 	"author": "WPmet",
 	"license": "ISC",
 	"dependencies": {
-		"antd": "^4.14.0",
+		"antd": "^4.16.6",
 		"chroma-js": "^2.1.1",
 		"react-select": "^3.2.0",
 		"react-select-2": "^2.0.11",
@@ -22,10 +22,10 @@
 	},
 	"devDependencies": {
 		"@babel/core": "^7.12.7",
-		"@babel/eslint-parser": "^7.13.10",
+		"@babel/eslint-parser": "^7.14.7",
 		"@babel/plugin-proposal-class-properties": "^7.8.0",
 		"@babel/plugin-syntax-jsx": "^7.12.13",
-		"@babel/preset-env": "^7.7.7",
+		"@babel/preset-env": "^7.14.7",
 		"@babel/preset-react": "^7.8.3",
 		"@wordpress/eslint-plugin": "^8.0.2",
 		"@wordpress/stylelint-config": "^19.0.1",
@@ -59,7 +59,7 @@
 		"react-dom": "^16.13.0",
 		"style-loader": "^2.0.0",
 		"stylelint": "^13.9.0",
-		"webpack": "^5.16.0"
+		"webpack": "^5.41.1"
 	},
 	"repository": {
 		"type": "git",
