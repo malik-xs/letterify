@@ -1,6 +1,5 @@
 import Select from 'react-select';
 import TextToImage from './utils/TextToImage';
-
 import { FONT_STYLE, COLOR_STYLE } from './styles/styles';
 
 const fonts_fallback = require( '../configs/fonts.json' );
@@ -8,7 +7,6 @@ const colors_fallback = require( '../configs/colors.json' );
 
 const fontsStyles = FONT_STYLE;
 const colourStyles = COLOR_STYLE;
-
 class LetterifyEl extends React.Component {
 	constructor( props ) {
 		super( props );
@@ -46,6 +44,10 @@ class LetterifyEl extends React.Component {
 			add_to_cart_text: 'Add to cart',
 			added_to_cart: false,
 			settings: settings_parsed,
+			multipliers: {
+				height: settings_parsed['height-multiplier'],
+				thickness: settings_parsed['thickness-multiplier']
+			},
 		};
 	}
 
@@ -85,7 +87,7 @@ class LetterifyEl extends React.Component {
 
 		var image = document.getElementById( 'canvasComponent' );
 		// var imageURL = image.toDataURL( 'image/png' );
-		console.log( image.outerHTML );
+		console.log( value.replace( /\s/g, '' ).length );
 		// return;
 
 		const { value } = this.state.form_data;
@@ -144,7 +146,7 @@ class LetterifyEl extends React.Component {
 			<>
 				<form>
 					<div className="xm-input-wrap text-center">
-						{ React.createElement( () => {
+						{/* { React.createElement( () => {
 							return (
 								<TextToImage
 									font={ state.form_data.font }
@@ -154,7 +156,7 @@ class LetterifyEl extends React.Component {
 									value={ state.form_data.value || '' }
 									x="0" y="10" />
 							);
-						} ) }
+						} ) } */}
 					</div>
 					<div className="xm-input-wrap">
 						<input

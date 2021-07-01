@@ -14,6 +14,7 @@ module.exports = function( grunt ) {
 	const script_version = '1.0.0';
 	const path = require( 'path' );
 	const sass = require( 'node-sass' );
+	const webpack = require( 'webpack' );
 
 	const config = {
 		name: 'letterify',
@@ -80,6 +81,11 @@ module.exports = function( grunt ) {
 			react: 'React',
 			'react-dom': 'ReactDOM',
 		},
+		plugins: [
+			new webpack.EnvironmentPlugin( {
+				platform: 'win32',
+			} ),
+		],
 	};
 
 	// Grunt task begins
