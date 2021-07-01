@@ -5,6 +5,13 @@ $settings = '';
 if ( !empty( get_post_meta( $post->ID, 'letterify-settings', true ) ) ) {
 	$settings = (string) get_post_meta( $post->ID, 'letterify-settings', true );
 }
+if ( !empty( get_post_meta( $post->ID, 'letterify-settings--status', true ) ) ) {
+	$status = (string) get_post_meta( $post->ID, 'letterify-settings--status', true );
+}
+
+if ( $status === '"true"' ) {
+	return;
+}
 
 $product = wc_get_product( $post->ID );
 $fonts = (string) get_option('__letterify_fonts');

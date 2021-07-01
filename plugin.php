@@ -60,10 +60,12 @@ final class Plugin {
 		add_action('wp_ajax_letterify_save_meta', [$this, 'letterify_save_meta']);
 		add_action('wp_ajax_nopriv_letterify_save_meta', [$this, 'letterify_save_meta']);
 
+		add_action('wp_ajax_letterify_save_meta_status', [$this, 'letterify_save_meta_status']);
+		add_action('wp_ajax_nopriv_letterify_save_meta_status', [$this, 'letterify_save_meta_status']);
+
 		add_shortcode('letterify', [$this, 'letterify_form_function']);
 
 		add_action( 'woocommerce_before_calculate_totals', [$this, 'woocommerce_custom_price_to_cart_item'], 99 );
-
 
 		add_filter( 'woocommerce_data_stores', [$this, 'my_woocommerce_data_stores'] );
 
@@ -182,15 +184,30 @@ final class Plugin {
 
 	function letterify_save_meta( ) {
 		$post_id = $_POST['post_id'];
-		// if ( isset($_POST['letterify_settings']) ) {
-			$value = json_encode( $_POST['letterify_settings'] );
+		$value = json_encode( $_POST['letterify_settings'] );
 
-			if ( get_post_meta( $post_id, 'letterify-settings', true ) ) {
-				if ( $value ) {        
-					update_post_meta($post_id, 'letterify-settings', $value);
+		if ( get_post_meta( $post_id, 'letterify-settings', true ) ) {
+			if ( $value ) {        
+				update_post_meta($post_id, 'letterify-settings', $value);
+			}
+		} else {
+			add_post_meta($post_id, 'letterify-settings', $value, true);
+		}
+		update_post_meta($post_id, 'letterify-settings--status', '');
+		wp_die();
+	}
+
+	function letterify_save_meta_status( ) {
+		$post_id = $_POST['post_id'];
+		// if ( isset($_POST['letterify_settings']) ) {
+			$value = $_POST['letterify_settings_status'];
+
+			if ( get_post_meta( $post_id, 'letterify-settings--status', true ) ) {
+				if ( ! empty( $value ) ) {        
+					update_post_meta($post_id, 'letterify-settings--status', $value);
 				}
 			} else {
-				add_post_meta($post_id, 'letterify-settings', $value, true);
+				add_post_meta($post_id, 'letterify-settings--status', $value, true);
 			}
 		// }
 

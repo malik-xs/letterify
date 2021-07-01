@@ -20,25 +20,37 @@ jQuery( document ).ready( function( $ ) {
 	 */
 	$( '.letterify-product-option-form-submit' ).on( 'click', function( e ) {
 		e.preventDefault();
-		let form_data = new FormData(),
-			sub_data = {},
-			el = $( '.letterify-product-option-form input[type="checkbox"]' );
+		let sub_data = {},
+			el = $( '.letterify-product-option-form input[type="checkbox"]' ),
+			data;
 
-		el.each( function() {
-			if ( $( this ).is(":checked") )
-				sub_data[ $(this).attr( 'name' ) ] = $( this ).is(":checked");
-		} );
+		if ( $( 'input#letterify-settings--status' ).is(":checked") ) {
+			data = {
+				action: 'letterify_save_meta_status',
+				post_id: $( this ).data( 'post_id' ),
+				letterify_settings_status: ( $( 'input#letterify-settings--status' ).is(":checked") ? 'true' : ''),
+			};
+		} else {
+			el.each( function() {
+				if ( $( this ).is(":checked") )
+					sub_data[ $(this).attr( 'name' ) ] = $( this ).is(":checked");
+			} );
 
-		form_data.append( 'letterify-settings', sub_data );
+			if ( $('#height-multiplier').val() > 0 ) { sub_data['height-multiplier'] = $('#height-multiplier').val(); }
+			if ( $('#thickness-multiplier').val() > 0 ) { sub_data['thickness-multiplier'] = $('#thickness-multiplier').val(); }
+
+			console.log( sub_data );
+			data = {
+				action: 'letterify_save_meta',
+				post_id: $( this ).data( 'post_id' ),
+				letterify_settings: sub_data,
+			};
+		}
 
 		jQuery.ajax( {
 			type: 'post',
 			url: letterify_admin_product_var.ajax_url,
-			data: {
-				action: 'letterify_save_meta',
-				post_id: $( this ).data( 'post_id' ),
-				letterify_settings: sub_data,
-			},
+			data: data,
 			success: ( response ) => {
 				alert("Successfully Saved");
 			},

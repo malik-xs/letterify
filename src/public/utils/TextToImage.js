@@ -1,5 +1,6 @@
 import process from 'process';
 
+import TextToSVG from './TextToPath';
 export default class TextToImage extends React.Component {
 	constructor( props ) {
 		super( props );
