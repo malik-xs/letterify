@@ -10519,6 +10519,14 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
       });
     });
 
+    app_defineProperty(app_assertThisInitialized(_this), "handleQuantity", function (e) {
+      var _e$target2 = e.target,
+          name = _e$target2.name,
+          value = _e$target2.value;
+
+      _this.setState(app_defineProperty({}, name, value));
+    });
+
     app_defineProperty(app_assertThisInitialized(_this), "handleSubmit", function (e) {
       e.preventDefault();
 
@@ -10783,7 +10791,7 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         type: "number",
         name: "quantity",
         value: state.quantity,
-        onChange: this.handleChange,
+        onChange: this.handleQuantity,
         placeholder: 'Enter your size'
       })), /*#__PURE__*/React.createElement("div", {
         className: "xm-input-frag"

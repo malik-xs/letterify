@@ -9,7 +9,7 @@ if ( !empty( get_post_meta( $post->ID, 'letterify-settings--status', true ) ) ) 
 	$status = (string) get_post_meta( $post->ID, 'letterify-settings--status', true );
 }
 
-if ( $status === '"true"' ) {
+if ( $status === '"true"' || $status === 'true' ) {
 	return;
 }
 

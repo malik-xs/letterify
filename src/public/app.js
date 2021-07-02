@@ -76,6 +76,11 @@ class LetterifyEl extends React.Component {
 		this.setState( { form_data: new_data } );
 	}
 
+	handleQuantity = ( e ) => {
+		const { name, value } = e.target;
+		this.setState( { [name]: value } );
+	}
+
 	handleSubmit = ( e ) => {
 		e.preventDefault();
 		if ( this.state.added_to_cart ) {
@@ -310,7 +315,7 @@ class LetterifyEl extends React.Component {
 							<label htmlFor="quantity" className="text-right"><strong>Qty</strong></label>
 							<input type='number'
 								name='quantity' value={ state.quantity }
-								onChange={ this.handleChange } placeholder={ 'Enter your size' } />
+								onChange={ this.handleQuantity } placeholder={ 'Enter your size' } />
 						</div>
 						<div className="xm-input-frag">
 							<input

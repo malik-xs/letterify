@@ -202,11 +202,11 @@ final class Plugin {
 		// if ( isset($_POST['letterify_settings']) ) {
 			$value = $_POST['letterify_settings_status'];
 
-			if ( get_post_meta( $post_id, 'letterify-settings--status', true ) ) {
-				if ( ! empty( $value ) ) {        
-					update_post_meta($post_id, 'letterify-settings--status', $value);
-				}
+			if ( null !== get_post_meta( $post_id, 'letterify-settings--status', true ) ) {
+				echo 'darn';
+				update_post_meta($post_id, 'letterify-settings--status', $value);
 			} else {
+				echo 'nayyy';
 				add_post_meta($post_id, 'letterify-settings--status', $value, true);
 			}
 		// }

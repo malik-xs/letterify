@@ -12,14 +12,15 @@ class MetaBox_View {
 		$value = get_post_meta( $post->ID, 'letterify-settings', true );
 		$status = get_post_meta( $post->ID, 'letterify-settings--status', true );
 		$value = json_decode( $value );
+		var_dump( $status );
 		?>
 		<div class="form-field term-meta-text-wrap">
 			<input type="checkbox"
-				id="letterify-settings--status"
+				id="letterify-settings--status-val"
 				name="letterify-settings--status"
-				<?php checked( isset( $status ) ? $status : '', '"true"' ) ?> >
+				<?php checked( isset( $status ) ? $status : '', 'true' ) ?> >
 
-			<label for="letterify-settings--status">
+			<label for="letterify-settings--status-val">
 				<strong><?php esc_html_e( 'Disable Letterify?' , 'letterify' ); ?></strong>
 			</label>
 		</div>
@@ -46,7 +47,7 @@ class MetaBox_View {
 						<input type="number"
 							id="<?php echo $multiplier['slug'] ?>"
 							name="<?php echo $multiplier['slug'] ?>"
-							value="<?php echo $value->{$multiplier['slug']} ?>">
+							value="<?php echo isset($value->{$multiplier['slug']} ) ? $value->{$multiplier['slug']} : ''; ?>">
 					</div>
 				<?php
 				endforeach;
