@@ -12,7 +12,6 @@ class MetaBox_View {
 		$value = get_post_meta( $post->ID, 'letterify-settings', true );
 		$status = get_post_meta( $post->ID, 'letterify-settings--status', true );
 		$value = json_decode( $value );
-		var_dump( $status );
 		?>
 		<div class="form-field term-meta-text-wrap">
 			<input type="checkbox"

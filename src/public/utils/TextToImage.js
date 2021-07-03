@@ -13,15 +13,17 @@ export default class TextToImage extends React.Component {
 	}
 
 	componentDidMount() {
+		const dpi = 480;
+		const scaleFactor = dpi / 96;
 		const { value, color, fontFamily, fontSize } = this.state;
 
-		const font = 'bold ' + fontSize + 'px ' + fontFamily + '';
+		const font = 'bold ' + ( fontSize * scaleFactor ) + 'px ' + fontFamily + '';
 
 		let canvasTxt = document.getElementById( 'canvasComponent' ).getContext( '2d' );
 
-		canvasTxt.canvas.width = 500;
-		canvasTxt.canvas.height = 100;
-		canvasTxt.clearRect( 0, 0, 500, 100 );
+		canvasTxt.canvas.width = 500 * scaleFactor;
+		canvasTxt.canvas.height = 100 * scaleFactor;
+		canvasTxt.clearRect( 0, 0, 500 * scaleFactor, 100 * scaleFactor );
 		canvasTxt.font = font;
 		canvasTxt.fillStyle = color;
 		canvasTxt.textAlign = 'center';
@@ -44,7 +46,7 @@ export default class TextToImage extends React.Component {
 			<div>
 				<canvas
 					id="canvasComponent"
-					style={ { display: 'none' } }
+					style={ { display: 'none', maxWidth: '100%' } }
 				/>
 				{
 					this.state.img

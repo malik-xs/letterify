@@ -10299,16 +10299,18 @@ var TextToImage = /*#__PURE__*/function (_React$Component) {
   TextToImage_createClass(TextToImage, [{
     key: "componentDidMount",
     value: function componentDidMount() {
+      var dpi = 480;
+      var scaleFactor = dpi / 96;
       var _this$state = this.state,
           value = _this$state.value,
           color = _this$state.color,
           fontFamily = _this$state.fontFamily,
           fontSize = _this$state.fontSize;
-      var font = 'bold ' + fontSize + 'px ' + fontFamily + '';
+      var font = 'bold ' + fontSize * scaleFactor + 'px ' + fontFamily + '';
       var canvasTxt = document.getElementById('canvasComponent').getContext('2d');
-      canvasTxt.canvas.width = 500;
-      canvasTxt.canvas.height = 100;
-      canvasTxt.clearRect(0, 0, 500, 100);
+      canvasTxt.canvas.width = 500 * scaleFactor;
+      canvasTxt.canvas.height = 100 * scaleFactor;
+      canvasTxt.clearRect(0, 0, 500 * scaleFactor, 100 * scaleFactor);
       canvasTxt.font = font;
       canvasTxt.fillStyle = color;
       canvasTxt.textAlign = 'center';
@@ -10327,7 +10329,8 @@ var TextToImage = /*#__PURE__*/function (_React$Component) {
       return /*#__PURE__*/React.createElement("div", null, /*#__PURE__*/React.createElement("canvas", {
         id: "canvasComponent",
         style: {
-          display: 'none'
+          display: 'none',
+          maxWidth: '100%'
         }
       }), this.state.img ? /*#__PURE__*/React.createElement("img", {
         id: "imageComponent",
@@ -10539,27 +10542,20 @@ var LetterifyEl = /*#__PURE__*/function (_React$Component) {
         loading: true
       });
 
-      var image = document.getElementById('canvasComponent'); // var imageURL = image.toDataURL( 'image/png' );
-      // return;
-
-      var _this$state$form_data = _this.state.form_data,
-          multipliers = _this$state$form_data.multipliers,
-          quantity = _this$state$form_data.quantity,
-          form_data = _this$state$form_data.form_data;
+      var image = document.getElementById('canvasComponent');
+      var imageURL = image.toDataURL('image/png');
+      var _this$state = _this.state,
+          multipliers = _this$state.multipliers,
+          quantity = _this$state.quantity,
+          form_data = _this$state.form_data;
       var base_price = _this.props.base_price;
       var value = form_data.value;
       var data = {
         action: 'woocommerce_ajax_add_to_cart',
         price: parseFloat(base_price) * (value.replace(/\s/g, '').length > 0 ? value.replace(/\s/g, '').length : 1) * multipliers.height * multipliers.thickness * (quantity > 0 ? quantity : 1),
         quantity: quantity,
-        imgBase64: image.outerHTML,
-        data: form_data // variation_id: null,
-        // finish: this.state.finish,
-        // height: this.state.height,
-        // thickness: this.state.thickness,
-        // mounting: this.state.mounting,
-        // width: this.state.width,
-
+        imgBase64: imageURL,
+        data: form_data
       };
       jQuery.ajax({
         type: 'post',

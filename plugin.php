@@ -116,12 +116,6 @@ final class Plugin {
 		// 		return $original;
 		// 	}
 		// });
-
-		add_filter( 'upload_mimes', function( $mime_types ) {
-			$mime_types['svg'] = 'image/svg+xml';
-			$mime_types['svgz'] = 'image/svg+xml';
-			return $mime_types;
-		} );
 	}
 
 	public function woocommerce_before_order_itemmeta($item_id, $item, $product){
@@ -268,15 +262,15 @@ final class Plugin {
 		$upload_dir  = wp_upload_dir();
 		$upload_path = str_replace( '/', DIRECTORY_SEPARATOR, $upload_dir['path'] ) . DIRECTORY_SEPARATOR;
 
-		// $img             = str_replace( 'data:image/png;base64,', '', $imgBase64 );
-		// $img             = str_replace( ' ', '+', $img );
-		// $decoded         = base64_decode( $img );
-		$filename        = $_POST['data']['value']. time() . '.svg';
-		$file_type       = 'svg';
+		$img             = str_replace( 'data:image/png;base64,', '', $imgBase64 );
+		$img             = str_replace( ' ', '+', $img );
+		$decoded         = base64_decode( $img );
+		$filename        = $_POST['data']['value']. time() . '.png';
+		$file_type       = 'image/png';
 		$hashed_filename = md5( $filename . microtime() ) . '_' . $filename;
 
 		// Save the image in the uploads directory.
-		$upload_file = file_put_contents( $upload_path . $hashed_filename, $imgBase64 );
+		$upload_file = file_put_contents( $upload_path . $hashed_filename, $decoded );
 
 		$attachment = array(
 			'post_mime_type' => $file_type,
@@ -288,10 +282,7 @@ final class Plugin {
 
 		$attach_id = wp_insert_attachment( $attachment, $upload_dir['path'] . '/' . $hashed_filename );
 		
-		return [
-			'_id'=> $attach_id,
-			'url'=> $upload_dir['url'] . '/' . $hashed_filename
-		];
+		return $attach_id;
 	}
 
 	function woocommerce_ajax_add_to_cart() {
@@ -324,9 +315,7 @@ final class Plugin {
 		$quantity = $_POST['quantity'];
 
 		/** Set thumbnail */
-		$attach = $this->save_photo( '<?xml version="1.0"?>' . stripslashes($_POST['imgBase64']) );
-		$thumbnail_id = $attach['_id'];
-		$thumbnail_url = $attach['url'];
+		$thumbnail_id = $this->save_photo($_POST['imgBase64']);
 		set_post_thumbnail( $entry_id_letter, $thumbnail_id );
 
         add_post_meta($entry_id_letter, '_letterify_image', $thumbnail_url);

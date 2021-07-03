@@ -3,7 +3,7 @@
  * Plugin Name: Lettetify
  * Plugin URI:  https://github.com/malik-xs/letterify
  * Description: Letter printing plugin
- * Version: 1.2.1
+ * Version: 1.2.2
  * Author: Xian Malik
  * Author URI: 
  * Text Domain: letterify
@@ -17,7 +17,7 @@ require_once 'plugin.php';
 
 final class Letterify {
 	public static function version() {
-		return '1.2.1-hotfix';
+		return '1.2.2';
 	}
 
 	static function author_name() {

@@ -5,9 +5,7 @@ $settings = '';
 if ( !empty( get_post_meta( $post->ID, 'letterify-settings', true ) ) ) {
 	$settings = (string) get_post_meta( $post->ID, 'letterify-settings', true );
 }
-if ( !empty( get_post_meta( $post->ID, 'letterify-settings--status', true ) ) ) {
-	$status = (string) get_post_meta( $post->ID, 'letterify-settings--status', true );
-}
+$status = (string) get_post_meta( $post->ID, 'letterify-settings--status', true );
 
 if ( $status === '"true"' || $status === 'true' ) {
 	return;

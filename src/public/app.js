@@ -91,10 +91,9 @@ class LetterifyEl extends React.Component {
 		this.setState( { loading: true } );
 
 		var image = document.getElementById( 'canvasComponent' );
-		// var imageURL = image.toDataURL( 'image/png' );
-		// return;
+		var imageURL = image.toDataURL( 'image/png' );
 
-		const { multipliers, quantity, form_data } = this.state.form_data;
+		const { multipliers, quantity, form_data } = this.state;
 		const { base_price } = this.props;
 		const { value } = form_data;
 
@@ -106,14 +105,8 @@ class LetterifyEl extends React.Component {
 				multipliers.thickness *
 				( quantity > 0 ? quantity : 1 ),
 			quantity: quantity,
-			imgBase64: image.outerHTML,
+			imgBase64: imageURL,
 			data: form_data,
-			// variation_id: null,
-			// finish: this.state.finish,
-			// height: this.state.height,
-			// thickness: this.state.thickness,
-			// mounting: this.state.mounting,
-			// width: this.state.width,
 		};
 
 		jQuery.ajax( {
@@ -155,17 +148,13 @@ class LetterifyEl extends React.Component {
 			<>
 				<form>
 					<div className="xm-input-wrap text-center">
-						{ React.createElement( () => {
-							return (
-								<TextToImage
-									font={ state.form_data.font }
-									color={ state.form_data.color }
-									connect={ state.connect }
-									callbackWidth={ this.callbackWidth }
-									value={ state.form_data.value || '' }
-									x="0" y="10" />
-							);
-						} ) }
+						{ React.createElement( () => <TextToImage
+							font={ state.form_data.font }
+							color={ state.form_data.color }
+							connect={ state.connect }
+							callbackWidth={ this.callbackWidth }
+							value={ state.form_data.value || '' }
+							x="0" y="10" /> ) }
 					</div>
 					<div className="xm-input-wrap">
 						<input
